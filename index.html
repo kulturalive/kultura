@@ -206,6 +206,33 @@
             line-height: 1.5;
         }
 
+        .theme-tabs-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-pill-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-pill-btn.active {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: var(--accent-glow);
+        }
+
         .artist-grid {
             display: flex;
             flex-direction: column;
@@ -496,7 +523,6 @@
             transform: translateX(4px);
         }
 
-        /* VIBRANT ACCENT ADJUSTMENTS MATCHING image_42efbd.png CONTRAST FIXES */
         .option-button.correct {
             background: #4CAF50 !important;
             border-color: #4CAF50 !important;
@@ -566,7 +592,6 @@
             margin-left: 6px;
         }
 
-        /* METHOD 3 ADDED STYLE SHEETS FOR SCRAMBLED CHIPS UI */
         .scrambled-board-zone {
             display: flex;
             flex-direction: column;
@@ -668,9 +693,16 @@
 
         <section id="portfolio-section" class="app-section active">
             <div class="doc-intro">
-                <h2>Explorar el Arte y la Fotografía</h2>
-                <p>Learn advanced European Spanish. Explore multi-sentence, bilingual analytical essays. Tap any phrase to reveal the direct English translation instantly.</p>
+                <h2>Explorar Contenido</h2>
+                <p>Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.</p>
             </div>
+
+            <div class="theme-tabs-row">
+                <button id="tab-btn-all" class="tab-pill-btn" onclick="filterHomeTheme('all')">Todos</button>
+                <button id="tab-btn-art" class="tab-pill-btn" onclick="filterHomeTheme('Arte')">Arte</button>
+                <button id="tab-btn-news" class="tab-pill-btn" onclick="filterHomeTheme('Noticias')">Noticias</button>
+            </div>
+
             <div class="artist-grid" id="artist-grid-container"></div>
         </section>
 
@@ -708,6 +740,10 @@
                 <i class="fa-solid fa-compass"></i>
                 <span>Explorar</span>
             </button>
+            <button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Noticias</span>
+            </button>
             <button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
                 <i class="fa-solid fa-rectangle-list"></i>
                 <span>Tarjetas</span>
@@ -716,12 +752,14 @@
     </div>
 
     <script>
+        // Content Registry Definition Grid Arrays
         const documentaries = [
             {
                 id: "monet",
                 title: "Claude Monet y el Impresionismo",
                 subtitle: "El pintor que descompuso la luz sobre el agua.",
                 genre: "Impresionismo",
+                theme: "Arte",
                 file: "monet.json",
                 vocabQuizSeed: [
                     { term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" },
@@ -735,6 +773,7 @@
                 title: "Georges Seurat y la Ciencia del Puntillismo",
                 subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.",
                 genre: "Puntillismo",
+                theme: "Arte",
                 file: "georgesseurat.json",
                 vocabQuizSeed: [
                     { term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" },
@@ -748,6 +787,7 @@
                 title: "Henri Cartier-Bresson: El Ojo de la Calle",
                 subtitle: "La geometría instantánea y la revolución de la fotografía documental.",
                 genre: "Fotografía",
+                theme: "Arte",
                 file: "henricartierbresson.json",
                 vocabQuizSeed: [
                     { term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" },
@@ -755,19 +795,34 @@
                     { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" },
                     { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }
                 ]
+            },
+            {
+                id: "diario-actualidad",
+                title: "Diario de Actualidad: Noticias de España",
+                subtitle: "Últimas novedades, sociedad y cultura analizadas en castellano nativo.",
+                genre: "Noticias",
+                theme: "Noticias",
+                file: "news_ia.json",
+                vocabQuizSeed: [
+                    { term: "redacción", translation: "newsroom", hint: "Lugar o equipo de periodistas encargados de redactar" },
+                    { term: "titular", translation: "headline", hint: "El título llamativo y principal de una noticia" },
+                    { term: "corresponsal", translation: "correspondent", hint: "Periodista enviado a otra ciudad o país" },
+                    { term: "rueda de prensa", translation: "press conference", hint: "Reunión convocada por una organización para responder preguntas" }
+                ]
             }
         ];
 
         const state = {
             theme: "light",
             currentTab: "portfolio",
+            currentHomeTab: "all",
             quizMode: "mixed", 
             score: 0,
             streak: 0,
             allSentencePairs: [],
             needsReview: [],
             activeQuestion: null,
-            scrambledSelections: [] // Dynamic buffer trace tracker for Method 3 assembly tracking
+            scrambledSelections: [] 
         };
 
         async function buildGlobalFlashcardCache() {
@@ -787,7 +842,7 @@
                         });
                     });
                 } catch (e) {
-                    console.error("Cache processing aborted: ", e);
+                    console.warn(`File loading skipped for ${doc.file}: `, e);
                 }
             }
             state.allSentencePairs = list;
@@ -801,6 +856,17 @@
             state.theme = newTheme;
             const btnIcon = document.getElementById('theme-toggle').querySelector('i');
             btnIcon.className = newTheme === 'dark' ? "fa-regular fa-sun" : "fa-regular fa-moon";
+        }
+
+        function filterHomeTheme(themeName) {
+            state.currentHomeTab = themeName;
+            document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if(themeName === 'all') document.getElementById('tab-btn-all').classList.add('active');
+            if(themeName === 'Arte') document.getElementById('tab-btn-art').classList.add('active');
+            if(themeName === 'Noticias') document.getElementById('tab-btn-news').classList.add('active');
+            
+            renderPortfolio();
         }
 
         function toggleFlashcardMode() {
@@ -817,26 +883,39 @@
 
         async function switchSection(tabId) {
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId === 'portfolio' ? 'tab-doc' : 'tab-flash').classList.add('active');
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             
+            state.currentTab = tabId;
+
             if (tabId === 'portfolio') {
+                document.getElementById('tab-doc').classList.add('active');
                 document.getElementById('portfolio-section').classList.add('active');
                 document.getElementById('reader-section').classList.remove('active');
-            } else {
+                filterHomeTheme('all');
+            } 
+            else if (tabId === 'news-direct') {
+                document.getElementById('tab-news-nav').classList.add('active');
+                document.getElementById('portfolio-section').classList.add('active');
+                document.getElementById('reader-section').classList.remove('active');
+                filterHomeTheme('Noticias');
+            }
+            else if (tabId === 'flashcards') {
+                document.getElementById('tab-flash').classList.add('active');
                 document.getElementById('flashcards-section').classList.add('active');
                 if (state.allSentencePairs.length === 0) {
                     await buildGlobalFlashcardCache();
                 }
                 initiateNextQuestion();
             }
-            state.currentTab = tabId;
         }
 
         function renderPortfolio() {
             const grid = document.getElementById('artist-grid-container');
             grid.innerHTML = '';
+            
             documentaries.forEach(doc => {
+                if (state.currentHomeTab !== 'all' && doc.theme !== state.currentHomeTab) return;
+
                 const card = document.createElement('div');
                 card.className = 'artist-card';
                 card.onclick = () => launchReader(doc.id);
@@ -860,7 +939,7 @@
             document.getElementById('current-reader-title').innerText = doc.title;
             document.getElementById('current-reader-genre').innerText = doc.genre;
             const container = document.getElementById('essay-display-container');
-            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando...</p>';
+            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando canales...</p>';
 
             try {
                 const response = await fetch(`./data/${doc.file}`);
@@ -886,7 +965,7 @@
                     container.appendChild(pDiv);
                 });
             } catch (error) {
-                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al procesar JSON remoto.</p>';
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">No se ha cargado el archivo JSON todavía.</p>';
             }
 
             document.getElementById('portfolio-section').classList.remove('active');
@@ -924,39 +1003,32 @@
         }
 
         function generateContextQuestion() {
-            // Leitner SRS Queue Probability Interceptor (60% pull priority weight)
             if (state.needsReview.length > 0 && Math.random() < 0.60) {
                 const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
                 queuedQuestion.isReview = true;
                 return queuedQuestion;
             }
 
-            // Pool expansion to include our new Method 3 sentence builder engine rule mappings
             const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze", "scrambled"];
             const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
                 ? "vocabulary" 
                 : pool[Math.floor(Math.random() * pool.length)];
 
-            // METHOD 3 ADDED: SCRAMBLED SENTENCE GENERATION ENGINE
             if (selectedType === "scrambled") {
                 const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-                
-                // Clean punctuation using simple regex to avoid syntax chip headaches on touch screens
                 const cleanSpanish = targetPair.es.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g,"").trim();
                 const rawTokens = cleanSpanish.split(/\s+/);
 
-                // Ensure we don't accidentally pick massive paragraphs that ruin mobile scaling layout blocks
                 if (rawTokens.length > 3 && rawTokens.length <= 12) {
                     const shuffledTokens = [...rawTokens].sort(() => 0.5 - Math.random());
-                    
                     return {
                         id_key: `scramble_${targetPair.es.substring(0,15)}`,
                         type: "Construir Frase (Syntax)",
                         question: `Construye la frase correcta que traduzca:<br><br><em style="color:var(--accent-secondary); font-size:16px;">"${targetPair.en}"</em>`,
                         tokens: shuffledTokens,
-                        answer: rawTokens, // Sequence of words array
+                        answer: rawTokens,
                         rawFullAnswer: cleanSpanish,
-                        explanation: `La estructura exacta en español es: "${targetPair.es}"`
+                        explanation: `La estructura exacta es: "${targetPair.es}"`
                     };
                 }
             }
@@ -1000,9 +1072,10 @@
                 }
             }
 
-            if (selectedType === "vocabulary" || selectedType === "cloze" || selectedType === "scrambled") { 
-                const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
-                const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
+            const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
+            const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
+            
+            if (selectedType === "vocabulary" || state.allSentencePairs.length === 0) {
                 const questionText = `¿Cómo se traduce el término técnico?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
                 const answer = randomTerm.translation;
                 
@@ -1041,15 +1114,13 @@
         }
 
         function initiateNextQuestion() {
-            state.scrambledSelections = []; // Wipe selections array
+            state.scrambledSelections = [];
             const questionData = generateContextQuestion();
             state.activeQuestion = questionData;
             const container = document.getElementById('active-card-frame');
             const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> REPASO</span>` : '';
 
-            // Render branches conditionally based on whether it's a Scrambled Sequence card or a basic MCQ card
             if (questionData.tokens) {
-                // METHOD 3 DESIGN IMPLEMENTATION
                 container.innerHTML = `
                     <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
                     <div class="fc-question-text">${questionData.question}</div>
@@ -1079,7 +1150,6 @@
                 });
 
             } else {
-                // Standard structural architecture for Multiple Choice Questions
                 container.innerHTML = `
                     <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
                     <div class="fc-question-text">${questionData.question}</div>
@@ -1098,7 +1168,6 @@
             }
         }
 
-        // METHOD 3 HELPER ROUTINES
         function appendWordChip(chipElement, wordString) {
             chipElement.classList.add('used-up');
             state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
@@ -1120,11 +1189,9 @@
         function validateScrambledSequence() {
             const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
             const correctString = state.activeQuestion.answer.map(w => w.toLowerCase()).join(' ');
-
             const previewZone = document.getElementById('chip-preview-destination-box');
-            document.getElementById('scramble-controls').classList.add('hidden');
             
-            // Lock remaining chips inside the view
+            document.getElementById('scramble-controls').classList.add('hidden');
             document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
 
             if (compiledString === correctString) {
@@ -1194,7 +1261,7 @@
         }
 
         window.onload = async () => {
-            renderPortfolio();
+            filterHomeTheme('all');
             await buildGlobalFlashcardCache();
         };
     </script>
