@@ -1,0 +1,32 @@
+name: Daily Spanish News Refresher
+
+on:
+  schedule:
+    - cron: '0 0 * * *' 
+  workflow_dispatch: 
+
+jobs:
+  refresh-content:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Code Repository
+      uses: actions/checkout@v4
+
+    - name: Initialize Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Runtime Dependencies
+      run: pip install requests
+
+    - name: Execute Extraction Pipeline
+      run: python .github/scripts/fetch_news.py
+
+    - name: Commit Updated Content to GitHub Pages
+      run: |
+        git config --global user.name "Kultura Automation Bot"
+        git config --global user.email "bot@kultura.internal"
+        git add data/news_ia.json
+        git diff-index --quiet HEAD || git commit -m "Automated Sync: Refreshed daily news feeds"
+        git push
