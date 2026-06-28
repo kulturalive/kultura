@@ -367,7 +367,7 @@
         }
 
         .sentence-node.highlighted .en-translation {
-            max-height: 500px; /* Boosted boundary cap ensuring paragraphs never break or truncate */
+            max-height: 500px;
             opacity: 1;
             margin-top: 8px;
         }
@@ -828,11 +828,59 @@
         }
 
         function generateContextQuestion() {
+            // Determine structural pool type based on interface switch state
+            const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze"];
             const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
                 ? "vocabulary" 
-                : ["translateES_EN", "translateEN_ES", "vocabulary"][Math.floor(Math.random() * 3)];
+                : pool[Math.floor(Math.random() * pool.length)];
 
-            if (selectedType === "vocabulary") {
+            // METHOD 1 ADDED: CLOZE DELETION ENGINE
+            if (selectedType === "cloze") {
+                // Find a sentence that actually contains one of our target vocabulary words
+                let validPair = null;
+                let targetVocab = null;
+                
+                // Shuffle sentences to get a random match
+                const shuffledPairs = [...state.allSentencePairs].sort(() => 0.5 - Math.random());
+                
+                for (const pair of shuffledPairs) {
+                    const matchedTerm = documentaries
+                        .flatMap(d => d.vocabQuizSeed)
+                        .find(v => pair.es.toLowerCase().includes(v.term.toLowerCase()));
+                    
+                    if (matchedTerm) {
+                        validPair = pair;
+                        targetVocab = matchedTerm;
+                        break;
+                    }
+                }
+
+                // Fallback loop configuration wrapper if JSON context is simple or has no matches
+                if (validPair && targetVocab) {
+                    // Replace the exact word in the sentence with visual blanks
+                    const regex = new RegExp(`\\b${targetVocab.term}\\b`, 'gi');
+                    const blankedSentence = validPair.es.replace(regex, "___________");
+                    
+                    const questionText = `Completa la frase con el término adecuado:<br><br><em style="font-size: 17px; color: var(--text-primary); display: block; line-height: 1.6;">"${blankedSentence}"</em>`;
+                    const answer = targetVocab.term;
+
+                    // Gather distractors from vocabulary lists
+                    let distractors = [];
+                    documentaries.forEach(d => d.vocabQuizSeed.forEach(t => { if (t.term !== answer) distractors.push(t.term); }));
+                    distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
+                    const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+
+                    return {
+                        type: "Completar Texto (Cloze)",
+                        question: questionText,
+                        options: options,
+                        answer: answer,
+                        explanation: `La frase completa es: "${validPair.es}". El término «${targetVocab.term}» significa «${targetVocab.translation}».`
+                    };
+                }
+            }
+
+            if (selectedType === "vocabulary" || selectedType === "cloze") { 
                 const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
                 const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
                 const questionText = `¿Cómo se traduce el término técnico?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
