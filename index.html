@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kultura — Aprende Español de España</title>
     
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap)" rel="stylesheet">
-    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
@@ -63,7 +63,7 @@
 
         .app-shell {
             width: 100%;
-            max-width: 600px; /* Centers and constrains layout beautifully on computers */
+            max-width: 600px;
             padding: 24px 20px 120px 20px;
             display: flex;
             flex-direction: column;
@@ -580,34 +580,19 @@
     </div>
 
     <script>
+        // Gallery catalog definitions referencing your optimized path files seen in image_426ffa.png
         const documentaries = [
             {
                 id: "monet",
                 title: "Claude Monet y el Impresionismo",
                 subtitle: "El pintor que descompuso la luz sobre el agua.",
                 genre: "Impresionismo",
+                file: "monet.json",
                 vocabQuizSeed: [
                     { term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" },
                     { term: "lienzo", translation: "canvas", hint: "La tela sobre la que se pinta al óleo" },
                     { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" },
                     { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }
-                ],
-                paragraphs: [
-                    [
-                        { es: "Claude Monet fue el pilar indiscutible del movimiento impresionista francés.", en: "Claude Monet was the undisputed pillar of the French Impressionist movement." },
-                        { es: "Su enfoque rechazó de pleno la rigidez del academicismo parisino del siglo diecinueve.", en: "His approach completely rejected the rigidity of nineteenth-century Parisian academicism." },
-                        { es: "En lugar de pintar en estudios cerrados, prefería pintar al aire libre.", en: "Instead of painting in closed studios, he preferred to paint outdoors." }
-                    ],
-                    [
-                        { es: "Su obra maestra, «Impresión, sol naciente», dio nombre a todo el movimiento.", en: "His masterpiece, 'Impression, Sunrise', gave its name to the entire movement." },
-                        { es: "Esta obra captura las vibraciones lumínicas del puerto de El Havre mediante pinceladas rápidas y sueltas.", en: "This work captures the light vibrations of the port of Le Havre using rapid and loose brushstrokes." },
-                        { es: "Los colores puros no se mezclaban en la paleta, sino directamente en la retina del espectador.", en: "Pure colors were not mixed on the palette, but directly in the viewer's retina." }
-                    ],
-                    [
-                        { es: "Al final de su vida, se recluyó en su pintoresco jardín en el pueblo de Giverny.", en: "At the end of his life, he retreated to his picturesque garden in the village of Giverny." },
-                        { es: "Allí, diseñó un estanque japonés repleto de exóticos nenúfares.", en: "There, he designed a Japanese pond filled with exotic water lilies." },
-                        { es: "A pesar de sufrir cataratas graves, continuó pintando lienzos monumentales con pinceladas casi abstractas.", en: "Despite suffering from severe cataracts, he continued painting monumental canvases with almost abstract brushstrokes." }
-                    ]
                 ]
             },
             {
@@ -615,27 +600,12 @@
                 title: "Georges Seurat y la Ciencia del Puntillismo",
                 subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.",
                 genre: "Puntillismo",
+                file: "georgesseurat.json",
                 vocabQuizSeed: [
                     { term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" },
                     { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" },
                     { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" },
                     { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }
-                ],
-                paragraphs: [
-                    [
-                        { es: "Georges Seurat transformó la libertad empírica del impresionismo en un método rigurosamente científico.", en: "Georges Seurat transformed the empirical freedom of Impressionism into a rigorously scientific method." },
-                        { es: "Su técnica se basó en la teoría de los contrastes de color simultáneos planteada por Michel Eugène Chevreul.", en: "His technique was based on the simultaneous color contrast theory proposed by Michel Eugène Chevreul." },
-                        { es: "Buscaba crear una luminosidad superior mediante leyes puramente matemáticas y físicas.", en: "He sought to create superior luminosity using purely mathematical and physical laws." }
-                    ],
-                    [
-                        { es: "Su obra maestra indiscutible es «Tarde de domingo en la isla de la Grande Jatte».", en: "His undisputed masterpiece is 'A Sunday Afternoon on the Island of La Grande Jatte'." },
-                        { es: "Seurat tardó más de dos años en completar este enorme lienzo compuesto de millones de puntos diminutos.", en: "Seurat took more than two years to complete this huge canvas composed of millions of tiny dots." },
-                        { es: "Al yuxtaponer puntos de colores puros complementarios, la mezcla se produce ópticamente en el ojo.", en: "By juxtaposing dots of pure complementary colors, the mixing occurs optically in the eye." }
-                    ],
-                    [
-                        { es: "Trágicamente, Seurat falleció a la temprana edad de treinta y un años debido a una misteriosa enfermedad.", en: "Tragically, Seurat passed away at the young age of thirty-one due to a mysterious illness." },
-                        { es: "Sin embargo, su meticuloso rigor óptico allanó el camino para el desarrollo del cubismo y la abstracción posterior.", en: "However, his meticulous optical rigor paved the way for the development of cubism and subsequent abstraction." }
-                    ]
                 ]
             },
             {
@@ -643,27 +613,12 @@
                 title: "Henri Cartier-Bresson: El Ojo de la Calle",
                 subtitle: "La geometría instantánea y la revolución de la fotografía documental.",
                 genre: "Fotografía",
+                file: "henricartierbresson.json",
                 vocabQuizSeed: [
                     { term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" },
                     { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" },
                     { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" },
                     { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }
-                ],
-                paragraphs: [
-                    [
-                        { es: "Henri Cartier-Bresson es considerado unánimemente el padre del fotoperiodismo moderno.", en: "Henri Cartier-Bresson is unanimously considered the father of modern photojournalism." },
-                        { es: "Él popularizó el término vanguardista conocido como «el instante decisivo».", en: "He popularized the avant-garde term known as 'the decisive moment'." },
-                        { es: "Consistía en coordinar perfectamente la cabeza, el ojo y el corazón en una fraction de segundo.", en: "It consisted in perfectly coordinating the head, the eye, and the heart in a fraction of a second." }
-                    ],
-                    [
-                        { es: "A diferencia de otros fotógrafos de su época, utilizaba una discreta cámara Leica de cincuenta milímetros.", en: "Unlike other photographers of his era, he used a discreet fifty-millimeter Leica camera." },
-                        { es: "Pintaba las partes metálicas brillantes de negro para pasar desapercibido entre la multitud callejera.", en: "He painted the shiny metallic parts black to go unnoticed among the street crowds." },
-                        { es: "Cofundó la legendaria agencia Magnum Photos para proteger los derechos de autor de los fotoperiodistas.", en: "He co-founded the legendary Magnum Photos agency to protect the copyrights of photojournalists." }
-                    ],
-                    [
-                        { es: "Se oponía radicalmente a manipular el encuadre original de la imagen en el cuarto oscuro.", en: "He was radically opposed to manipulating the original framing of the image in the darkroom." },
-                        { es: "Sus copias fotográficas debían mostrar una fina línea negra circundante, demostrando la pureza total del encuadre inicial.", en: "His photographic prints had to show a thin surrounding black border line, proving the total purity of the initial framing." }
-                    ]
                 ]
             }
         ];
@@ -677,20 +632,27 @@
             activeQuestion: null
         };
 
-        function cacheSentences() {
+        // Aggregates text elements from external JSON files to run your flashcard algorithms
+        async function buildGlobalFlashcardCache() {
             let list = [];
-            documentaries.forEach(doc => {
-                doc.paragraphs.forEach(para => {
-                    para.forEach(pair => {
-                        list.push({
-                            es: pair.es,
-                            en: pair.en,
-                            genre: doc.genre,
-                            source: doc.title
+            for (const doc of documentaries) {
+                try {
+                    const response = await fetch(`./data/${doc.file}`);
+                    const paragraphs = await response.json();
+                    paragraphs.forEach(para => {
+                        para.forEach(pair => {
+                            list.push({
+                                es: pair.es,
+                                en: pair.en,
+                                genre: doc.genre,
+                                source: doc.title
+                            });
                         });
                     });
-                });
-            });
+                } catch (e) {
+                    console.error("Failed caching for layout translation tracking: ", e);
+                }
+            }
             state.allSentencePairs = list;
         }
 
@@ -704,7 +666,7 @@
             btnIcon.className = newTheme === 'dark' ? "fa-regular fa-sun" : "fa-regular fa-moon";
         }
 
-        function switchSection(tabId) {
+        async function switchSection(tabId) {
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId === 'portfolio' ? 'tab-doc' : 'tab-flash').classList.add('active');
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
@@ -714,6 +676,9 @@
                 document.getElementById('reader-section').classList.remove('active');
             } else {
                 document.getElementById('flashcards-section').classList.add('active');
+                if (state.allSentencePairs.length === 0) {
+                    await buildGlobalFlashcardCache();
+                }
                 initiateNextQuestion();
             }
             state.currentTab = tabId;
@@ -739,32 +704,43 @@
             });
         }
 
-        function launchReader(docId) {
+        // Dynamically loads individual files like monet.json from your path architecture
+        async function launchReader(docId) {
             const doc = documentaries.find(d => d.id === docId);
             if (!doc) return;
+            
             document.getElementById('current-reader-title').innerText = doc.title;
             document.getElementById('current-reader-genre').innerText = doc.genre;
             const container = document.getElementById('essay-display-container');
-            container.innerHTML = '';
+            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando texto...</p>';
 
-            doc.paragraphs.forEach(pArray => {
-                const pDiv = document.createElement('div');
-                pDiv.className = 'essay-paragraph';
-                pArray.forEach(pair => {
-                    const sNode = document.createElement('div');
-                    sNode.className = 'sentence-node';
-                    sNode.onclick = (e) => {
-                        e.stopPropagation();
-                        sNode.classList.toggle('highlighted');
-                    };
-                    sNode.innerHTML = `
-                        <span class="sp-text">${pair.es}</span>
-                        <span class="en-translation">${pair.en}</span>
-                    `;
-                    pDiv.appendChild(sNode);
+            try {
+                const response = await fetch(`./data/${doc.file}`);
+                const paragraphs = await response.json();
+                container.innerHTML = '';
+
+                paragraphs.forEach(pArray => {
+                    const pDiv = document.createElement('div');
+                    pDiv.className = 'essay-paragraph';
+                    pArray.forEach(pair => {
+                        const sNode = document.createElement('div');
+                        sNode.className = 'sentence-node';
+                        sNode.onclick = (e) => {
+                            e.stopPropagation();
+                            sNode.classList.toggle('highlighted');
+                        };
+                        sNode.innerHTML = `
+                            <span class="sp-text">${pair.es}</span>
+                            <span class="en-translation">${pair.en}</span>
+                        `;
+                        pDiv.appendChild(sNode);
+                    });
+                    container.appendChild(pDiv);
                 });
-                container.appendChild(pDiv);
-            });
+            } catch (error) {
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al cargar los datos del ensayo.</p>';
+                console.error("Fetch failure:", error);
+            }
 
             document.getElementById('portfolio-section').classList.remove('active');
             document.getElementById('reader-section').classList.add('active');
@@ -802,7 +778,7 @@
 
         function generateContextQuestion() {
             const types = ["translateES_EN", "translateEN_ES", "vocabulary"];
-            const selectedType = types[Math.floor(Math.random() * types.length)];
+            const selectedType = (state.allSentencePairs.length === 0) ? "vocabulary" : types[Math.floor(Math.random() * types.length)];
 
             if (selectedType === "vocabulary") {
                 const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
@@ -880,9 +856,10 @@
             document.getElementById('next-action-wrapper').classList.remove('hidden');
         }
 
-        window.onload = () => {
-            cacheSentences();
+        window.onload = async () => {
             renderPortfolio();
+            // Asynchronously fetches files to populate database cards for offline mobile access
+            await buildGlobalFlashcardCache();
         };
     </script>
 </body>
