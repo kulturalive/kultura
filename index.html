@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -496,11 +496,13 @@
             transform: translateX(4px);
         }
 
+        /* VIBRANT ACCENT ADJUSTMENTS MATCHING image_42efbd.png CONTRAST FIXES */
         .option-button.correct {
             background: #4CAF50 !important;
             border-color: #4CAF50 !important;
             color: white !important;
             font-weight: 600;
+            opacity: 1 !important;
         }
 
         .option-button.wrong {
@@ -508,10 +510,11 @@
             border-color: #F44336 !important;
             color: white !important;
             font-weight: 600;
+            opacity: 1 !important;
         }
 
-        .option-button.disabled {
-            opacity: 0.6;
+        .option-button.disabled:not(.correct):not(.wrong) {
+            opacity: 0.35;
             cursor: not-allowed;
             pointer-events: none;
         }
@@ -561,6 +564,91 @@
             color: var(--accent-primary);
             font-weight: 700;
             margin-left: 6px;
+        }
+
+        /* METHOD 3 ADDED STYLE SHEETS FOR SCRAMBLED CHIPS UI */
+        .scrambled-board-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .construct-build-preview {
+            min-height: 76px;
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+        }
+
+        .scrambled-pool-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            background: var(--bg-card);
+            padding: 12px 4px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .word-chip-pill {
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            padding: 10px 16px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .word-chip-pill:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-card);
+        }
+
+        .word-chip-pill.used-up {
+            opacity: 0.2;
+            pointer-events: none;
+            background: var(--bg-tertiary);
+            border-color: transparent;
+        }
+
+        .scramble-check-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .secondary-outline-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .secondary-outline-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
         }
     </style>
 </head>
@@ -670,7 +758,6 @@
             }
         ];
 
-        // METHOD 2 ADDED: state.needsReview initialized to keep tabs on missed items
         const state = {
             theme: "light",
             currentTab: "portfolio",
@@ -679,7 +766,8 @@
             streak: 0,
             allSentencePairs: [],
             needsReview: [],
-            activeQuestion: null
+            activeQuestion: null,
+            scrambledSelections: [] // Dynamic buffer trace tracker for Method 3 assembly tracking
         };
 
         async function buildGlobalFlashcardCache() {
@@ -699,7 +787,7 @@
                         });
                     });
                 } catch (e) {
-                    console.error("Failed caching layout items: ", e);
+                    console.error("Cache processing aborted: ", e);
                 }
             }
             state.allSentencePairs = list;
@@ -772,7 +860,7 @@
             document.getElementById('current-reader-title').innerText = doc.title;
             document.getElementById('current-reader-genre').innerText = doc.genre;
             const container = document.getElementById('essay-display-container');
-            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando texto...</p>';
+            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando...</p>';
 
             try {
                 const response = await fetch(`./data/${doc.file}`);
@@ -798,7 +886,7 @@
                     container.appendChild(pDiv);
                 });
             } catch (error) {
-                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al cargar datos.</p>';
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al procesar JSON remoto.</p>';
             }
 
             document.getElementById('portfolio-section').classList.remove('active');
@@ -836,19 +924,42 @@
         }
 
         function generateContextQuestion() {
-            // METHOD 2 ADDED: SRS Leitner Queue Interceptor
-            // If the user has failed items, give a 60% probability that they must face one right now.
+            // Leitner SRS Queue Probability Interceptor (60% pull priority weight)
             if (state.needsReview.length > 0 && Math.random() < 0.60) {
                 const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
-                // Append a visual indicator tag so the user knows it's an SRS review question
                 queuedQuestion.isReview = true;
                 return queuedQuestion;
             }
 
-            const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze"];
+            // Pool expansion to include our new Method 3 sentence builder engine rule mappings
+            const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze", "scrambled"];
             const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
                 ? "vocabulary" 
                 : pool[Math.floor(Math.random() * pool.length)];
+
+            // METHOD 3 ADDED: SCRAMBLED SENTENCE GENERATION ENGINE
+            if (selectedType === "scrambled") {
+                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+                
+                // Clean punctuation using simple regex to avoid syntax chip headaches on touch screens
+                const cleanSpanish = targetPair.es.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g,"").trim();
+                const rawTokens = cleanSpanish.split(/\s+/);
+
+                // Ensure we don't accidentally pick massive paragraphs that ruin mobile scaling layout blocks
+                if (rawTokens.length > 3 && rawTokens.length <= 12) {
+                    const shuffledTokens = [...rawTokens].sort(() => 0.5 - Math.random());
+                    
+                    return {
+                        id_key: `scramble_${targetPair.es.substring(0,15)}`,
+                        type: "Construir Frase (Syntax)",
+                        question: `Construye la frase correcta que traduzca:<br><br><em style="color:var(--accent-secondary); font-size:16px;">"${targetPair.en}"</em>`,
+                        tokens: shuffledTokens,
+                        answer: rawTokens, // Sequence of words array
+                        rawFullAnswer: cleanSpanish,
+                        explanation: `La estructura exacta en español es: "${targetPair.es}"`
+                    };
+                }
+            }
 
             if (selectedType === "cloze") {
                 let validPair = null;
@@ -879,7 +990,7 @@
                     const options = [...distractors, answer].sort(() => 0.5 - Math.random());
 
                     return {
-                        id_key: `cloze_${targetVocab.term}`, // Unique identification key for SRS comparisons
+                        id_key: `cloze_${targetVocab.term}`,
                         type: "Completar Texto (Cloze)",
                         question: questionText,
                         options: options,
@@ -889,7 +1000,7 @@
                 }
             }
 
-            if (selectedType === "vocabulary" || selectedType === "cloze") { 
+            if (selectedType === "vocabulary" || selectedType === "cloze" || selectedType === "scrambled") { 
                 const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
                 const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
                 const questionText = `¿Cómo se traduce el término técnico?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
@@ -930,28 +1041,121 @@
         }
 
         function initiateNextQuestion() {
+            state.scrambledSelections = []; // Wipe selections array
             const questionData = generateContextQuestion();
             state.activeQuestion = questionData;
             const container = document.getElementById('active-card-frame');
-            
-            // Build text context label showing remaining SRS metrics if active
             const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> REPASO</span>` : '';
 
-            container.innerHTML = `
-                <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
-                <div class="fc-question-text">${questionData.question}</div>
-                <div class="options-list" id="mcq-options-container"></div>
-                <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
-                <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Siguiente</span> <i class="fa-solid fa-arrow-right"></i></button></div>
-            `;
-            const optionsContainer = document.getElementById('mcq-options-container');
-            questionData.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'option-button';
-                btn.innerText = opt;
-                btn.onclick = () => evaluateOption(btn, opt);
-                optionsContainer.appendChild(btn);
-            });
+            // Render branches conditionally based on whether it's a Scrambled Sequence card or a basic MCQ card
+            if (questionData.tokens) {
+                // METHOD 3 DESIGN IMPLEMENTATION
+                container.innerHTML = `
+                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
+                    <div class="fc-question-text">${questionData.question}</div>
+                    
+                    <div class="scrambled-board-zone">
+                        <div class="construct-build-preview" id="chip-preview-destination-box"></div>
+                        <div class="scrambled-pool-chips" id="source-chips-container"></div>
+                    </div>
+
+                    <div class="scramble-check-footer" id="scramble-controls">
+                        <button class="secondary-outline-btn" onclick="clearScrambledBuild()">Limpiar</button>
+                        <button class="primary-btn" onclick="validateScrambledSequence()"><i class="fa-solid fa-square-check"></i> Comprobar</button>
+                    </div>
+
+                    <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
+                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Siguiente</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                `;
+
+                const poolContainer = document.getElementById('source-chips-container');
+                questionData.tokens.forEach((word, index) => {
+                    const chip = document.createElement('button');
+                    chip.className = 'word-chip-pill';
+                    chip.innerText = word;
+                    chip.id = `chip_idx_${index}`;
+                    chip.onclick = () => appendWordChip(chip, word);
+                    poolContainer.appendChild(chip);
+                });
+
+            } else {
+                // Standard structural architecture for Multiple Choice Questions
+                container.innerHTML = `
+                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
+                    <div class="fc-question-text">${questionData.question}</div>
+                    <div class="options-list" id="mcq-options-container"></div>
+                    <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
+                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Siguiente</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                `;
+                const optionsContainer = document.getElementById('mcq-options-container');
+                questionData.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-button';
+                    btn.innerText = opt;
+                    btn.onclick = () => evaluateOption(btn, opt);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        // METHOD 3 HELPER ROUTINES
+        function appendWordChip(chipElement, wordString) {
+            chipElement.classList.add('used-up');
+            state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
+
+            const previewZone = document.getElementById('chip-preview-destination-box');
+            const subBadge = document.createElement('span');
+            subBadge.className = 'word-chip-pill';
+            subBadge.style.borderColor = 'var(--accent-secondary)';
+            subBadge.innerText = wordString;
+            previewZone.appendChild(subBadge);
+        }
+
+        function clearScrambledBuild() {
+            state.scrambledSelections = [];
+            document.querySelectorAll('.word-chip-pill').forEach(c => c.classList.remove('used-up'));
+            document.getElementById('chip-preview-destination-box').innerHTML = '';
+        }
+
+        function validateScrambledSequence() {
+            const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
+            const correctString = state.activeQuestion.answer.map(w => w.toLowerCase()).join(' ');
+
+            const previewZone = document.getElementById('chip-preview-destination-box');
+            document.getElementById('scramble-controls').classList.add('hidden');
+            
+            // Lock remaining chips inside the view
+            document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
+
+            if (compiledString === correctString) {
+                previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
+                previewZone.style.borderColor = '#4CAF50';
+                state.score += 15; state.streak += 1;
+                playSfx('correct');
+
+                if (state.activeQuestion.id_key) {
+                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+                }
+            } else {
+                previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
+                previewZone.style.borderColor = '#F44336';
+                state.streak = 0;
+                playSfx('wrong');
+
+                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
+                if (!flagged && state.activeQuestion.id_key) {
+                    const cleanCopy = { ...state.activeQuestion };
+                    delete cleanCopy.isReview;
+                    state.needsReview.push(cleanCopy);
+                }
+            }
+
+            document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
+            document.getElementById('fc-feedback-box').style.display = "block";
+            document.getElementById('score-counter').innerText = `Puntos: ${state.score}`;
+            document.getElementById('streak-counter').innerText = `Racha: ${state.streak} 🔥`;
+            document.getElementById('fc-progress').style.width = `${Math.min((state.score % 200) / 2, 100)}%`;
+            document.getElementById('next-action-wrapper').classList.remove('hidden');
         }
 
         function evaluateOption(selectedBtn, selectedValue) {
@@ -964,7 +1168,6 @@
                 state.score += 10; state.streak += 1;
                 playSfx('correct');
 
-                // METHOD 2 ADDED: If the user answered a card correctly that was in the SRS queue, remove it.
                 if (state.activeQuestion.id_key) {
                     state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
                 }
@@ -974,10 +1177,8 @@
                 playSfx('wrong');
                 allButtons.forEach(btn => { if (btn.innerText === correctValue) btn.classList.add('correct'); });
 
-                // METHOD 2 ADDED: Push failed card to trouble queue if it isn't already there
-                const alreadyFlaged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
-                if (!alreadyFlaged && state.activeQuestion.id_key) {
-                    // Create a clean copy devoid of immediate review flags to save state sanity
+                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
+                if (!flagged && state.activeQuestion.id_key) {
                     const cleanCopy = { ...state.activeQuestion };
                     delete cleanCopy.isReview; 
                     state.needsReview.push(cleanCopy);
