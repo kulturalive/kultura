@@ -555,6 +555,13 @@
             transform: translateY(-2px);
             opacity: 0.9;
         }
+
+        .srs-queue-badge {
+            font-size: 11px;
+            color: var(--accent-primary);
+            font-weight: 700;
+            margin-left: 6px;
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -663,6 +670,7 @@
             }
         ];
 
+        // METHOD 2 ADDED: state.needsReview initialized to keep tabs on missed items
         const state = {
             theme: "light",
             currentTab: "portfolio",
@@ -670,6 +678,7 @@
             score: 0,
             streak: 0,
             allSentencePairs: [],
+            needsReview: [],
             activeQuestion: null
         };
 
@@ -690,7 +699,7 @@
                         });
                     });
                 } catch (e) {
-                    console.error("Failed caching for layout translation tracking: ", e);
+                    console.error("Failed caching layout items: ", e);
                 }
             }
             state.allSentencePairs = list;
@@ -789,8 +798,7 @@
                     container.appendChild(pDiv);
                 });
             } catch (error) {
-                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al cargar los datos del ensayo.</p>';
-                console.error("Fetch failure:", error);
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">Error al cargar datos.</p>';
             }
 
             document.getElementById('portfolio-section').classList.remove('active');
@@ -828,19 +836,23 @@
         }
 
         function generateContextQuestion() {
-            // Determine structural pool type based on interface switch state
+            // METHOD 2 ADDED: SRS Leitner Queue Interceptor
+            // If the user has failed items, give a 60% probability that they must face one right now.
+            if (state.needsReview.length > 0 && Math.random() < 0.60) {
+                const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
+                // Append a visual indicator tag so the user knows it's an SRS review question
+                queuedQuestion.isReview = true;
+                return queuedQuestion;
+            }
+
             const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze"];
             const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
                 ? "vocabulary" 
                 : pool[Math.floor(Math.random() * pool.length)];
 
-            // METHOD 1 ADDED: CLOZE DELETION ENGINE
             if (selectedType === "cloze") {
-                // Find a sentence that actually contains one of our target vocabulary words
                 let validPair = null;
                 let targetVocab = null;
-                
-                // Shuffle sentences to get a random match
                 const shuffledPairs = [...state.allSentencePairs].sort(() => 0.5 - Math.random());
                 
                 for (const pair of shuffledPairs) {
@@ -855,22 +867,19 @@
                     }
                 }
 
-                // Fallback loop configuration wrapper if JSON context is simple or has no matches
                 if (validPair && targetVocab) {
-                    // Replace the exact word in the sentence with visual blanks
                     const regex = new RegExp(`\\b${targetVocab.term}\\b`, 'gi');
                     const blankedSentence = validPair.es.replace(regex, "___________");
-                    
                     const questionText = `Completa la frase con el término adecuado:<br><br><em style="font-size: 17px; color: var(--text-primary); display: block; line-height: 1.6;">"${blankedSentence}"</em>`;
                     const answer = targetVocab.term;
 
-                    // Gather distractors from vocabulary lists
                     let distractors = [];
                     documentaries.forEach(d => d.vocabQuizSeed.forEach(t => { if (t.term !== answer) distractors.push(t.term); }));
                     distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
                     const options = [...distractors, answer].sort(() => 0.5 - Math.random());
 
                     return {
+                        id_key: `cloze_${targetVocab.term}`, // Unique identification key for SRS comparisons
                         type: "Completar Texto (Cloze)",
                         question: questionText,
                         options: options,
@@ -892,6 +901,7 @@
                 const options = [...distractors, answer].sort(() => 0.5 - Math.random());
                 
                 return { 
+                    id_key: `vocab_${randomTerm.term}`,
                     type: `Vocabulario: ${randomDoc.genre}`, 
                     question: questionText, 
                     options: options, 
@@ -906,7 +916,7 @@
                 state.allSentencePairs.forEach(p => { if (p.en !== answer) distractors.push(p.en); });
                 distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
                 const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-                return { type: "Traducir al Inglés", question: questionText, options: options, answer: answer, explanation: `Traducción correcta.` };
+                return { id_key: `es_en_${targetPair.es.substring(0,15)}`, type: "Traducir al Inglés", question: questionText, options: options, answer: answer, explanation: `Traducción correcta.` };
             } else {
                 const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
                 const questionText = `Traduce al español europeo:<br><br><em>"${targetPair.en}"</em>`;
@@ -915,7 +925,7 @@
                 state.allSentencePairs.forEach(p => { if (p.es !== answer) distractors.push(p.es); });
                 distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
                 const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-                return { type: "Traducir al Español", question: questionText, options: options, answer: answer, explanation: `Estructura correcta en Castilian.` };
+                return { id_key: `en_es_${targetPair.es.substring(0,15)}`, type: "Traducir al Español", question: questionText, options: options, answer: answer, explanation: `Estructura correcta en Castilian.` };
             }
         }
 
@@ -923,8 +933,12 @@
             const questionData = generateContextQuestion();
             state.activeQuestion = questionData;
             const container = document.getElementById('active-card-frame');
+            
+            // Build text context label showing remaining SRS metrics if active
+            const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> REPASO</span>` : '';
+
             container.innerHTML = `
-                <div class="card-type-indicator">${questionData.type}</div>
+                <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
                 <div class="fc-question-text">${questionData.question}</div>
                 <div class="options-list" id="mcq-options-container"></div>
                 <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
@@ -949,11 +963,25 @@
                 selectedBtn.classList.add('correct');
                 state.score += 10; state.streak += 1;
                 playSfx('correct');
+
+                // METHOD 2 ADDED: If the user answered a card correctly that was in the SRS queue, remove it.
+                if (state.activeQuestion.id_key) {
+                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+                }
             } else {
                 selectedBtn.classList.add('wrong');
                 state.streak = 0;
                 playSfx('wrong');
                 allButtons.forEach(btn => { if (btn.innerText === correctValue) btn.classList.add('correct'); });
+
+                // METHOD 2 ADDED: Push failed card to trouble queue if it isn't already there
+                const alreadyFlaged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
+                if (!alreadyFlaged && state.activeQuestion.id_key) {
+                    // Create a clean copy devoid of immediate review flags to save state sanity
+                    const cleanCopy = { ...state.activeQuestion };
+                    delete cleanCopy.isReview; 
+                    state.needsReview.push(cleanCopy);
+                }
             }
 
             document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
