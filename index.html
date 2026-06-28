@@ -323,9 +323,11 @@
             margin-bottom: 14px;
             cursor: pointer;
             border-left: 3px solid transparent;
-            padding: 2px 0 2px 14px;
+            padding: 4px 12px;
             transition: var(--transition-smooth);
             border-radius: 0 var(--card-radius) var(--card-radius) 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .sentence-node:hover {
@@ -344,6 +346,7 @@
             color: var(--text-spanish);
             font-weight: 400;
             display: block;
+            white-space: normal;
         }
 
         .en-translation {
@@ -354,16 +357,19 @@
             font-size: 14.5px;
             color: var(--accent-secondary);
             font-style: italic;
-            transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, margin-top 0.25s ease;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.25s ease;
             margin-top: 0;
             display: block;
             font-weight: 500;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .sentence-node.highlighted .en-translation {
-            max-height: 100px;
+            max-height: 500px; /* Boosted boundary cap ensuring paragraphs never break or truncate */
             opacity: 1;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .fc-container {
@@ -371,6 +377,7 @@
             flex-direction: column;
             gap: 24px;
             align-items: center;
+            width: 100%;
         }
 
         .fc-stats-bar {
@@ -431,13 +438,15 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--card-radius);
-            padding: 36px 28px;
+            padding: 32px 24px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.02);
             position: relative;
             display: flex;
             flex-direction: column;
             gap: 24px;
             transition: var(--transition-smooth);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .card-type-indicator {
@@ -449,16 +458,18 @@
         }
 
         .fc-question-text {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 500;
             line-height: 1.4;
             color: var(--text-primary);
+            white-space: normal;
         }
 
         .options-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            width: 100%;
         }
 
         .option-button {
@@ -474,7 +485,10 @@
             cursor: pointer;
             transition: var(--transition-smooth);
             font-weight: 400;
-            line-height: 1.3;
+            line-height: 1.4;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .option-button:hover {
@@ -510,12 +524,15 @@
             line-height: 1.5;
             color: var(--text-secondary);
             display: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .fc-actions {
             display: flex;
             justify-content: flex-end;
             margin-top: 12px;
+            width: 100%;
         }
 
         .primary-btn {
@@ -649,7 +666,7 @@
         const state = {
             theme: "light",
             currentTab: "portfolio",
-            quizMode: "mixed", // Options: "mixed" or "words-only"
+            quizMode: "mixed", 
             score: 0,
             streak: 0,
             allSentencePairs: [],
@@ -777,7 +794,6 @@
             }
 
             document.getElementById('portfolio-section').classList.remove('active');
-            document.getElementById('reader-section').add('active'); // Fixed standard reference hook
             document.getElementById('reader-section').classList.add('active');
         }
 
@@ -812,7 +828,6 @@
         }
 
         function generateContextQuestion() {
-            // Coordinate quiz dynamic types based on active user feature mode
             const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
                 ? "vocabulary" 
                 : ["translateES_EN", "translateEN_ES", "vocabulary"][Math.floor(Math.random() * 3)];
