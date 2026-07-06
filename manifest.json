@@ -1,0 +1,22 @@
+{
+  "short_name": "Kultura",
+  "name": "Kultura — Learn European Spanish",
+  "description": "An interactive tool to master advanced European Spanish with AI writing evaluations.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#FBFBFA",
+  "theme_color": "#E05A47",
+  "display": "standalone",
+  "orientation": "portrait"
+}
