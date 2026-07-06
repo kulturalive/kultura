@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kultura — Learn European Spanish</title>
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#E05A47">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1673,22 +1671,15 @@
         }
 
 window.onload = async () => {
-    // Keep your existing initialization code here:
-    updateUiLanguageDOM();
-    filterHomeTheme('all');
-    await buildGlobalFlashcardCache();
-    
-    const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
-    if (savedKey) {
-        document.getElementById('gemini-key-field').value = savedKey;
-    }
-
-    // ADD THIS CODE TO REGISTER YOUR PWA WORKER AUTOMATICALLY:
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-            .then(reg => console.log('Kultura PWA Service Worker Active:', reg.scope))
-            .catch(err => console.error('PWA Worker Registration Error:', err));
-    }
+            // Apply language setup transformations
+            updateUiLanguageDOM();
+            filterHomeTheme('all');
+            await buildGlobalFlashcardCache();
+            
+            const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+            if (savedKey) {
+                document.getElementById('gemini-key-field').value = savedKey;
+            }
 };
         };
     </script>
