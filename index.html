@@ -676,53 +676,6 @@
             border-color: var(--text-secondary);
         }
 
-        .api-inline-setup {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            padding: 16px;
-            border-radius: var(--card-radius);
-            margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .api-inline-setup label {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-        }
-
-        .api-input-group {
-            display: flex;
-            gap: 8px;
-        }
-
-        .api-input-group input {
-            flex: 1;
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 14px;
-        }
-
-        .api-input-group button {
-            background: var(--accent-secondary);
-            color: white;
-            border: none;
-            padding: 0 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            font-size: 14px;
-        }
-
         .writing-panel-box {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -795,7 +748,7 @@
         }
     </style>
 </head>
-<body data-theme="light">
+<body data-theme="light" data-secret-token="">
     <div class="app-shell">
         <header>
             <div class="brand-logo">
@@ -867,14 +820,6 @@
                 <p id="lbl-wp-subheading">Draft authentic text answers and get instant native AI formatting feedback.</p>
             </div>
 
-            <div class="api-inline-setup">
-                <label for="gemini-key-field" id="lbl-api-label">Gemini API Key Connection</label>
-                <div class="api-input-group">
-                    <input type="password" id="gemini-key-field" placeholder="AIZAisy..." />
-                    <button id="lbl-save-key-btn" onclick="commitApiKeySecurely()">Save Token</button>
-                </div>
-            </div>
-
             <div class="writing-panel-box">
                 <div class="theme-tabs-row" style="margin-bottom: 4px; padding-bottom: 4px; border-bottom: none;">
                     <button class="tab-pill-btn active" id="wp-tab-conversational" onclick="switchWritingCategory('conversational')">Conversational</button>
@@ -927,8 +872,6 @@
                 wpHeading: "Creative Composition",
                 wpSubheading: "Draft authentic text answers and get instant native AI formatting feedback.",
                 backBtn: "Back to Library",
-                apiLabel: "Gemini API Key Connection",
-                saveKeyBtn: "Save Token",
                 skipBtn: "Skip Prompt",
                 evalBtn: "Evaluate Text",
                 qHeading: "Writing Prompt",
@@ -939,7 +882,7 @@
                 navWrite: "Write",
                 streak: "Streak",
                 points: "Points",
-                apiAlert: "Please supply a valid Gemini API access token to execute live feedback processing.",
+                apiAlert: "Workflow API Key Verification Failed. Ensure your GitHub Action contains the valid secret token configuration mappings.",
                 emptyAlert: "Your composition canvas is currently empty. Please type a short response first.",
                 analyzing: "Analyzing Framework...",
                 loadingRobot: "Reviewing metrics, alignment grammar, and stylistic syntax properties...",
@@ -959,8 +902,6 @@
                 wpHeading: "Composición Creativa",
                 wpSubheading: "Redacta respuestas auténticas y obtén comentarios instantáneos de IA sobre sintaxis nativa.",
                 backBtn: "Volver a la Biblioteca",
-                apiLabel: "Conexión de Clave API Gemini",
-                saveKeyBtn: "Guardar Token",
                 skipBtn: "Saltar Propuesta",
                 evalBtn: "Evaluar Texto",
                 qHeading: "Propuesta de Escritura",
@@ -971,7 +912,7 @@
                 navWrite: "Escribir",
                 streak: "Racha",
                 points: "Puntos",
-                apiAlert: "Por favor, proporciona un token de acceso válido de la API de Gemini para ejecutar la evaluación en vivo.",
+                apiAlert: "Error de verificación de clave API del flujo de trabajo. Asegúrate de que tu Acción de GitHub contiene los mapeos de tokens secretos válidos.",
                 emptyAlert: "El lienzo de composición está vacío. Por favor, escribe una breve respuesta primero.",
                 analyzing: "Analizando Estructura...",
                 loadingRobot: "Revisando métricas de alineación estructural, gramática y propiedades sintácticas...",
@@ -1066,8 +1007,6 @@
             document.getElementById('lbl-wp-heading').innerText = currentDict.wpHeading;
             document.getElementById('lbl-wp-subheading').innerText = currentDict.wpSubheading;
             document.getElementById('lbl-back-btn').innerText = currentDict.backBtn;
-            document.getElementById('lbl-api-label').innerText = currentDict.apiLabel;
-            document.getElementById('lbl-save-key-btn').innerText = currentDict.saveKeyBtn;
             document.getElementById('lbl-skip-prompt-btn').innerText = currentDict.skipBtn;
             document.getElementById('lbl-eval-btn').innerText = currentDict.evalBtn;
             document.getElementById('lbl-wp-question-heading').innerText = currentDict.qHeading;
@@ -1454,14 +1393,6 @@
             document.getElementById('scramble-next-row').classList.remove('hidden');
         }
 
-        function commitApiKeySecurely() {
-            const key = document.getElementById('gemini-key-field').value.trim();
-            if (key) {
-                localStorage.setItem('KULTURA_GEMINI_KEY', key);
-                alert("Credentials committed successfully to local app sandbox storage variables.");
-            }
-        }
-
         function renderCurrentWritingPrompt() {
             const filteredPrompts = getFilteredWritingPrompts();
             if (filteredPrompts.length === 0) return;
@@ -1488,7 +1419,9 @@
 
         async function transmitCompositionToGemini() {
             const currentDict = i18n[state.uiLanguage];
-            const apiKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+            
+            // Reads key injected securely from GitHub Action Secrets mapping attribute
+            const apiKey = document.body.getAttribute('data-secret-token');
             if (!apiKey) {
                 alert(currentDict.apiAlert);
                 return;
@@ -1596,11 +1529,6 @@
             updateUiLanguageDOM();
             filterHomeTheme('all');
             await buildGlobalFlashcardCache();
-            
-            const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
-            if (savedKey) {
-                document.getElementById('gemini-key-field').value = savedKey;
-            }
         };
     </script>
 </body>
