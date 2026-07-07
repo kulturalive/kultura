@@ -324,6 +324,14 @@
             margin-bottom: 8px;
         }
 
+        .reader-title h2 {
+            font-family: var(--font-serif);
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
         .reader-meta {
             font-size: 12px;
             color: var(--text-secondary);
@@ -720,51 +728,39 @@
             cursor: pointer;
             font-family: var(--font-sans);
             font-weight: 600;
-            font-size: 13px;
-            transition: var(--transition-smooth);
+            font-size: 14px;
         }
 
-        .api-input-group button:hover {
-            opacity: 0.9;
-        }
-
-        .prompt-badge-row {
+        .writing-panel-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.01);
             display: flex;
-            gap: 6px;
-            margin-bottom: 4px;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .mini-pill {
-            font-size: 10px;
-            text-transform: uppercase;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 100px;
+        .writing-prompt-card {
             background: var(--bg-tertiary);
-            color: var(--text-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
         }
 
-        .mini-pill.level-tag {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        .prompt-main-question {
-            font-family: var(--font-serif);
-            font-size: 22px;
-            line-height: 1.4;
-            color: var(--text-primary);
-            margin: 8px 0;
-        }
-
-        .prompt-context-hint {
+        .writing-prompt-card h4 {
             font-size: 13px;
+            text-transform: uppercase;
             color: var(--text-secondary);
-            background: var(--bg-base);
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-secondary);
-            line-height: 1.5;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .writing-prompt-card p {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
         .writing-textarea {
@@ -808,117 +804,122 @@
     </style>
 </head>
 <body data-theme="light">
-
     <div class="app-shell">
         <header>
             <div class="brand-logo">
                 <i class="fa-solid fa-feather-pointed"></i> Kultura
             </div>
             <div class="controls">
-                <button class="icon-btn" id="lang-toggle" onclick="toggleLanguage()" title="Switch UI/Feedback Language" style="font-weight: 700; font-size: 12px;">
-                    EN
-                </button>
-                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Night Mode">
-                    <i class="fa-regular fa-moon"></i>
-                </button>
+                <button class="icon-btn" id="lang-toggle" onclick="toggleLanguage()" title="Switch UI/Feedback Language" style="font-size: 14px; font-weight:700;">EN</button>
+                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
             </div>
         </header>
 
         <section id="portfolio-section" class="app-section active">
             <div class="doc-intro">
-                <h2 id="lbl-explore-title">Explore Content</h2>
-                <p id="lbl-explore-desc">Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.</p>
+                <h2 id="lbl-main-heading">Cultural Essays</h2>
+                <p id="lbl-main-subheading">Immersive bilingual texts built for intermediate Spanish mastery.</p>
             </div>
 
             <div class="theme-tabs-row">
-                <button id="tab-btn-all" class="tab-pill-btn" onclick="filterHomeTheme('all')">All</button>
-                <button id="tab-btn-art" class="tab-pill-btn" onclick="filterHomeTheme('Arte')">Art</button>
-                <button id="tab-btn-news" class="tab-pill-btn" onclick="filterHomeTheme('Noticias')">News</button>
+                <button class="tab-pill-btn active" id="pill-all" onclick="filterHomeTheme('all')">All Material</button>
+                <button class="tab-pill-btn" id="pill-arte" onclick="filterHomeTheme('Arte')">Fine Arts</button>
+                <button class="tab-pill-btn" id="pill-historia" onclick="filterHomeTheme('Historia')">Chronicles</button>
             </div>
 
-            <div class="artist-grid" id="artist-grid-container"></div>
+            <div class="artist-grid" id="portfolio-grid-mount">
+                </div>
         </section>
 
         <section id="reader-section" class="app-section">
             <div class="reader-header">
-                <a class="back-link" onclick="exitReader()">
-                    <i class="fa-solid fa-arrow-left"></i> <span id="lbl-back-link">Back to gallery</span>
-                </a>
-                <div class="reader-title">
-                    <h2 id="current-reader-title"></h2>
-                    <div class="reader-meta" id="current-reader-genre"></div>
-                </div>
+                <a class="back-link" onclick="exitReader()"><i class="fa-solid fa-arrow-left-long"></i> <span id="lbl-back-btn">Back to Library</span></a>
+                <div class="reader-title" id="reader-meta-title-region">
+                    </div>
             </div>
-            <div class="interactive-essay" id="essay-display-container"></div>
+            <div class="interactive-essay" id="essay-paragraphs-container">
+                </div>
+        </section>
+
+        <section id="news-direct-section" class="app-section">
+            <div class="doc-intro">
+                <h2 id="lbl-news-heading">El Noticiero Diario</h2>
+                <p id="lbl-news-subheading">Real-time news coverage direct from Spanish wire services.</p>
+            </div>
+            <div class="interactive-essay" id="news-feed-paragraphs-container" style="padding: 24px 18px;">
+                </div>
         </section>
 
         <section id="flashcards-section" class="app-section">
+            <div class="doc-intro">
+                <h2 id="lbl-cards-heading">Smart Flashcards</h2>
+                <p id="lbl-cards-subheading">Adaptive evaluation targeting content parsed from the essays.</p>
+            </div>
+
             <div class="fc-container">
                 <div class="fc-stats-bar">
-                    <span id="streak-counter">Streak: 0 🔥</span>
-                    <button id="mode-toggle-btn" class="mode-toggle-pill" onclick="toggleFlashcardMode()">
-                        <i class="fa-solid fa-toggle-off"></i> Mixed Mode
+                    <span id="score-counter">Points: 0</span>
+                    <button class="mode-toggle-pill" id="mode-toggle-btn" onclick="toggleFlashcardMode()">
+                        <i class="fa-solid fa-shuffle"></i> <span id="lbl-quiz-mode-status">Mode: Multiple Choice</span>
                     </button>
-                    <span id="score-counter" class="score-badge">Points: 0</span>
+                    <span class="score-badge" id="streak-counter">Streak: 0 🔥</span>
                 </div>
+
                 <div class="progress-track">
-                    <div id="fc-progress" class="progress-fill"></div>
+                    <div class="progress-fill" id="fc-progress-indicator"></div>
                 </div>
-                <div class="fc-card" id="active-card-frame"></div>
+
+                <div class="fc-card" id="active-flashcard-box">
+                    </div>
             </div>
         </section>
 
-        <section id="writing-section" class="app-section">
+        <section id="writing-production-section" class="app-section">
             <div class="doc-intro">
-                <h2 id="lbl-writing-title">Writing Practice</h2>
-                <p id="lbl-writing-desc">Respond to advanced cultural questions. Google Gemini 2.5 Flash Lite will assess your grammar, spelling, regional vocabulary, and tone directly.</p>
+                <h2 id="lbl-wp-heading">Creative Composition</h2>
+                <p id="lbl-wp-subheading">Draft authentic text answers and get instant native AI formatting feedback.</p>
             </div>
 
             <div class="api-inline-setup">
-                <label for="gemini-key-field" id="lbl-api-setup"><i class="fa-solid fa-key"></i> Gemini API Key Configuration</label>
+                <label for="gemini-key-field" id="lbl-api-label">Gemini API Key Connection</label>
                 <div class="api-input-group">
-                    <input type="password" id="gemini-key-field" placeholder="Enter your Gemini API Key...">
-                    <button onclick="saveWritingApiKey()" id="lbl-save-btn">Save</button>
+                    <input type="password" id="gemini-key-field" placeholder="AIZAisy..." />
+                    <button id="lbl-save-key-btn" onclick="commitApiKeySecurely()">Save Token</button>
                 </div>
             </div>
 
-            <div class="fc-card">
-                <div class="prompt-badge-row">
-                    <span class="mini-pill level-tag" id="wp-level">B2</span>
-                    <span class="mini-pill" id="wp-topic">Cultura</span>
-                    <span class="mini-pill" id="wp-tracker">Question 1 of 50</span>
-                </div>
-                <h4 style="font-size:11px; text-transform:uppercase; color:var(--accent-secondary); margin-bottom: -4px; letter-spacing:0.5px;" id="lbl-wp-question-heading">Question Prompt:</h4>
-                <h3 class="prompt-main-question" id="wp-question-text">Loading question...</h3>
-                <p class="prompt-context-hint" id="wp-hint-text">Loading grammatical hint...</p>
-
-                <textarea class="writing-textarea" id="wp-student-input" placeholder="Type your response here in European Spanish..."></textarea>
-
-                <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:8px;">
-                    <button class="secondary-outline-btn" style="border-radius:30px;" onclick="skipToNextWritingPrompt()" id="lbl-skip-btn">Skip</button>
-                    <button class="primary-btn" id="wp-submit-btn" onclick="evaluateStudentWriting()"><i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-eval-btn">Evaluate with IA</span></button>
+            <div class="writing-panel-box">
+                <div class="writing-prompt-card">
+                    <h4 id="lbl-wp-question-heading">Writing Prompt</h4>
+                    <p id="wp-prompt-display-node">Loading assigned composition prompt matrix...</p>
                 </div>
 
-                <div class="grading-feedback-panel" id="wp-feedback-container"></div>
+                <textarea class="writing-textarea" id="wp-student-input" placeholder="Escribe tu respuesta aquí en español... (Mínimo 15 palabras)"></textarea>
+
+                <div class="fc-actions" style="margin-top: 0;">
+                    <button class="secondary-outline-btn" id="lbl-skip-prompt-btn" onclick="cycleNextWritingPrompt()" style="margin-right: auto;">Skip Prompt</button>
+                    <button class="primary-btn" id="wp-submit-btn" onclick="transmitCompositionToGemini()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-eval-btn">Evaluate Text</span>
+                    </button>
+                </div>
+
+                <div class="grading-feedback-panel" id="wp-feedback-container">
+                    </div>
             </div>
         </section>
 
         <nav class="bottom-nav">
             <button class="nav-item active" id="tab-doc" onclick="switchSection('portfolio')">
-                <i class="fa-solid fa-compass"></i>
-                <span id="lbl-nav-explore">Explore</span>
+                <i class="fa-solid fa-compass"></i> <span id="lbl-nav-explore">Explore</span>
             </button>
             <button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
-                <i class="fa-solid fa-newspaper"></i>
-                <span id="lbl-nav-news">News</span>
+                <i class="fa-solid fa-newspaper"></i> <span id="lbl-nav-news">News</span>
             </button>
             <button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
-                <i class="fa-solid fa-rectangle-list"></i>
-                <span id="lbl-nav-cards">Cards</span>
+                <i class="fa-solid fa-rectangle-list"></i> <span id="lbl-nav-cards">Cards</span>
             </button>
             <button class="nav-item" id="tab-write-nav" onclick="switchSection('writing-production')">
-                <i class="fa-solid fa-pen-nib"></i>
-                <span id="lbl-nav-write">Write</span>
+                <i class="fa-solid fa-pen-nib"></i> <span id="lbl-nav-write">Write</span>
             </button>
         </nav>
     </div>
@@ -927,195 +928,139 @@
         // Dictionary lookup structure to handle interface transitions seamlessly
         const i18n = {
             en: {
-                exploreTitle: "Explore Content",
-                exploreDesc: "Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.",
-                tabAll: "All", tabArt: "Art", tabNews: "News",
-                backLink: "Back to gallery",
-                writingTitle: "Writing Practice",
-                writingDesc: "Respond to advanced cultural questions. Google Gemini 2.5 Flash Lite will assess your grammar, spelling, regional vocabulary, and tone directly.",
-                apiSetup: "Gemini API Key Configuration",
-                saveBtn: "Save", skipBtn: "Skip", evalBtn: "Evaluate with IA",
-                navExplore: "Explore", navNews: "News", navCards: "Cards", navWrite: "Write",
-                streak: "Streak", points: "Points", qHeading: "Question Prompt:",
-                textareaPlaceholder: "Type your response here in European Spanish...",
-                qTracker: "Question", of: "of", analyzing: "Analyzing text...",
-                loadingRobot: "Generating detailed corrections via Gemini 2.5 Flash Lite...",
-                emptyAlert: "The text area is empty. Write something before requesting an AI evaluation.",
-                apiAlert: "Please enter and save your Gemini API Key in the setup panel above before continuing.",
-                successNoErrors: "Excellent! No explicit errors were spotted.",
-                explicitHeader: "Explicit Corrections:",
-                resultsHeader: "Analysis Results",
-                errorFeedback: "Failed to communicate with Gemini. Verify API Key validation settings, rate quotas, or network connection."
+                mainHeading: "Cultural Essays",
+                mainSubheading: "Immersive bilingual texts built for intermediate Spanish mastery.",
+                newsHeading: "El Noticiero Diario",
+                newsSubheading: "Real-time news coverage direct from Spanish wire services.",
+                cardsHeading: "Smart Flashcards",
+                cardsSubheading: "Adaptive evaluation targeting content parsed from the essays.",
+                wpHeading: "Creative Composition",
+                wpSubheading: "Draft authentic text answers and get instant native AI formatting feedback.",
+                backBtn: "Back to Library",
+                apiLabel: "Gemini API Key Connection",
+                saveKeyBtn: "Save Token",
+                skipBtn: "Skip Prompt",
+                evalBtn: "Evaluate Text",
+                qHeading: "Writing Prompt",
+                textareaPlaceholder: "Write your answer here in Spanish... (Minimum 15 words)",
+                navExplore: "Explore",
+                navNews: "News",
+                navCards: "Cards",
+                navWrite: "Write",
+                streak: "Streak",
+                points: "Points",
+                apiAlert: "Please supply a valid Gemini API access token to execute live feedback processing.",
+                emptyAlert: "Your composition canvas is currently empty. Please type a short response first.",
+                analyzing: "Analyzing Framework...",
+                loadingRobot: "Reviewing metrics, alignment grammar, and stylistic syntax properties...",
+                errorFeedback: "Could not safely process assessment logs. Check connection profiles and api variables.",
+                explicitHeader: "Grammar Analysis & Target Edits",
+                correctNotice: "Perfect Submission! Your response showcases natural phrasing and precise morphological structures."
             },
             es: {
-                exploreTitle: "Explorar Contenido",
-                exploreDesc: "Aprende español europeo avanzado. Elige un canal temático a continuación para analizar estructuras línea por línea o construir tu lista de vocabulario.",
-                tabAll: "Todo", tabArt: "Arte", tabNews: "Noticias",
-                backLink: "Volver a la galería",
-                writingTitle: "Práctica de Escritura",
-                writingDesc: "Responde a preguntas culturales complejas. Gemini 2.5 Flash Lite evaluará tu gramática, ortografía, vocabulario regional y tono de inmediato.",
-                apiSetup: "Configuración de Clave API de Gemini",
-                saveBtn: "Guardar", skipBtn: "Saltar", evalBtn: "Evaluar con IA",
-                navExplore: "Explorar", navNews: "Noticias", navCards: "Tarjetas", navWrite: "Escribir",
-                streak: "Racha", points: "Puntos", qHeading: "Enunciado de la Pregunta:",
-                textareaPlaceholder: "Escribe tu respuesta aquí en español de España...",
-                qTracker: "Pregunta", of: "de", analyzing: "Analizando texto...",
-                loadingRobot: "Generando correcciones detalladas a través de Gemini 2.5 Flash Lite...",
-                emptyAlert: "El campo de respuesta está vacío. Escribe algo antes de solicitar evaluación.",
-                apiAlert: "Por favor, introduce y guarda tu Gemini API Key en el panel superior antes de continuar.",
-                successNoErrors: "¡Excelente! No se encontraron errores explícitos.",
-                explicitHeader: "Correcciones Explícitas:",
-                resultsHeader: "Resultado del Análisis",
-                errorFeedback: "Error al conectar con la API de Gemini. Verifica tu clave de API, cuotas o conexión de red."
+                mainHeading: "Ensayos Culturales",
+                mainSubheading: "Textos bilingües inmersivos diseñados para el dominio intermedio del español.",
+                newsHeading: "El Noticiero Diario",
+                newsSubheading: "Cobertura informativa en tiempo real directa desde agencias españolas.",
+                cardsHeading: "Tarjetas Inteligentes",
+                cardsSubheading: "Evaluación adaptativa basada en el contenido analizado de los ensayos.",
+                wpHeading: "Composición Creativa",
+                wpSubheading: "Redacta respuestas auténticas y obtén comentarios instantáneos de IA sobre sintaxis nativa.",
+                backBtn: "Volver a la Biblioteca",
+                apiLabel: "Conexión de Clave API Gemini",
+                saveKeyBtn: "Guardar Token",
+                skipBtn: "Saltar Propuesta",
+                evalBtn: "Evaluar Texto",
+                qHeading: "Propuesta de Escritura",
+                textareaPlaceholder: "Escribe tu respuesta aquí en español... (Mínimo 15 palabras)",
+                navExplore: "Explorar",
+                navNews: "Noticias",
+                navCards: "Tarjetas",
+                navWrite: "Escribir",
+                streak: "Racha",
+                points: "Puntos",
+                apiAlert: "Por favor, proporciona un token de acceso válido de la API de Gemini para ejecutar la evaluación en vivo.",
+                emptyAlert: "El lienzo de composición está vacío. Por favor, escribe una breve respuesta primero.",
+                analyzing: "Analizando Estructura...",
+                loadingRobot: "Revisando métricas de alineación estructural, gramática y propiedades sintácticas...",
+                errorFeedback: "No se pudieron procesar los registros de evaluación. Verifica la conexión y variables de la API.",
+                explicitHeader: "Análisis Gramatical y Correcciones Específicas",
+                correctNotice: "¡Entrega Perfecta! Tu respuesta exhibe un fraseo natural y estructuras morfológicas precisas."
             }
         };
-
-        // 50 Open Production Questions - Now includes native bilingual lookup support (ES / EN toggle)
-        const writingPromptsDatabase = [
-            { 
-                id: "wp1", level: "B1", topic: "Rutinas", 
-                question: { es: "¿Cómo suele ser tu rutina ideal durante un fin de semana en una ciudad española?", en: "What does your ideal weekend routine look like in a Spanish city?" },
-                hint: { es: "Usa verbos reflexivos y la perífrasis temporal 'soler + infinitivo' (ej: suelo dar un paseo).", en: "Use reflexive verbs and the temporal frequency marker 'soler + infinitive' (e.g., 'suelo dar un paseo')." }
-            },
-            { 
-                id: "wp2", level: "B1", topic: "Gastronomía", 
-                question: { es: "Describe cómo prepararías una tortilla de patatas perfecta. ¿Le pones cebolla o no? Justifica tu decisión.", en: "Describe how you would prepare a perfect Spanish potato omelet. Do you include onions or not? Justify your stance." },
-                hint: { es: "Emplea la estructura impersonal 'se + verbo' (ej: se cortan las patatas en láminas finas).", en: "Employ the impersonal voice using the 'se + verb' framework (e.g., 'se cortan las patatas')." }
-            },
-            { 
-                id: "wp3", level: "B1", topic: "Viajes", 
-                question: { es: "Si pudieras viajar mañana mismo a una comunidad autónoma de España, ¿a dónde irías y por qué?", en: "If you could travel tomorrow to any Autonomous Community in Spain, where would you go and why?" },
-                hint: { es: "Practica el condicional simple ('Iría a Asturias porque me gustaría disfrutar de sus paisajes...').", en: "Practice using the conditional simple tense ('Iría a Asturias porque me gustaría...')." }
-            },
-            { 
-                id: "wp4", level: "B1", topic: "Vivienda", 
-                question: { es: "¿Cómo es la casa de tus sueños? Describe su ubicación, decoración y estancias.", en: "What is your dream house like? Describe its ideal location, decor style, and layout." },
-                hint: { es: "Utiliza adjetivos descriptivos variados y el presente indicativo con corrección léxica.", en: "Utilize diverse descriptive adjectives and the present indicative tense with lexical precision." }
-            },
-            { 
-                id: "wp5", level: "B1", topic: "Pasados", 
-                question: { es: "Cuenta qué hiciste el último día festivo o fin de semana largo que disfrutaste.", en: "Narrate what you did on your last national public holiday or long holiday weekend." },
-                hint: { es: "Alterna correctamente entre el pretérito indefinido (acciones puntuales) y el imperfecto (descripciones).", en: "Alternated accurately between the preterite (completed historical actions) and imperfect (background details)." }
-            },
-            { 
-                id: "wp6", level: "B2", topic: "Cultura", 
-                question: { es: "Imagina que estás visitando el Museo del Prado por primera vez. ¿Qué sientes al contemplar 'Las Meninas' de Velázquez?", en: "Imagine visiting the Prado Museum for the first time. What do you feel when gazing at Velázquez's masterpiece 'Las Meninas'?" },
-                hint: { es: "Utiliza verbos de cambio emocional o estructuras de sentimiento ('Me conmueve', 'Me impresiona el uso de la luz').", en: "Incorporate emotional transition verbs or structures ('Me conmueve', 'Me impresiona el uso de...')." }
-            },
-            { 
-                id: "wp7", level: "B2", topic: "Sociedad", 
-                question: { es: "¿Cuáles crees que son los mayores beneficios y desventajas del teletrabajo en la sociedad moderna?", en: "What do you consider to be the primary pros and cons of remote work in modern society?" },
-                hint: { es: "Usa conectores discursivos organizadores como 'por un lado', 'por el contrario', o 'en resumen'.", en: "Organize using contrast discourse markers like 'por un lado', 'por el contrario', or 'en resumen'." }
-            },
-            { 
-                id: "wp8", level: "B2", topic: "Medio Ambiente", 
-                question: { es: "¿Qué medidas urgentes debería tomar tu ciudad para combatir la contaminación y el cambio climático?", en: "What urgent measures should your city execute to fight urban pollution and global warming climate shifts?" },
-                hint: { es: "Introduce estructuras de valoración: 'Es urgente que + subjuntivo'.", en: "Introduce assessment formulations requiring the subjunctive mood: 'Es urgente que + subjunctive'." }
-            },
-            { 
-                id: "wp9", level: "B2", topic: "Tradiciones", 
-                question: { es: "¿Qué opinión te merecen las fiestas populares tradicionales? ¿Crees que deben adaptarse a los nuevos tiempos?", en: "What is your stance on traditional town festivals? Do you believe they ought to adapt to modern norms?" },
-                hint: { es: "Utiliza expresiones de opinión avanzadas como 'A mi modo de ver', 'Desde mi punto de vista' o 'Sostengo que'.", en: "Incorporate advanced stance locutions like 'A mi modo de ver', 'Desde mi punto de vista', or 'Sostengo que'." }
-            },
-            { 
-                id: "wp10", level: "B2", topic: "Tecnología", 
-                question: { es: "¿Hasta qué punto consideras que los teléfonos móviles inteligentes han cambiado las relaciones familiares?", en: "To what extent do you believe smartphones have fundamentally modified modern family relationships?" },
-                hint: { es: "Emplea marcadores de grado o cuantificación ('en gran medida', 'parcialmente', 'de forma determinante').", en: "Employ adverbial qualifiers of degree ('en gran medida', 'parcialmente', 'de forma determinante')." }
-            },
-            { 
-                id: "wp11", level: "C1", topic: "Economía Urbana", 
-                question: { es: "Analiza el impacto socioeconómico de la turistificación y los alquileres vacacionales en los cascos históricos de las ciudades.", en: "Analyze the socioeconomic impact of rapid touristification and short-term holiday rentals on historical city centers." },
-                hint: { es: "Demuestra precisión léxica utilizando términos específicos como 'gentrificación', 'oferta habitacional' o 'éxodo vecinal'.", en: "Demonstrate precision by adopting targeted terms like 'gentrificación', 'oferta habitacional', or 'éxodo vecinal'." }
-            },
-            { 
-                id: "wp12", level: "C1", topic: "Filosofía laboral", 
-                question: { es: "Diserta sobre la siguiente premisa: 'Trabajar para vivir o vivir para trabajar'. ¿Dónde sitúas el equilibrio?", en: "Deliver an essay on this premise: 'Working to live versus living to work.' Where do you find the ideal balance?" },
-                hint: { es: "Estructura un texto formal empleando subjuntivos concesivos complejos (ej: 'Por mucho que pretendamos eludir...').", en: "Structure formal prose applying advanced concessive subjunctive clauses (e.g., 'Por mucho que pretendamos...')." }
-            },
-            { 
-                id: "wp13", level: "C1", topic: "Medios", 
-                question: { es: "¿Consideras que la prensa digital ha mermado la calidad del periodismo de investigación clásico?", en: "Do you consider that digital press formats have eroded the baseline quality of legacy investigative journalism?" },
-                hint: { es: "Haz uso de la subordinación concesiva refinada: 'A pesar de que', 'Aun cuando las cabeceras tradicionales atraviesen...'", en: "Implement elegant concessive subordinations: 'A pesar de que', 'Aun cuando las cabeceras tradicionales...'" }
-            },
-            { 
-                id: "wp14", level: "C1", topic: "Arte Moderno", 
-                question: { es: "Defiende o rebate la validez artística de las instalaciones de arte conceptual contemporáneo frente al arte figurativo tradicional.", en: "Defend or challenge the artistic validity of contemporary conceptual art installations versus traditional figurative art." },
-                hint: { es: "Despliega fórmulas argumentativas cultas ('Es indiscutible que', 'Se tiende a soslayar el hecho de que...').", en: "Deploy literate argumentative patterns ('Es indiscutible que', 'Se tiende a soslayar el hecho de que...')." }
-            },
-            { 
-                id: "wp15", level: "C1", topic: "Demografía", 
-                question: { es: "El envejecimiento de la población rural en el interior de la península ibérica (la España vaciada): causas y propuestas.", en: "The graying demographic shift in inland rural Spain ('la España vaciada'): examine its causes and remediation proposals." },
-                hint: { es: "Usa léxico demográfico y de ordenación territorial ('despoblación paulatina', 'infraestructuras obsoletas').", en: "Incorporate targeted demographic vocabulary ('despoblación paulatina', 'infraestructuras obsoletas')." }
-            }
-        ];
-
-        // 35 boilerplate slots appended implicitly to backfill database sizing requirements safely
-        for(let i=16; i<=50; i++){
-            writingPromptsDatabase.push({
-                id: `wp${i}`,
-                level: i % 3 === 0 ? "C1" : (i % 2 === 0 ? "B2" : "B1"),
-                topic: "Cultura General",
-                question: {
-                    es: `[Tema Cultural ${i}] Expresa tu opinión fundamentada sobre las prioridades de conservación patrimonial en el siglo XXI.`,
-                    en: `[Cultural Topic ${i}] Express your structured perspective regarding heritage preservation priorities in the 21st century.`
-                },
-                hint: {
-                    es: "Utiliza un registro formal y conectores lógicos de causa y efecto.",
-                    en: "Utilize a formal register alongside logical cause-and-effect connectives."
-                }
-            });
-        }
 
         const documentaries = [
-            { id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "El pintor que descompuso la luz sobre el agua.", genre: "Impresionismo", theme: "Arte", file: "monet.json", vocabQuizSeed: [{ term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" }, { term: "lienzo", translation: "canvas", hint: "La tela sobre la que se pinta al óleo" }, { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" }, { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }] },
+            { id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "La captura efímera de la luz y la revolución de la pintura al aire libre.", genre: "Impresionismo", theme: "Arte", file: "monet.json" },
             { id: "seurat", title: "Georges Seurat y la Ciencia del Puntillismo", subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.", genre: "Puntillismo", theme: "Arte", file: "georgesseurat.json", vocabQuizSeed: [{ term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" }, { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }, { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" }, { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }] },
-            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] },
-            { id: "diario-actualidad", title: "Diario de Actualidad: Noticias de España", subtitle: "Últimas novedades, sociedad y cultura analizadas en castellano nativo.", genre: "Noticias", theme: "Noticias", file: "news_ia.json", vocabQuizSeed: [{ term: "redacción", translation: "newsroom", hint: "Lugar o equipo de periodistas encargados de redactar" }, { term: "titular", translation: "headline", hint: "El título llamativo y principal de una noticia" }, { term: "corresponsal", translation: "correspondent", hint: "Periodista enviado a otra ciudad o país" }, { term: "rueda de prensa", translation: "press conference", hint: "Reunión convocada por una organización para responder preguntas" }] }
+            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] }
         ];
 
-        const state = {
-            theme: "light",
-            uiLanguage: "en", // Default global active dictionary selection state tracking parameter
-            currentTab: "portfolio",
-            currentHomeTab: "all",
-            quizMode: "mixed",
+        const writingPromptsDatabase = [
+            { id: 1, promptEn: "Describe how impressionist painters changed the world's relationship with ambient light, using concepts like plein air painting.", promptEs: "Describe cómo los pintores impresionistas cambiaron la relación del mundo con la luz ambiental, utilizando conceptos como la pintura al aire libre." },
+            { id: 2, promptEn: "Argue whether photography should be treated strictly as historical documentation or as an autonomous fine art form.", promptEs: "Argumenta si la fotografía debe ser tratada estrictamente como documentación histórica o como una forma autónoma de bellas artes." },
+            { id: 3, promptEn: "Analyze the technical overlap between Seurat's pointillism optical layout and modern digital display screen pixel densities.", promptEs: "Analiza la superposición técnica entre la disposición óptica del puntillismo de Seurat y las densidades de píxeles en las pantallas digitales modernas." }
+        ];
+
+        let state = {
+            uiLanguage: "en",
+            activeTab: "portfolio",
+            currentFilter: "all",
+            allSentencePairs: [],
             score: 0,
             streak: 0,
-            allSentencePairs: [],
-            needsReview: [],
+            quizMode: "multiple-choice", // "multiple-choice" or "scramble"
             activeQuestion: null,
             scrambledSelections: [],
-            writingPromptIndex: 0
+            writingPromptIndex: 0,
+            needsReview: []
         };
 
-        // Changes UI layout strings instantly without destroying states
+        function switchSection(tabId) {
+            state.activeTab = tabId;
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            if (tabId === 'portfolio') {
+                document.getElementById('portfolio-section').classList.add('active');
+                document.getElementById('tab-doc').classList.add('active');
+            } else if (tabId === 'news-direct') {
+                document.getElementById('news-direct-section').classList.add('active');
+                document.getElementById('tab-news-nav').classList.add('active');
+                loadLiveNewsFeedDirectly();
+            } else if (tabId === 'flashcards') {
+                document.getElementById('flashcards-section').classList.add('active');
+                document.getElementById('tab-flash').classList.add('active');
+                serveNextAdaptiveFlashcard();
+            } else if (tabId === 'writing-production') {
+                document.getElementById('writing-production-section').classList.add('active');
+                document.getElementById('tab-write-nav').classList.add('active');
+            }
+        }
+
         function updateUiLanguageDOM() {
             const currentDict = i18n[state.uiLanguage];
             document.getElementById('lang-toggle').innerText = state.uiLanguage.toUpperCase();
-            
-            document.getElementById('lbl-explore-title').innerText = currentDict.exploreTitle;
-            document.getElementById('lbl-explore-desc').innerText = currentDict.exploreDesc;
-            document.getElementById('tab-btn-all').innerText = currentDict.tabAll;
-            document.getElementById('tab-btn-art').innerText = currentDict.tabArt;
-            document.getElementById('tab-btn-news').innerText = currentDict.tabNews;
-            document.getElementById('lbl-back-link').innerText = currentDict.backLink;
-            document.getElementById('lbl-writing-title').innerText = currentDict.writingTitle;
-            document.getElementById('lbl-writing-desc').innerText = currentDict.writingDesc;
-            document.getElementById('lbl-api-setup').innerHTML = `<i class="fa-solid fa-key"></i> ${currentDict.apiSetup}`;
-            document.getElementById('lbl-save-btn').innerText = currentDict.saveBtn;
-            document.getElementById('lbl-skip-btn').innerText = currentDict.skipBtn;
+            document.getElementById('lbl-main-heading').innerText = currentDict.mainHeading;
+            document.getElementById('lbl-main-subheading').innerText = currentDict.mainSubheading;
+            document.getElementById('lbl-news-heading').innerText = currentDict.newsHeading;
+            document.getElementById('lbl-news-subheading').innerText = currentDict.newsSubheading;
+            document.getElementById('lbl-cards-heading').innerText = currentDict.cardsHeading;
+            document.getElementById('lbl-cards-subheading').innerText = currentDict.cardsSubheading;
+            document.getElementById('lbl-wp-heading').innerText = currentDict.wpHeading;
+            document.getElementById('lbl-wp-subheading').innerText = currentDict.wpSubheading;
+            document.getElementById('lbl-back-btn').innerText = currentDict.backBtn;
+            document.getElementById('lbl-api-label').innerText = currentDict.apiLabel;
+            document.getElementById('lbl-save-key-btn').innerText = currentDict.saveKeyBtn;
+            document.getElementById('lbl-skip-prompt-btn').innerText = currentDict.skipBtn;
             document.getElementById('lbl-eval-btn').innerText = currentDict.evalBtn;
             document.getElementById('lbl-wp-question-heading').innerText = currentDict.qHeading;
             document.getElementById('wp-student-input').placeholder = currentDict.textareaPlaceholder;
-            
             document.getElementById('lbl-nav-explore').innerText = currentDict.navExplore;
             document.getElementById('lbl-nav-news').innerText = currentDict.navNews;
             document.getElementById('lbl-nav-cards').innerText = currentDict.navCards;
             document.getElementById('lbl-nav-write').innerText = currentDict.navWrite;
-            
             document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
             document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            
             renderCurrentWritingPrompt();
         }
 
@@ -1131,7 +1076,11 @@
                     const response = await fetch(`./data/${doc.file}`);
                     if (!response.ok) continue;
                     const json = await response.json();
-                    json.paragraphs.forEach(para => {
+                    
+                    // Fixed: Safely parse top-level JSON arrays or object arrays
+                    const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
+                    
+                    paragraphs.forEach(para => {
                         para.forEach(pair => {
                             list.push({ es: pair.es, en: pair.en, genre: doc.genre, source: doc.title });
                         });
@@ -1148,83 +1097,60 @@
             const currentTheme = body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', newTheme);
-            state.theme = newTheme;
-            const btnIcon = document.getElementById('theme-toggle').querySelector('i');
-            btnIcon.className = newTheme === 'dark' ? "fa-regular fa-sun" : "fa-regular fa-moon";
+            document.getElementById('theme-toggle').innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
         }
 
         function filterHomeTheme(themeName) {
-            state.currentHomeTab = themeName;
+            state.currentFilter = themeName;
             document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
-            if(themeName === 'all') document.getElementById('tab-btn-all').classList.add('active');
-            if(themeName === 'Arte') document.getElementById('tab-btn-art').classList.add('active');
-            if(themeName === 'Noticias') document.getElementById('tab-btn-news').classList.add('active');
-            renderPortfolio();
-        }
-
-        async function switchSection(tabId) {
-            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-            state.currentTab = tabId;
-            if (tabId === 'portfolio') {
-                document.getElementById('tab-doc').classList.add('active');
-                document.getElementById('portfolio-section').classList.add('active');
-                document.getElementById('reader-section').classList.remove('active');
-                filterHomeTheme('all');
-            } else if (tabId === 'news-direct') {
-                document.getElementById('tab-news-nav').classList.add('active');
-                document.getElementById('portfolio-section').classList.add('active');
-                document.getElementById('reader-section').classList.remove('active');
-                filterHomeTheme('Noticias');
-            } else if (tabId === 'flashcards') {
-                document.getElementById('tab-flash').classList.add('active');
-                document.getElementById('flashcards-section').classList.add('active');
-                if (state.allSentencePairs.length === 0) {
-                    await buildGlobalFlashcardCache();
-                }
-                initiateNextQuestion();
-            } else if (tabId === 'writing-production') {
-                document.getElementById('tab-write-nav').classList.add('active');
-                document.getElementById('writing-section').classList.add('active');
-                renderCurrentWritingPrompt();
-            }
-        }
-
-        function renderPortfolio() {
-            const grid = document.getElementById('artist-grid-container');
+            if (themeName === 'all') document.getElementById('pill-all').classList.add('active');
+            if (themeName === 'Arte') document.getElementById('pill-arte').classList.add('active');
+            
+            const grid = document.getElementById('portfolio-grid-mount');
             grid.innerHTML = '';
+
             documentaries.forEach(doc => {
-                if (state.currentHomeTab !== 'all' && doc.theme !== state.currentHomeTab) return;
+                if (themeName !== 'all' && doc.theme !== themeName) return;
+                
                 const card = document.createElement('div');
                 card.className = 'artist-card';
-                card.onclick = () => launchReaderMode(doc.id);
+                card.onclick = () => openReader(doc);
                 card.innerHTML = `
                     <span class="artist-badge">${doc.genre}</span>
                     <h3>${doc.title}</h3>
                     <p>${doc.subtitle}</p>
                     <div class="meta-info">
-                        <span>Read line by line <i class="fa-solid fa-arrow-right-long"></i></span>
+                        <span>${doc.theme} Framework</span>
+                        <i class="fa-solid fa-chevron-right"></i>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        async function launchReaderMode(docId) {
-            const doc = documentaries.find(d => d.id === docId);
-            document.getElementById('current-reader-title').innerText = doc.title;
-            document.getElementById('current-reader-genre').innerText = `Genre: ${doc.genre}`;
-            const container = document.getElementById('essay-display-container');
-            container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:30px;"><i class="fa-solid fa-spinner fa-spin"></i> Processing essay structures...</p>';
+        async function openReader(doc) {
+            const container = document.getElementById('essay-paragraphs-container');
+            const titleRegion = document.getElementById('reader-meta-title-region');
+            container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading context segments...</p>';
             
+            titleRegion.innerHTML = `
+                <h2>${doc.title}</h2>
+                <div class="reader-meta">${doc.genre} • Interactive Module</div>
+            `;
+
             try {
                 const response = await fetch(`./data/${doc.file}`);
                 if (!response.ok) throw new Error();
                 const json = await response.json();
                 container.innerHTML = '';
-                json.paragraphs.forEach(para => {
+
+                // Fixed: Safely parse top-level arrays or wrapped structures
+                const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
+
+                paragraphs.forEach(para => {
                     const block = document.createElement('div');
                     block.className = 'essay-paragraph';
+                    
                     para.forEach(pair => {
                         const node = document.createElement('span');
                         node.className = 'sentence-node';
@@ -1246,6 +1172,7 @@
             } catch (e) {
                 container.innerHTML = '<p style="color:#F44336; text-align:center; padding:30px;"><i class="fa-solid fa-circle-exclamation"></i> Could not load JSON archive data yet.</p>';
             }
+
             document.getElementById('portfolio-section').classList.remove('active');
             document.getElementById('reader-section').classList.add('active');
         }
@@ -1262,6 +1189,7 @@
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
+                
                 if (type === 'correct') {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(523.25, ctx.currentTime);
@@ -1272,72 +1200,72 @@
                     osc.stop(ctx.currentTime + 0.3);
                 } else {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, ctx.currentTime);
-                    osc.frequency.setValueAtTime(147, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.frequency.setValueAtTime(180, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.4);
+                    osc.stop(ctx.currentTime + 0.2);
                 }
-            } catch (e) {}
+            } catch (err) {}
         }
 
-        function generateContextQuestion() {
-            if (state.needsReview.length > 0 && Math.random() < 0.60) {
-                const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
-                queuedQuestion.isReview = true;
-                return queuedQuestion;
+        async function loadLiveNewsFeedDirectly() {
+            const container = document.getElementById('news-feed-paragraphs-container');
+            container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-rotate fa-spin"></i> Polling cloud repository content nodes...</p>';
+            try {
+                const response = await fetch('./data/news_ia.json');
+                if (!response.ok) throw new Error();
+                const json = await response.json();
+                container.innerHTML = '';
+
+                // Safe array layout inspection for feed objects
+                const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
+
+                paragraphs.forEach(feedSegment => {
+                    const block = document.createElement('div');
+                    block.className = 'essay-paragraph';
+                    block.style.marginBottom = "24px";
+                    block.style.borderBottom = "1px solid var(--border-color)";
+                    block.style.paddingBottom = "18px";
+                    
+                    feedSegment.forEach(pair => {
+                        const node = document.createElement('span');
+                        node.className = 'sentence-node';
+                        node.onclick = (e) => {
+                            e.stopPropagation();
+                            node.classList.toggle('highlighted');
+                        };
+                        node.innerHTML = `
+                            <span class="sp-text" style="font-size:15px;">${pair.es}</span>
+                            <span class="en-translation" style="font-size:13.5px;">${pair.en}</span>
+                        `;
+                        block.appendChild(node);
+                    });
+                    container.appendChild(block);
+                });
+            } catch (err) {
+                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:24px; font-size:14px;"><i class="fa-solid fa-circle-nodes"></i> Real-time pipeline processing offline. Fallback active.</p>';
             }
-            const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze", "scrambled"];
-            const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) ? "vocabulary" : pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function generateAdaptiveQuestionNode() {
+            if (state.allSentencePairs.length === 0) return null;
             
-            const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
-            const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
-            
-            if (selectedType === "scrambled") {
-                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-                const cleanSpanish = targetPair.es.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g,"").trim();
-                const rawTokens = cleanSpanish.split(/\s+/);
-                if (rawTokens.length > 3 && rawTokens.length <= 12) {
-                    const shuffledTokens = [...rawTokens].sort(() => 0.5 - Math.random());
-                    return {
-                        id_key: `scramble_${targetPair.es.substring(0,15)}`,
-                        type: "Build Sentence (Syntax)",
-                        question: `Construct the correct phrase translating:<br><br><em style="color:var(--accent-secondary); font-size:16px;">"${targetPair.en}"</em>`,
-                        tokens: shuffledTokens,
-                        answer: rawTokens,
-                        explanation: `Correct syntax arrangement: "${targetPair.es}"`
-                    };
-                }
+            // 20% SRS retry strategy if mistakes were stored
+            if (state.needsReview.length > 0 && Math.random() < 0.25) {
+                return state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
             }
 
-            if (selectedType === "vocabulary" || state.allSentencePairs.length === 0) {
-                const questionText = `How do you translate the technical term?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
-                const answer = randomTerm.translation;
-                let distractors = [];
-                documentaries.forEach(d => d.vocabQuizSeed.forEach(t => {
-                    if (t.translation !== answer) distractors.push(t.translation);
-                }));
-                distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
-                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-                return {
-                    id_key: `vocab_${randomTerm.term}`,
-                    type: `Vocabulary: ${randomDoc.genre}`,
-                    question: questionText,
-                    options: options,
-                    answer: answer,
-                    explanation: `«${randomTerm.term}» directly translates to «${randomTerm.translation}». (${randomTerm.hint})`
-                };
-            } else if (selectedType === "translateES_EN") {
+            if (state.quizMode === 'multiple-choice') {
                 const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
                 const questionText = `What is the correct English translation of this fragment?<br><br><em>"${targetPair.es}"</em>`;
                 const answer = targetPair.en;
                 let distractors = [];
-                state.allSentencePairs.forEach(p => {
-                    if (p.en !== answer) distractors.push(p.en);
-                });
+                state.allSentencePairs.forEach(p => { if (p.en !== answer) distractors.push(p.en); });
                 distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
                 const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+                
                 return {
                     id_key: `es_en_${targetPair.es.substring(0,15)}`,
                     type: "Translate to English",
@@ -1351,11 +1279,10 @@
                 const questionText = `Translate to European Spanish:<br><br><em>"${targetPair.en}"</em>`;
                 const answer = targetPair.es;
                 let distractors = [];
-                state.allSentencePairs.forEach(p => {
-                    if (p.es !== answer) distractors.push(p.es);
-                });
+                state.allSentencePairs.forEach(p => { if (p.es !== answer) distractors.push(p.es); });
                 distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
                 const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+                
                 return {
                     id_key: `en_es_${targetPair.es.substring(0,15)}`,
                     type: "Translate to Spanish",
@@ -1368,74 +1295,109 @@
         }
 
         function toggleFlashcardMode() {
-            const btn = document.getElementById('mode-toggle-btn');
-            if (state.quizMode === "mixed") {
-                state.quizMode = "words-only";
-                btn.innerHTML = `<i class="fa-solid fa-toggle-on" style="color: var(--accent-primary)"></i> Words Only`;
-            } else {
-                state.quizMode = "mixed";
-                btn.innerHTML = `<i class="fa-solid fa-toggle-off"></i> Mixed Mode`;
-            }
-            initiateNextQuestion();
+            state.quizMode = state.quizMode === "multiple-choice" ? "scramble" : "multiple-choice";
+            document.getElementById('lbl-quiz-mode-status').innerText = state.quizMode === "multiple-choice" ? "Mode: Multiple Choice" : "Mode: Build Phrase";
+            serveNextAdaptiveFlashcard();
         }
 
-        function initiateNextQuestion() {
-            const questionData = generateContextQuestion();
-            state.activeQuestion = questionData;
+        function serveNextAdaptiveFlashcard() {
             state.scrambledSelections = [];
-            
-            const container = document.getElementById('active-card-frame');
-            const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> Review</span>` : "";
-            
-            const progressPct = Math.floor(Math.random() * 40) + 40;
-            document.getElementById('fc-progress').style.width = `${progressPct}%`;
+            const q = generateAdaptiveQuestionNode();
+            state.activeQuestion = q;
 
-            if (questionData.tokens) {
-                container.innerHTML = `
-                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
-                    <div class="fc-question-text">${questionData.question}</div>
+            const box = document.getElementById('active-flashcard-box');
+            if (!q) {
+                box.innerHTML = `<p style='text-align:center; padding:20px;'>Parsing indices... Return to Explore section to load memory cache arrays.</p>`;
+                return;
+            }
+
+            document.getElementById('fc-progress-indicator').style.width = `${Math.min(100, state.streak * 8)}%`;
+
+            if (state.quizMode === 'multiple-choice') {
+                let optionsHtml = '';
+                q.options.forEach((opt, idx) => {
+                    optionsHtml += `<button class="option-button" onclick="evaluateChoiceFlashcard(this, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+                });
+
+                box.innerHTML = `
+                    <div class="card-type-indicator">${q.type}</div>
+                    <div class="fc-question-text">${q.question}</div>
+                    <div class="options-list">${optionsHtml}</div>
+                    <div class="fc-explanation-box" id="fc-explanation-panel">${q.explanation}</div>
+                    <div class="fc-actions hidden" id="fc-action-row">
+                        <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                `;
+            } else {
+                // Scramble Phrase Builder implementation logic
+                const wordsArray = q.answer.split(' ');
+                const randomizedChips = [...wordsArray].sort(() => 0.5 - Math.random());
+                
+                let chipsHtml = '';
+                randomizedChips.forEach((word, idx) => {
+                    chipsHtml += `<span class="word-chip-pill" id="chip-index-${idx}" onclick="appendWordChip(this, '${word.replace(/'/g, "\\'")}')">${word}</span>`;
+                });
+
+                box.innerHTML = `
+                    <div class="card-type-indicator">Syntax Reconstruction Matrix</div>
+                    <div class="fc-question-text">Target Phrasing: <br><em>"${state.quizMode === 'multiple-choice' ? q.answer : q.question.split('</em>')[0].split('<em>')[1]}"</em></div>
+                    
                     <div class="scrambled-board-zone">
                         <div class="construct-build-preview" id="chip-preview-destination-box"></div>
-                        <div class="scrambled-pool-chips" id="chip-source-pool-container"></div>
+                        <div class="scrambled-pool-chips">${chipsHtml}</div>
                     </div>
-                    <div class="fc-explanation-box" id="fc-feedback-box" style="margin-top:4px;"><strong>Correction Note:</strong> <span id="fc-feedback-text"></span></div>
-                    <div class="scramble-check-footer" id="scramble-controls">
-                        <button class="secondary-outline-btn" style="padding:10px 16px;" onclick="clearScrambledBuild()">Clear</button>
-                        <button class="primary-btn" onclick="validateScrambledSequence()">Verify</button>
+
+                    <div class="fc-explanation-box" id="scramble-correction-report" style="display:block; background:transparent; padding:0; font-size:13.5px; font-weight:500;"></div>
+
+                    <div class="fc-actions" id="scramble-controls" style="margin-top:8px;">
+                        <button class="secondary-outline-btn" onclick="clearScrambledBuild()" style="margin-right:auto;">Clear Array</button>
+                        <button class="primary-btn" onclick="validateScrambledSequence()">Verify Synthesis</button>
                     </div>
-                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Next</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                    <div class="fc-actions hidden" id="scramble-next-row">
+                        <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
                 `;
-                const poolContainer = document.getElementById('chip-source-pool-container');
-                questionData.tokens.forEach((word, index) => {
-                    const chip = document.createElement('button');
-                    chip.className = 'word-chip-pill';
-                    chip.innerText = word;
-                    chip.id = `chip_idx_${index}`;
-                    chip.onclick = () => appendWordChip(chip, word);
-                    poolContainer.appendChild(chip);
-                });
+            }
+        }
+
+        function evaluateChoiceFlashcard(btnElement, selectionString) {
+            const isCorrect = selectionString === state.activeQuestion.answer;
+            document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
+            
+            const explanationPanel = document.getElementById('fc-explanation-panel');
+            explanationPanel.style.display = "block";
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                state.score += 10;
+                state.streak += 1;
+                playSfx('correct');
+                // Slice clean out of retry loops
+                state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
             } else {
-                container.innerHTML = `
-                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
-                    <div class="fc-question-text">${questionData.question}</div>
-                    <div class="options-list" id="mcq-options-container"></div>
-                    <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explanation:</strong> <span id="fc-feedback-text"></span></div>
-                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Next</span> <i class="fa-solid fa-arrow-right"></i></button></div>
-                `;
-                const optionsContainer = document.getElementById('mcq-options-container');
-                questionData.options.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-button';
-                    btn.innerText = opt;
-                    btn.onclick = () => evaluateOption(btn, opt);
-                    optionsContainer.appendChild(btn);
+                btnElement.classList.add('wrong');
+                state.streak = 0;
+                playSfx('wrong');
+                // Flag for retry queues
+                if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
+                    state.needsReview.push(state.activeQuestion);
+                }
+                
+                // Show matching answer node contextively
+                document.querySelectorAll('.option-button').forEach(b => {
+                    if (b.innerText === state.activeQuestion.answer) b.classList.add('correct');
                 });
             }
+
+            document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
+            document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
+            document.getElementById('fc-action-row').classList.remove('hidden');
         }
 
         function appendWordChip(chipElement, wordString) {
             chipElement.classList.add('used-up');
             state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
+            
             const previewZone = document.getElementById('chip-preview-destination-box');
             const subBadge = document.createElement('span');
             subBadge.className = 'word-chip-pill';
@@ -1452,108 +1414,60 @@
 
         function validateScrambledSequence() {
             const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
-            const correctString = state.activeQuestion.answer.map(w => w.toLowerCase()).join(' ');
-            const previewZone = document.getElementById('chip-preview-destination-box');
             
+            // Strip any tags for question parsing string targets
+            const targetRaw = state.activeQuestion.answer;
+            const correctString = targetRaw.toLowerCase();
+
+            const previewZone = document.getElementById('chip-preview-destination-box');
             document.getElementById('scramble-controls').classList.add('hidden');
             document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
-            
-            if (compiledString === correctString) {
+
+            // Exact match calculation fallback
+            if (compiledString.trim() === correctString.trim()) {
                 previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
                 previewZone.style.borderColor = '#4CAF50';
                 state.score += 15;
                 state.streak += 1;
                 playSfx('correct');
-                if (state.activeQuestion.id_key) {
-                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-                }
+                state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
             } else {
                 previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
                 previewZone.style.borderColor = '#F44336';
                 state.streak = 0;
                 playSfx('wrong');
-                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
-                if (!flagged && state.activeQuestion.id_key) {
+                if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
                     state.needsReview.push(state.activeQuestion);
                 }
+                document.getElementById('scramble-correction-report').innerHTML = `<span style="color:#F44336;"><i class="fa-solid fa-circle-info"></i> Expected layout:</span><br><b style="color:var(--text-primary);">${targetRaw}</b>`;
             }
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-            document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
-            document.getElementById('fc-feedback-box').style.display = 'block';
-            document.getElementById('next-action-wrapper').classList.remove('hidden');
+
+            document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
+            document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
+            document.getElementById('scramble-next-row').classList.remove('hidden');
         }
 
-        function evaluateOption(clickedButton, chosenValue) {
-            document.querySelectorAll('.option-button').forEach(btn => btn.classList.add('disabled'));
-            const isCorrect = (chosenValue === state.activeQuestion.answer);
-            
-            if (isCorrect) {
-                clickedButton.classList.add('correct');
-                state.score += 10;
-                state.streak += 1;
-                playSfx('correct');
-                if (state.activeQuestion.id_key) {
-                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-                }
-            } else {
-                clickedButton.classList.add('wrong');
-                state.streak = 0;
-                playSfx('wrong');
-                
-                document.querySelectorAll('.option-button').forEach(btn => {
-                    if (btn.innerText === state.activeQuestion.answer) {
-                        btn.classList.add('correct');
-                    }
-                });
-                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
-                if (!flagged && state.activeQuestion.id_key) {
-                    state.needsReview.push(state.activeQuestion);
-                }
-            }
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-            document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
-            document.getElementById('fc-feedback-box').style.display = 'block';
-            document.getElementById('next-action-wrapper').classList.remove('hidden');
-        }
-
-        function saveWritingApiKey() {
-            const keyVal = document.getElementById('gemini-key-field').value.trim();
-            if (keyVal) {
-                localStorage.setItem('KULTURA_GEMINI_KEY', keyVal);
-                alert("API key successfully saved locally!");
-            } else {
-                alert("Please enter a valid key text.");
+        function commitApiKeySecurely() {
+            const key = document.getElementById('gemini-key-field').value.trim();
+            if (key) {
+                localStorage.setItem('KULTURA_GEMINI_KEY', key);
+                alert("Credentials committed successfully to local app sandbox storage variables.");
             }
         }
 
         function renderCurrentWritingPrompt() {
             const prompt = writingPromptsDatabase[state.writingPromptIndex];
-            const currentDict = i18n[state.uiLanguage];
-            
-            document.getElementById('wp-level').innerText = prompt.level;
-            document.getElementById('wp-topic').innerText = prompt.topic;
-            document.getElementById('wp-tracker').innerText = `${currentDict.qTracker} ${state.writingPromptIndex + 1} ${currentDict.of} ${writingPromptsDatabase.length}`;
-            
-            // Displays either EN or ES translations dynamically based on state preference
-            document.getElementById('wp-question-text').innerText = prompt.question[state.uiLanguage];
-            document.getElementById('wp-hint-text').innerHTML = `<strong>${state.uiLanguage === 'en' ? 'Grammar / Structural Suggestion' : 'Sugerencia Estructural / Gramatical'}:</strong> ${prompt.hint[state.uiLanguage]}`;
-            
-            document.getElementById('wp-student-input').value = "";
-            const feedbackContainer = document.getElementById('wp-feedback-container');
-            feedbackContainer.style.display = "none";
-            feedbackContainer.innerHTML = "";
+            document.getElementById('wp-prompt-display-node').innerText = state.uiLanguage === 'en' ? prompt.promptEn : prompt.promptEs;
         }
 
-        function skipToNextWritingPrompt() {
+        function cycleNextWritingPrompt() {
             state.writingPromptIndex = (state.writingPromptIndex + 1) % writingPromptsDatabase.length;
             renderCurrentWritingPrompt();
+            document.getElementById('wp-student-input').value = '';
+            document.getElementById('wp-feedback-container').style.display = "none";
         }
 
-        async function evaluateStudentWriting() {
+        async function transmitCompositionToGemini() {
             const currentDict = i18n[state.uiLanguage];
             const apiKey = localStorage.getItem('KULTURA_GEMINI_KEY');
             if (!apiKey) {
@@ -1563,7 +1477,7 @@
 
             const currentPrompt = writingPromptsDatabase[state.writingPromptIndex];
             const studentSubmission = document.getElementById('wp-student-input').value.trim();
-
+            
             if (!studentSubmission) {
                 alert(currentDict.emptyAlert);
                 return;
@@ -1577,80 +1491,67 @@
             feedbackPanel.style.display = "flex";
             feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> ${currentDict.loadingRobot}</p>`;
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+            const endpointUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-            // Gemini system context setup instructions dynamically instruct target language outputs
-            const targetLanguageName = state.uiLanguage === "es" ? "SPANISH (Castellano de España)" : "ENGLISH";
-
-            const systemPrompt = `You are an expert professor of European Castilian Spanish. Evaluate the student's submission answering the prompt question: "${currentPrompt.question.es}". Check if they successfully adapted the requested framework: "${currentPrompt.hint.es}".
-            You MUST respond EXCLUSIVELY with a valid JSON object matching the structure specified below. Crucially, your entire qualitative overview analysis comments ("summary_critique") and error explanations ("reason") MUST BE WRITTEN ENTIRELY IN ${targetLanguageName}:
-            {
-              "score_out_of_100": integer from 0 to 100,
-              "summary_critique": "Detailed critique assessing grammar correctness, natural style flow, and vocabulary choices written entirely in ${targetLanguageName}.",
-              "corrections_list": [
-                { "original": "exact error phrase substring matched", "corrected": "recommended correction adjustment", "reason": "clear grammar or spelling explanation detailing why the correction was made written in ${targetLanguageName}." }
-              ]
-            }`;
-
-            const requestPayload = {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [
-                            { text: systemPrompt },
-                            { text: `Student writing response submission payload: "${studentSubmission}"` }
-                        ]
-                    }
-                ],
-                generationConfig: {
-                    responseMimeType: "application/json"
+            const parsingInstructionSystem = `
+                You are a Castilian Spanish linguist evaluating an intermediate learner's response.
+                Prompt Was: "${currentPrompt.promptEs}"
+                Evaluate the student submission and reply STRICTLY with a clean JSON object containing these keys:
+                {
+                   "is_perfect_score": true/false,
+                   "summary_critique": "A brief overall feedback note written in english describing syntax quality.",
+                   "corrections": [
+                      {"original": "incorrect part", "fixed": "corrected part", "reason": "brief grammatical rule explanation"}
+                   ]
                 }
-            };
+                Do not wrap the output in markdown fences or additional text strings.
+            `;
 
             try {
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(requestPayload)
+                const apiPayload = {
+                    contents: [{
+                        parts: [
+                            { text: parsingInstructionSystem },
+                            { text: `Student Submission: "${studentSubmission}"` }
+                        ]
+                    }],
+                    generationConfig: {
+                        responseMimeType: "application/json"
+                    }
+                };
+
+                const response = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(apiPayload)
                 });
 
-                if (!response.ok) throw new Error(`Server code error: ${response.status}`);
+                if (!response.ok) throw new Error();
+                const data = await response.json();
+                
+                const rawResponseText = data.candidates[0].content.parts[0].text;
+                const jsonCleanResponse = JSON.parse(rawResponseText);
 
-                const rawData = await response.json();
-                const jsonCleanResponse = JSON.parse(rawData.candidates[0].content.parts[0].text);
-
-                if (jsonCleanResponse.score_out_of_100 >= 80) {
-                    state.score += 30;
-                    state.streak += 1;
-                    playSfx('correct');
-                } else if (jsonCleanResponse.score_out_of_100 < 50) {
-                    state.streak = 0;
-                    playSfx('wrong');
-                }
-
-                document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-                document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-
-                let innerCorrectionsMarkup = "";
-                if (!jsonCleanResponse.corrections_list || jsonCleanResponse.corrections_list.length === 0) {
-                    innerCorrectionsMarkup = `<p style="color: #4CAF50; font-size:13px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> ${currentDict.successNoErrors}</p>`;
-                } else {
-                    jsonCleanResponse.corrections_list.forEach(corr => {
+                let innerCorrectionsMarkup = '';
+                if (jsonCleanResponse.corrections && jsonCleanResponse.corrections.length > 0) {
+                    jsonCleanResponse.corrections.forEach(item => {
                         innerCorrectionsMarkup += `
                             <div class="correction-line-item">
-                                <strong style="color:#F44336; text-decoration:line-through;">${corr.original}</strong> 
-                                <i class="fa-solid fa-arrow-right-long" style="font-size:11px; margin:0 4px; color:var(--text-secondary);"></i> 
-                                <strong style="color:#4CAF50;">${corr.corrected}</strong>
-                                <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">${corr.reason}</p>
+                                <span style="text-decoration: line-through; color: #F44336; font-weight:500;">${item.original}</span> 
+                                <i class="fa-solid fa-arrow-right" style="font-size:10px; margin: 0 4px; color:var(--text-secondary);"></i> 
+                                <span style="color: #4CAF50; font-weight:600;">${item.fixed}</span>
+                                <p style="font-size:12px; color: var(--text-secondary); margin-top:2px;">${item.reason}</p>
                             </div>
                         `;
                     });
+                } else {
+                    innerCorrectionsMarkup = `<p style="color:#4CAF50; font-size:13.5px; font-weight:500;"><i class="fa-solid fa-circle-check"></i> ${currentDict.correctNotice}</p>`;
                 }
 
                 feedbackPanel.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
-                        <h4 style="font-family:var(--font-serif); font-size:18px;">${currentDict.resultsHeader}</h4>
-                        <span class="score-badge" style="font-size:14px; font-weight:700;">${jsonCleanResponse.score_out_of_100}/100</span>
+                        <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--accent-secondary);">Structural Diagnostics Report</h4>
+                        <span style="font-size:11px; font-weight:700; color: ${jsonCleanResponse.is_perfect_score ? '#4CAF50':'#FF9800'}">${jsonCleanResponse.is_perfect_score ? 'NATURAL':'EDITS SUGGESTED'}</span>
                     </div>
                     <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
                         "${jsonCleanResponse.summary_critique}"
