@@ -819,18 +819,15 @@
                 <button class="tab-pill-btn" id="pill-historia" onclick="filterHomeTheme('Historia')">Chronicles</button>
             </div>
 
-            <div class="artist-grid" id="portfolio-grid-mount">
-                </div>
+            <div class="artist-grid" id="portfolio-grid-mount"></div>
         </section>
 
         <section id="reader-section" class="app-section">
             <div class="reader-header">
                 <a class="back-link" onclick="exitReader()"><i class="fa-solid fa-arrow-left-long"></i> <span id="lbl-back-btn">Back to Library</span></a>
-                <div class="reader-title" id="reader-meta-title-region">
-                    </div>
+                <div class="reader-title" id="reader-meta-title-region"></div>
             </div>
-            <div class="interactive-essay" id="essay-paragraphs-container">
-                </div>
+            <div class="interactive-essay" id="essay-paragraphs-container"></div>
         </section>
 
         <section id="news-direct-section" class="app-section">
@@ -838,8 +835,7 @@
                 <h2 id="lbl-news-heading">El Noticiero Diario</h2>
                 <p id="lbl-news-subheading">Real-time news coverage direct from Spanish wire services.</p>
             </div>
-            <div class="interactive-essay" id="news-feed-paragraphs-container" style="padding: 24px 18px;">
-                </div>
+            <div class="interactive-essay" id="news-feed-paragraphs-container" style="padding: 24px 18px;"></div>
         </section>
 
         <section id="flashcards-section" class="app-section">
@@ -861,8 +857,7 @@
                     <div class="progress-fill" id="fc-progress-indicator"></div>
                 </div>
 
-                <div class="fc-card" id="active-flashcard-box">
-                    </div>
+                <div class="fc-card" id="active-flashcard-box"></div>
             </div>
         </section>
 
@@ -900,8 +895,7 @@
                     </button>
                 </div>
 
-                <div class="grading-feedback-panel" id="wp-feedback-container">
-                    </div>
+                <div class="grading-feedback-panel" id="wp-feedback-container"></div>
             </div>
         </section>
 
@@ -1525,13 +1519,13 @@
                 Prompt Was: "${currentPrompt.promptEs}"
                 Evaluate the student submission and reply STRICTLY with a clean JSON object containing these keys:
                 {
-                   "is_perfect_score": true/false,
+                   "score": 85,
                    "summary_critique": "A brief overall feedback note written in english describing syntax quality.",
                    "corrections": [
                       {"original": "incorrect part", "fixed": "corrected part", "reason": "brief grammatical rule explanation"}
                    ]
                 }
-                Do not wrap the output in markdown fences or additional text strings.
+                The "score" value must be an integer from 0 to 100 representing linguistic accuracy. Do not wrap the output in markdown fences or additional text strings.
             `;
 
             try {
@@ -1578,7 +1572,7 @@
                 feedbackPanel.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
                         <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--accent-secondary);">Structural Diagnostics Report</h4>
-                        <span style="font-size:11px; font-weight:700; color: ${jsonCleanResponse.is_perfect_score ? '#4CAF50':'#FF9800'}">${jsonCleanResponse.is_perfect_score ? 'NATURAL':'EDITS SUGGESTED'}</span>
+                        <span style="font-size:11px; font-weight:700; color: ${jsonCleanResponse.score >= 80 ? '#4CAF50':'#FF9800'}">SCORE: ${jsonCleanResponse.score}/100</span>
                     </div>
                     <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
                         "${jsonCleanResponse.summary_critique}"
