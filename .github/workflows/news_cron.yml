@@ -28,13 +28,13 @@ jobs:
         NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
       run: python .github/scripts/fetch_news.py
 
+    # ---> THIS IS THE MISSING STEP <---
     - name: Inject Secure Gemini Access Key Token
       env:
         SECURE_GEMINI_TOKEN: ${{ secrets.GEMINI_API_KEY }}
       run: |
-        # Safely finds the structural body tag and injects the token variable
         if [ -n "$SECURE_GEMINI_TOKEN" ]; then
-          sed -i 's/<body data-theme="light">/<body data-theme="light" data-secret-token="'"$SECURE_GEMINI_TOKEN"'">/g' index.html
+          sed -i 's/<body\([^>]*\)>/<body\1 data-secret-token="'"$SECURE_GEMINI_TOKEN"'">/g' index.html
           echo "Gemini authorization routing configuration applied successfully."
         else
           echo "Warning: GEMINI_API_KEY secret not found in repository secrets."
