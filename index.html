@@ -324,14 +324,6 @@
             margin-bottom: 8px;
         }
 
-        .reader-title h2 {
-            font-family: var(--font-serif);
-            font-size: 36px;
-            font-weight: 500;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
         .reader-meta {
             font-size: 12px;
             color: var(--text-secondary);
@@ -889,6 +881,11 @@
             </div>
 
             <div class="writing-panel-box">
+                <div class="theme-tabs-row" style="margin-bottom: 4px; padding-bottom: 4px; border-bottom: none;">
+                    <button class="tab-pill-btn active" id="wp-tab-conversational" onclick="switchWritingCategory('conversational')">Conversational</button>
+                    <button class="tab-pill-btn" id="wp-tab-academic" onclick="switchWritingCategory('academic')">Academic</button>
+                </div>
+
                 <div class="writing-prompt-card">
                     <h4 id="lbl-wp-question-heading">Writing Prompt</h4>
                     <p id="wp-prompt-display-node">Loading assigned composition prompt matrix...</p>
@@ -925,7 +922,6 @@
     </div>
 
     <script>
-        // Dictionary lookup structure to handle interface transitions seamlessly
         const i18n = {
             en: {
                 mainHeading: "Cultural Essays",
@@ -955,7 +951,9 @@
                 loadingRobot: "Reviewing metrics, alignment grammar, and stylistic syntax properties...",
                 errorFeedback: "Could not safely process assessment logs. Check connection profiles and api variables.",
                 explicitHeader: "Grammar Analysis & Target Edits",
-                correctNotice: "Perfect Submission! Your response showcases natural phrasing and precise morphological structures."
+                correctNotice: "Perfect Submission! Your response showcases natural phrasing and precise morphological structures.",
+                trackConversational: "Conversational",
+                trackAcademic: "Academic"
             },
             es: {
                 mainHeading: "Ensayos Culturales",
@@ -985,20 +983,27 @@
                 loadingRobot: "Revisando métricas de alineación estructural, gramática y propiedades sintácticas...",
                 errorFeedback: "No se pudieron procesar los registros de evaluación. Verifica la conexión y variables de la API.",
                 explicitHeader: "Análisis Gramatical y Correcciones Específicas",
-                correctNotice: "¡Entrega Perfecta! Tu respuesta exhibe un fraseo natural y estructuras morfológicas precisas."
+                correctNotice: "¡Entrega Perfecta! Tu respuesta exhibe un fraseo natural y estructuras morfológicas precisas.",
+                trackConversational: "Conversacional",
+                trackAcademic: "Académico"
             }
         };
 
         const documentaries = [
             { id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "La captura efímera de la luz y la revolución de la pintura al aire libre.", genre: "Impresionismo", theme: "Arte", file: "monet.json" },
             { id: "seurat", title: "Georges Seurat y la Ciencia del Puntillismo", subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.", genre: "Puntillismo", theme: "Arte", file: "georgesseurat.json", vocabQuizSeed: [{ term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" }, { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }, { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" }, { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }] },
-            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] }
+            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de reality que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] }
         ];
 
         const writingPromptsDatabase = [
-            { id: 1, promptEn: "Describe how impressionist painters changed the world's relationship with ambient light, using concepts like plein air painting.", promptEs: "Describe cómo los pintores impresionistas cambiaron la relación del mundo con la luz ambiental, utilizando conceptos como la pintura al aire libre." },
-            { id: 2, promptEn: "Argue whether photography should be treated strictly as historical documentation or as an autonomous fine art form.", promptEs: "Argumenta si la fotografía debe ser tratada estrictamente como documentación histórica o como una forma autónoma de bellas artes." },
-            { id: 3, promptEn: "Analyze the technical overlap between Seurat's pointillism optical layout and modern digital display screen pixel densities.", promptEs: "Analiza la superposición técnica entre la disposición óptica del puntillismo de Seurat y las densidades de píxeles en las pantallas digitales modernas." }
+            { id: 1, category: "academic", promptEn: "Describe how impressionist painters changed the world's relationship with ambient light, using concepts like plein air painting.", promptEs: "Describe cómo los pintores impresionistas cambiaron la relación del mundo con la luz ambiental, utilizando conceptos como la pintura al aire libre." },
+            { id: 2, category: "academic", promptEn: "Argue whether photography should be treated strictly as historical documentation or as an autonomous fine art form.", promptEs: "Argumenta si la fotografía debe ser tratada estrictamente como documentación histórica o como una forma autónoma de bellas artes." },
+            { id: 3, category: "academic", promptEn: "Analyze the technical overlap between Seurat's pointillism optical layout and modern digital display screen pixel densities.", promptEs: "Analiza la superposición técnica entre la disposición óptica del puntillismo de Seurat y las densidades de píxeles en las pantallas digitales modernas." },
+            { id: 4, category: "conversational", promptEn: "How would you describe your perfect weekend in Spain?", promptEs: "¿Cómo describirías tu fin de semana perfecto en España?" },
+            { id: 5, category: "conversational", promptEn: "What are the core differences between typical mid-day meals in your hometown and traditional Spanish tapas culture?", promptEs: "¿Cuáles son las diferencias principales entre las comidas típicas de tu ciudad natal y la cultura tradicional de las tapas españolas?" },
+            { id: 6, category: "conversational", promptEn: "Imagine you are lost in a historic neighborhood in Seville. Draft a script showing how you would ask a local for directions to the cathedral and a great nearby restaurant.", promptEs: "Imagina que estás perdido en un barrio histórico de Sevilla. Escribe un guion sobre cómo le pedirías indicaciones a un lugareño para llegar a la catedral y a un buen restaurante cercano." },
+            { id: 7, category: "conversational", promptEn: "Discuss your favorite seasonal celebrations or festivals, and compare their social dynamic with a Spanish tradition like La Tomatina or Las Fallas.", promptEs: "Habla sobre tus celebraciones o festivales estacionales favoritos y compara su dinámica social con una tradición española como La Tomatina o Las Fallas." },
+            { id: 8, category: "conversational", promptEn: "If you could live in a coastal Spanish village versus a dense capital like Madrid for a year to learn the language, which environment would you choose and why?", promptEs: "Si pudieras vivir en un pueblo costero español frente a una capital densa como Madrid durante un año para aprender el idioma, ¿qué entorno elegirías y por qué?" }
         ];
 
         let state = {
@@ -1008,9 +1013,10 @@
             allSentencePairs: [],
             score: 0,
             streak: 0,
-            quizMode: "multiple-choice", // "multiple-choice" or "scramble"
+            quizMode: "multiple-choice", 
             activeQuestion: null,
             scrambledSelections: [],
+            writingCategory: "conversational",
             writingPromptIndex: 0,
             needsReview: []
         };
@@ -1037,6 +1043,23 @@
             }
         }
 
+        function getFilteredWritingPrompts() {
+            return writingPromptsDatabase.filter(p => p.category === state.writingCategory);
+        }
+
+        function switchWritingCategory(targetCategory) {
+            if (state.writingCategory === targetCategory) return;
+            state.writingCategory = targetCategory;
+            state.writingPromptIndex = 0;
+
+            document.getElementById('wp-tab-conversational').classList.toggle('active', targetCategory === 'conversational');
+            document.getElementById('wp-tab-academic').classList.toggle('active', targetCategory === 'academic');
+
+            renderCurrentWritingPrompt();
+            document.getElementById('wp-student-input').value = '';
+            document.getElementById('wp-feedback-container').style.display = "none";
+        }
+
         function updateUiLanguageDOM() {
             const currentDict = i18n[state.uiLanguage];
             document.getElementById('lang-toggle').innerText = state.uiLanguage.toUpperCase();
@@ -1061,6 +1084,8 @@
             document.getElementById('lbl-nav-write').innerText = currentDict.navWrite;
             document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
             document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
+            document.getElementById('wp-tab-conversational').innerText = currentDict.trackConversational;
+            document.getElementById('wp-tab-academic').innerText = currentDict.trackAcademic;
             renderCurrentWritingPrompt();
         }
 
@@ -1076,8 +1101,6 @@
                     const response = await fetch(`./data/${doc.file}`);
                     if (!response.ok) continue;
                     const json = await response.json();
-                    
-                    // Fixed: Safely parse top-level JSON arrays or object arrays
                     const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
                     
                     paragraphs.forEach(para => {
@@ -1144,7 +1167,6 @@
                 const json = await response.json();
                 container.innerHTML = '';
 
-                // Fixed: Safely parse top-level arrays or wrapped structures
                 const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
 
                 paragraphs.forEach(para => {
@@ -1219,7 +1241,6 @@
                 const json = await response.json();
                 container.innerHTML = '';
 
-                // Safe array layout inspection for feed objects
                 const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
 
                 paragraphs.forEach(feedSegment => {
@@ -1252,7 +1273,6 @@
         function generateAdaptiveQuestionNode() {
             if (state.allSentencePairs.length === 0) return null;
             
-            // 20% SRS retry strategy if mistakes were stored
             if (state.needsReview.length > 0 && Math.random() < 0.25) {
                 return state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
             }
@@ -1329,7 +1349,6 @@
                     </div>
                 `;
             } else {
-                // Scramble Phrase Builder implementation logic
                 const wordsArray = q.answer.split(' ');
                 const randomizedChips = [...wordsArray].sort(() => 0.5 - Math.random());
                 
@@ -1372,18 +1391,15 @@
                 state.score += 10;
                 state.streak += 1;
                 playSfx('correct');
-                // Slice clean out of retry loops
                 state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
             } else {
                 btnElement.classList.add('wrong');
                 state.streak = 0;
                 playSfx('wrong');
-                // Flag for retry queues
                 if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
                     state.needsReview.push(state.activeQuestion);
                 }
                 
-                // Show matching answer node contextively
                 document.querySelectorAll('.option-button').forEach(b => {
                     if (b.innerText === state.activeQuestion.answer) b.classList.add('correct');
                 });
@@ -1414,8 +1430,6 @@
 
         function validateScrambledSequence() {
             const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
-            
-            // Strip any tags for question parsing string targets
             const targetRaw = state.activeQuestion.answer;
             const correctString = targetRaw.toLowerCase();
 
@@ -1423,7 +1437,6 @@
             document.getElementById('scramble-controls').classList.add('hidden');
             document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
 
-            // Exact match calculation fallback
             if (compiledString.trim() === correctString.trim()) {
                 previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
                 previewZone.style.borderColor = '#4CAF50';
@@ -1456,12 +1469,24 @@
         }
 
         function renderCurrentWritingPrompt() {
-            const prompt = writingPromptsDatabase[state.writingPromptIndex];
+            const filteredPrompts = getFilteredWritingPrompts();
+            if (filteredPrompts.length === 0) return;
+            
+            if (state.writingPromptIndex >= filteredPrompts.length) {
+                state.writingPromptIndex = 0;
+            }
+            
+            const prompt = filteredPrompts[state.writingPromptIndex];
             document.getElementById('wp-prompt-display-node').innerText = state.uiLanguage === 'en' ? prompt.promptEn : prompt.promptEs;
         }
 
         function cycleNextWritingPrompt() {
-            state.writingPromptIndex = (state.writingPromptIndex + 1) % writingPromptsDatabase.length;
+            const filteredPrompts = getFilteredWritingPrompts();
+            if (filteredPrompts.length > 0) {
+                state.writingPromptIndex = (state.writingPromptIndex + 1) % filteredPrompts.length;
+            } else {
+                state.writingPromptIndex = 0;
+            }
             renderCurrentWritingPrompt();
             document.getElementById('wp-student-input').value = '';
             document.getElementById('wp-feedback-container').style.display = "none";
@@ -1475,7 +1500,9 @@
                 return;
             }
 
-            const currentPrompt = writingPromptsDatabase[state.writingPromptIndex];
+            const filteredPrompts = getFilteredWritingPrompts();
+            if (filteredPrompts.length === 0) return;
+            const currentPrompt = filteredPrompts[state.writingPromptIndex];
             const studentSubmission = document.getElementById('wp-student-input').value.trim();
             
             if (!studentSubmission) {
@@ -1572,7 +1599,6 @@
         }
 
         window.onload = async () => {
-            // Apply language setup transformations
             updateUiLanguageDOM();
             filterHomeTheme('all');
             await buildGlobalFlashcardCache();
