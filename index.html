@@ -748,7 +748,7 @@
         }
     </style>
 </head>
-<body data-theme="light" data-secret-token="">
+<body data-theme="light">
     <div class="app-shell">
         <header>
             <div class="brand-logo">
@@ -1420,7 +1420,7 @@
         async function transmitCompositionToGemini() {
             const currentDict = i18n[state.uiLanguage];
             
-            // Reads key injected securely from GitHub Action Secrets mapping attribute
+            // Secure route reading token injected directly from code attributes
             const apiKey = document.body.getAttribute('data-secret-token');
             if (!apiKey) {
                 alert(currentDict.apiAlert);
