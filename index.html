@@ -1,1535 +1,1622 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kultura — Learn European Spanish</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <style>
-        :root {
-            --bg-base: #FBFBFA;
-            --bg-card: #FFFFFF;
-            --bg-tertiary: #F4F4F1;
-            --border-color: #E6E6E2;
-            --text-primary: #1C1C1A;
-            --text-secondary: #5C5C57;
-            --text-spanish: #000000;
-            --text-english: #6C6C67;
-            --accent-primary: #E05A47;
-            --accent-secondary: #1F4C81;
-            --accent-glow: rgba(226, 90, 71, 0.08);
-            --card-radius: 16px;
-            --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            --font-serif: 'Playfair Display', serif;
-        }
-
-        [data-theme="dark"] {
-            --bg-base: #111111;
-            --bg-card: #181818;
-            --bg-tertiary: #222222;
-            --border-color: #2D2D2D;
-            --text-primary: #ECECEC;
-            --text-secondary: #A0A0A0;
-            --text-spanish: #FFFFFF;
-            --text-english: #B5B5B5;
-            --accent-primary: #FF9800;
-            --accent-secondary: #4A90E2;
-            --accent-glow: rgba(255, 152, 0, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            transition: var(--transition-smooth);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .app-shell {
-            width: 100%;
-            max-width: 600px;
-            padding: 24px 20px 120px 20px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 28px;
-        }
-
-        .brand-logo {
-            font-family: var(--font-serif);
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-logo i {
-            font-size: 16px;
-            color: var(--accent-primary);
-        }
-
-        .controls {
-            display: flex;
-            gap: 12px;
-        }
-
-        .icon-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-
-        .icon-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-primary);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 520px;
-            background: rgba(28, 28, 26, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 8px;
-            display: flex;
-            justify-content: space-between;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        [data-theme="dark"] .bottom-nav {
-            background: rgba(18, 18, 18, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            padding: 10px 0;
-            border-radius: 22px;
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 500;
-            transition: var(--transition-smooth);
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-item.active {
-            color: #FFFFFF;
-            background: var(--accent-primary);
-        }
-
-        .app-section {
-            display: none;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .app-section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .doc-intro {
-            margin-bottom: 24px;
-        }
-
-        .doc-intro h2 {
-            font-family: var(--font-serif);
-            font-size: 32px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .doc-intro p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
-        .theme-tabs-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-        }
-
-        .tab-pill-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-secondary);
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 100px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .tab-pill-btn.active {
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-            background: var(--accent-glow);
-        }
-
-        .artist-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .artist-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 24px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .artist-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-primary);
-        }
-
-        .artist-badge {
-            align-self: flex-start;
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 6px 12px;
-            border-radius: 100px;
-            border: 1px solid var(--border-color);
-        }
-
-        .artist-card h3 {
-            font-family: var(--font-serif);
-            font-size: 24px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .artist-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .artist-card .meta-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 8px;
-            font-size: 13px;
-            color: var(--accent-primary);
-            font-weight: 500;
-        }
-
-        .reader-header {
-            margin-bottom: 24px;
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 16px;
-            transition: var(--transition-smooth);
-        }
-
-        .back-link:hover {
-            color: var(--accent-primary);
-        }
-
-        .reader-title h2 {
-            font-family: var(--font-serif);
-            font-size: 36px;
-            font-weight: 500;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .reader-meta {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .interactive-essay {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 32px 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-        }
-
-        .essay-paragraph {
-            margin-bottom: 36px;
-            line-height: 1.9;
-        }
-
-        .sentence-node {
-            display: block;
-            margin-bottom: 14px;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-            padding: 4px 12px;
-            transition: var(--transition-smooth);
-            border-radius: 0 var(--card-radius) var(--card-radius) 0;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .sentence-node:hover {
-            border-left-color: var(--border-color);
-            background: var(--bg-tertiary);
-        }
-
-        .sentence-node.highlighted {
-            border-left-color: var(--accent-primary);
-            background: var(--accent-glow);
-        }
-
-        .sp-text {
-            font-family: var(--font-sans);
-            font-size: 16.5px;
-            color: var(--text-spanish);
-            font-weight: 400;
-            display: block;
-            white-space: normal;
-        }
-
-        .en-translation {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            font-family: var(--font-sans);
-            font-size: 14.5px;
-            color: var(--accent-secondary);
-            font-style: italic;
-            transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.25s ease;
-            margin-top: 0;
-            display: block;
-            font-weight: 500;
-            white-space: normal;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .sentence-node.highlighted .en-translation {
-            max-height: 500px;
-            opacity: 1;
-            margin-top: 8px;
-        }
-
-        .fc-container {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .fc-stats-bar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .score-badge {
-            color: var(--accent-primary);
-            background: var(--accent-glow);
-            padding: 4px 12px;
-            border-radius: 100px;
-        }
-
-        .mode-toggle-pill {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 100px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition-smooth);
-        }
-
-        .mode-toggle-pill:hover {
-            border-color: var(--accent-primary);
-            color: var(--text-primary);
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 6px;
-            background: var(--border-color);
-            border-radius: 100px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-primary);
-            transition: width 0.3s ease;
-        }
-
-        .fc-card {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 32px 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.02);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            transition: var(--transition-smooth);
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .card-type-indicator {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 700;
-            color: var(--accent-primary);
-        }
-
-        .fc-question-text {
-            font-size: 19px;
-            font-weight: 500;
-            line-height: 1.4;
-            color: var(--text-primary);
-            white-space: normal;
-        }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .option-button {
-            width: 100%;
-            text-align: left;
-            padding: 16px 20px;
-            background: var(--bg-base);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-family: var(--font-sans);
-            font-size: 15px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-weight: 400;
-            line-height: 1.4;
-            white-space: normal;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .option-button:hover {
-            border-color: var(--accent-primary);
-            transform: translateX(4px);
-        }
-
-        .option-button.correct {
-            background: #4CAF50 !important;
-            border-color: #4CAF50 !important;
-            color: white !important;
-            font-weight: 600;
-            opacity: 1 !important;
-        }
-
-        .option-button.wrong {
-            background: #F44336 !important;
-            border-color: #F44336 !important;
-            color: white !important;
-            font-weight: 600;
-            opacity: 1 !important;
-        }
-
-        .option-button.disabled:not(.correct):not(.wrong) {
-            opacity: 0.35;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .fc-explanation-box {
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--text-secondary);
-            display: none;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .fc-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 12px;
-            width: 100%;
-        }
-
-        .primary-btn {
-            background: var(--text-primary);
-            color: var(--bg-base);
-            border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        .srs-queue-badge {
-            font-size: 11px;
-            color: var(--accent-primary);
-            font-weight: 700;
-            margin-left: 6px;
-        }
-
-        .scrambled-board-zone {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        .construct-build-preview {
-            min-height: 76px;
-            width: 100%;
-            background: var(--bg-tertiary);
-            border: 1px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-content: flex-start;
-        }
-
-        .scrambled-pool-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            background: var(--bg-card);
-            padding: 12px 4px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .word-chip-pill {
-            background: var(--bg-base);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 15px;
-            padding: 10px 16px;
-            border-radius: 100px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            user-select: none;
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
-        }
-
-        .word-chip-pill:hover {
-            border-color: var(--accent-primary);
-            background: var(--bg-card);
-        }
-
-        .word-chip-pill.used-up {
-            opacity: 0.2;
-            pointer-events: none;
-            background: var(--bg-tertiary);
-            border-color: transparent;
-        }
-
-        .scramble-check-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-top: 8px;
-        }
-
-        .secondary-outline-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .secondary-outline-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--text-secondary);
-        }
-
-        .writing-panel-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--card-radius);
-            padding: 24px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.01);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .writing-prompt-card {
-            background: var(--bg-tertiary);
-            padding: 16px;
-            border-radius: 12px;
-            border-left: 4px solid var(--accent-primary);
-        }
-
-        .writing-prompt-card h4 {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        .writing-prompt-card p {
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .writing-textarea {
-            width: 100%;
-            height: 130px;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 15px;
-            line-height: 1.6;
-            resize: vertical;
-            transition: var(--transition-smooth);
-        }
-
-        .writing-textarea:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .grading-feedback-panel {
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 20px;
-            display: none;
-            flex-direction: column;
-            gap: 16px;
-            margin-top: 12px;
-        }
-
-        .correction-line-item {
-            border-left: 3px solid var(--accent-primary);
-            padding-left: 12px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kultura — Learn European Spanish</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+--bg-base: #FBFBFA;
+--bg-card: #FFFFFF;
+--bg-tertiary: #F4F4F1;
+--border-color: #E6E6E2;
+--text-primary: #1C1C1A;
+--text-secondary: #5C5C57;
+--text-spanish: #000000;
+--text-english: #6C6C67;
+--accent-primary: #E05A47;
+--accent-secondary: #1F4C81;
+--accent-glow: rgba(226, 90, 71, 0.08);
+--card-radius: 16px;
+--transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+--font-sans: 'Plus Jakarta Sans', sans-serif;
+--font-serif: 'Playfair Display', serif;
+}
+
+[data-theme="dark"] {
+--bg-base: #111111;
+--bg-card: #181818;
+--bg-tertiary: #222222;
+--border-color: #2D2D2D;
+--text-primary: #ECECEC;
+--text-secondary: #A0A0A0;
+--text-spanish: #FFFFFF;
+--text-english: #B5B5B5;
+--accent-primary: #FF9800;
+--accent-secondary: #4A90E2;
+--accent-glow: rgba(255, 152, 0, 0.08);
+}
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+-webkit-tap-highlight-color: transparent;
+}
+
+body {
+background-color: var(--bg-base);
+color: var(--text-primary);
+font-family: var(--font-sans);
+transition: var(--transition-smooth);
+display: flex;
+justify-content: center;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+.app-shell {
+width: 100%;
+max-width: 600px;
+padding: 24px 20px 120px 20px;
+display: flex;
+flex-direction: column;
+position: relative;
+}
+
+header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-bottom: 20px;
+border-bottom: 1px solid var(--border-color);
+margin-bottom: 28px;
+}
+
+.brand-logo {
+font-family: var(--font-serif);
+font-size: 24px;
+font-weight: 600;
+letter-spacing: -0.5px;
+color: var(--text-primary);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.brand-logo i {
+font-size: 16px;
+color: var(--accent-primary);
+}
+
+.controls {
+display: flex;
+gap: 12px;
+}
+
+.icon-btn {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+color: var(--text-primary);
+width: 44px;
+height: 44px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: var(--transition-smooth);
+box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.icon-btn:hover {
+transform: translateY(-2px);
+border-color: var(--accent-primary);
+}
+
+.bottom-nav {
+position: fixed;
+bottom: 24px;
+left: 50%;
+transform: translateX(-50%);
+width: calc(100% - 40px);
+max-width: 520px;
+background: rgba(28, 28, 26, 0.85);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-radius: 30px;
+padding: 8px;
+display: flex;
+justify-content: space-between;
+box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+z-index: 1000;
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .bottom-nav {
+background: rgba(18, 18, 18, 0.9);
+border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-item {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+background: transparent;
+border: none;
+color: rgba(255, 255, 255, 0.6);
+cursor: pointer;
+padding: 10px 0;
+border-radius: 22px;
+font-family: var(--font-sans);
+font-size: 11px;
+font-weight: 500;
+transition: var(--transition-smooth);
+}
+
+.nav-item i {
+font-size: 18px;
+}
+
+.nav-item.active {
+color: #FFFFFF;
+background: var(--accent-primary);
+}
+
+.app-section {
+display: none;
+opacity: 0;
+transform: translateY(12px);
+transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.app-section.active {
+display: block;
+opacity: 1;
+transform: translateY(0);
+}
+
+.hidden {
+display: none !important;
+}
+
+.doc-intro {
+margin-bottom: 24px;
+}
+
+.doc-intro h2 {
+font-family: var(--font-serif);
+font-size: 32px;
+font-weight: 500;
+margin-bottom: 8px;
+letter-spacing: -0.5px;
+}
+
+.doc-intro p {
+color: var(--text-secondary);
+font-size: 15px;
+line-height: 1.5;
+}
+
+.theme-tabs-row {
+display: flex;
+gap: 8px;
+margin-bottom: 24px;
+border-bottom: 1px solid var(--border-color);
+padding-bottom: 12px;
+}
+
+.tab-pill-btn {
+background: transparent;
+border: 1px solid transparent;
+color: var(--text-secondary);
+font-family: var(--font-sans);
+font-size: 13px;
+font-weight: 600;
+padding: 8px 16px;
+border-radius: 100px;
+cursor: pointer;
+transition: var(--transition-smooth);
+}
+
+.tab-pill-btn.active {
+border-color: var(--accent-primary);
+color: var(--accent-primary);
+background: var(--accent-glow);
+}
+
+.artist-grid {
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+
+.artist-card {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: var(--card-radius);
+padding: 24px;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition: var(--transition-smooth);
+box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.artist-card:hover {
+transform: translateY(-4px);
+border-color: var(--accent-primary);
+}
+
+.artist-badge {
+align-self: flex-start;
+background: var(--bg-tertiary);
+color: var(--text-secondary);
+font-size: 10px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
+padding: 6px 12px;
+border-radius: 100px;
+border: 1px solid var(--border-color);
+}
+
+.artist-card h3 {
+font-family: var(--font-serif);
+font-size: 24px;
+font-weight: 500;
+color: var(--text-primary);
+}
+
+.artist-card p {
+font-size: 14px;
+color: var(--text-secondary);
+line-height: 1.5;
+}
+
+.artist-card .meta-info {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-top: 8px;
+font-size: 13px;
+color: var(--accent-primary);
+font-weight: 500;
+}
+
+.reader-header {
+margin-bottom: 24px;
+}
+
+.back-link {
+display: flex;
+align-items: center;
+gap: 8px;
+color: var(--text-secondary);
+font-size: 14px;
+cursor: pointer;
+text-decoration: none;
+font-weight: 500;
+margin-bottom: 16px;
+transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+color: var(--accent-primary);
+}
+
+.reader-title h2 {
+font-family: var(--font-serif);
+font-size: 36px;
+font-weight: 500;
+line-height: 1.2;
+margin-bottom: 8px;
+}
+
+.reader-meta {
+font-size: 12px;
+color: var(--text-secondary);
+text-transform: uppercase;
+letter-spacing: 1px;
+font-weight: 600;
+}
+
+.interactive-essay {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: var(--card-radius);
+padding: 32px 24px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+}
+
+.essay-paragraph {
+margin-bottom: 36px;
+line-height: 1.9;
+}
+
+.sentence-node {
+display: block;
+margin-bottom: 14px;
+cursor: pointer;
+border-left: 3px solid transparent;
+padding: 4px 12px;
+transition: var(--transition-smooth);
+border-radius: 0 var(--card-radius) var(--card-radius) 0;
+word-wrap: break-word;
+overflow-wrap: break-word;
+}
+
+.sentence-node:hover {
+border-left-color: var(--border-color);
+background: var(--bg-tertiary);
+}
+
+.sentence-node.highlighted {
+border-left-color: var(--accent-primary);
+background: var(--accent-glow);
+}
+
+.sp-text {
+font-family: var(--font-sans);
+font-size: 16.5px;
+color: var(--text-spanish);
+font-weight: 400;
+display: block;
+white-space: normal;
+}
+
+.en-translation {
+max-height: 0;
+overflow: hidden;
+opacity: 0;
+font-family: var(--font-sans);
+font-size: 14.5px;
+color: var(--accent-secondary);
+font-style: italic;
+transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.25s ease;
+margin-top: 0;
+display: block;
+font-weight: 500;
+white-space: normal;
+word-wrap: break-word;
+overflow-wrap: break-word;
+}
+
+.sentence-node.highlighted .en-translation {
+max-height: 500px;
+opacity: 1;
+margin-top: 8px;
+}
+
+.fc-container {
+display: flex;
+flex-direction: column;
+gap: 24px;
+align-items: center;
+width: 100%;
+}
+
+.fc-stats-bar {
+width: 100%;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 13px;
+color: var(--text-secondary);
+font-weight: 600;
+}
+
+.score-badge {
+color: var(--accent-primary);
+background: var(--accent-glow);
+padding: 4px 12px;
+border-radius: 100px;
+}
+
+.mode-toggle-pill {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+color: var(--text-secondary);
+font-family: var(--font-sans);
+font-size: 11px;
+font-weight: 600;
+padding: 6px 14px;
+border-radius: 100px;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 6px;
+transition: var(--transition-smooth);
+}
+
+.mode-toggle-pill:hover {
+border-color: var(--accent-primary);
+color: var(--text-primary);
+}
+
+.progress-track {
+width: 100%;
+height: 6px;
+background: var(--border-color);
+border-radius: 100px;
+overflow: hidden;
+}
+
+.progress-fill {
+height: 100%;
+width: 0%;
+background: var(--accent-primary);
+transition: width 0.3s ease;
+}
+
+.fc-card {
+width: 100%;
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: var(--card-radius);
+padding: 32px 24px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.02);
+position: relative;
+display: flex;
+flex-direction: column;
+gap: 24px;
+transition: var(--transition-smooth);
+word-wrap: break-word;
+overflow-wrap: break-word;
+}
+
+.card-type-indicator {
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+font-weight: 700;
+color: var(--accent-primary);
+}
+
+.fc-question-text {
+font-size: 19px;
+font-weight: 500;
+line-height: 1.4;
+color: var(--text-primary);
+white-space: normal;
+}
+
+.options-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+width: 100%;
+}
+
+.option-button {
+width: 100%;
+text-align: left;
+padding: 16px 20px;
+background: var(--bg-base);
+border: 1px solid var(--border-color);
+border-radius: 12px;
+font-family: var(--font-sans);
+font-size: 15px;
+color: var(--text-primary);
+cursor: pointer;
+transition: var(--transition-smooth);
+font-weight: 400;
+line-height: 1.4;
+white-space: normal;
+word-wrap: break-word;
+overflow-wrap: break-word;
+}
+
+.option-button:hover {
+border-color: var(--accent-primary);
+transform: translateX(4px);
+}
+
+.option-button.correct {
+background: #4CAF50 !important;
+border-color: #4CAF50 !important;
+color: white !important;
+font-weight: 600;
+opacity: 1 !important;
+}
+
+.option-button.wrong {
+background: #F44336 !important;
+border-color: #F44336 !important;
+color: white !important;
+font-weight: 600;
+opacity: 1 !important;
+}
+
+.option-button.disabled:not(.correct):not(.wrong) {
+opacity: 0.35;
+cursor: not-allowed;
+pointer-events: none;
+}
+
+.fc-explanation-box {
+background: var(--bg-tertiary);
+border-radius: 12px;
+padding: 16px;
+font-size: 14px;
+line-height: 1.5;
+color: var(--text-secondary);
+display: none;
+word-wrap: break-word;
+overflow-wrap: break-word;
+}
+
+.fc-actions {
+display: flex;
+justify-content: flex-end;
+margin-top: 12px;
+width: 100%;
+}
+
+.primary-btn {
+background: var(--text-primary);
+color: var(--bg-base);
+border: none;
+padding: 14px 28px;
+border-radius: 30px;
+font-family: var(--font-sans);
+font-weight: 600;
+font-size: 14px;
+cursor: pointer;
+transition: var(--transition-smooth);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.primary-btn:hover {
+transform: translateY(-2px);
+opacity: 0.9;
+}
+
+.srs-queue-badge {
+font-size: 11px;
+color: var(--accent-primary);
+font-weight: 700;
+margin-left: 6px;
+}
+
+.scrambled-board-zone {
+display: flex;
+flex-direction: column;
+gap: 16px;
+width: 100%;
+margin-top: 8px;
+}
+
+.construct-build-preview {
+min-height: 76px;
+width: 100%;
+background: var(--bg-tertiary);
+border: 1px dashed var(--border-color);
+border-radius: 12px;
+padding: 14px;
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+align-content: flex-start;
+}
+
+.scrambled-pool-chips {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+justify-content: center;
+background: var(--bg-card);
+padding: 12px 4px;
+border-top: 1px solid var(--border-color);
+}
+
+.word-chip-pill {
+background: var(--bg-base);
+border: 1px solid var(--border-color);
+color: var(--text-primary);
+font-family: var(--font-sans);
+font-size: 15px;
+padding: 10px 16px;
+border-radius: 100px;
+cursor: pointer;
+transition: var(--transition-smooth);
+user-select: none;
+font-weight: 500;
+box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+}
+
+.word-chip-pill:hover {
+border-color: var(--accent-primary);
+background: var(--bg-card);
+}
+
+.word-chip-pill.used-up {
+opacity: 0.2;
+pointer-events: none;
+background: var(--bg-tertiary);
+border-color: transparent;
+}
+
+.scramble-check-footer {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+margin-top: 8px;
+}
+
+.secondary-outline-btn {
+background: transparent;
+border: 1px solid var(--border-color);
+color: var(--text-secondary);
+padding: 12px 20px;
+border-radius: 30px;
+font-family: var(--font-sans);
+font-size: 13px;
+font-weight: 500;
+cursor: pointer;
+transition: var(--transition-smooth);
+}
+
+.secondary-outline-btn:hover {
+color: var(--text-primary);
+border-color: var(--text-secondary);
+}
+
+.api-inline-setup {
+background: var(--bg-tertiary);
+border: 1px solid var(--border-color);
+padding: 16px;
+border-radius: var(--card-radius);
+margin-bottom: 24px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.api-inline-setup label {
+font-size: 12px;
+font-weight: 700;
+text-transform: uppercase;
+color: var(--text-secondary);
+letter-spacing: 0.5px;
+}
+
+.api-input-group {
+display: flex;
+gap: 8px;
+}
+
+.api-input-group input {
+flex: 1;
+padding: 10px 14px;
+border-radius: 8px;
+border: 1px solid var(--border-color);
+background: var(--bg-card);
+color: var(--text-primary);
+font-family: var(--font-sans);
+font-size: 14px;
+}
+
+.api-input-group button {
+background: var(--accent-secondary);
+color: white;
+border: none;
+padding: 0 16px;
+border-radius: 8px;
+cursor: pointer;
+font-family: var(--font-sans);
+font-weight: 600;
+font-size: 14px;
+}
+
+.writing-panel-box {
+background: var(--bg-card);
+border: 1px solid var(--border-color);
+border-radius: var(--card-radius);
+padding: 24px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.01);
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+
+.writing-prompt-card {
+background: var(--bg-tertiary);
+padding: 16px;
+border-radius: 12px;
+border-left: 4px solid var(--accent-primary);
+}
+
+.writing-prompt-card h4 {
+font-size: 13px;
+text-transform: uppercase;
+color: var(--text-secondary);
+margin-bottom: 4px;
+letter-spacing: 0.5px;
+}
+
+.writing-prompt-card p {
+font-size: 16px;
+font-weight: 500;
+line-height: 1.4;
+}
+
+.writing-textarea {
+width: 100%;
+height: 130px;
+padding: 16px;
+border-radius: 12px;
+border: 1px solid var(--border-color);
+background: var(--bg-card);
+color: var(--text-primary);
+font-family: var(--font-sans);
+font-size: 15px;
+line-height: 1.6;
+resize: vertical;
+transition: var(--transition-smooth);
+}
+
+.writing-textarea:focus {
+outline: none;
+border-color: var(--accent-primary);
+box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.grading-feedback-panel {
+background: var(--bg-tertiary);
+border-radius: 12px;
+padding: 20px;
+display: none;
+flex-direction: column;
+gap: 16px;
+margin-top: 12px;
+}
+
+.correction-line-item {
+border-left: 3px solid var(--accent-primary);
+padding-left: 12px;
+margin-bottom: 8px;
+font-size: 14px;
+line-height: 1.5;
+}
+</style>
 </head>
 <body data-theme="light">
-    <div class="app-shell">
-        <header>
-            <div class="brand-logo">
-                <i class="fa-solid fa-feather-pointed"></i> Kultura
-            </div>
-            <div class="controls">
-                <button class="icon-btn" id="lang-toggle" onclick="toggleLanguage()" title="Switch UI/Feedback Language" style="font-size: 14px; font-weight:700;">EN</button>
-                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
-            </div>
-        </header>
+<div class="app-shell">
+<header>
+<div class="brand-logo">
+<i class="fa-solid fa-feather-pointed"></i> Kultura
+</div>
+<div class="controls">
+<button class="icon-btn" id="lang-toggle" onclick="toggleLanguage()" title="Switch UI/Feedback Language" style="font-size: 14px; font-weight:700;">EN</button>
+<button class="icon-btn" id="theme-toggle" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+</div>
+</header>
 
-        <section id="portfolio-section" class="app-section active">
-            <div class="doc-intro">
-                <h2 id="lbl-main-heading">Cultural Essays</h2>
-                <p id="lbl-main-subheading">Immersive bilingual texts built for intermediate Spanish mastery.</p>
-            </div>
+<section id="portfolio-section" class="app-section active">
+<div class="doc-intro">
+<h2 id="lbl-main-heading">Cultural Essays</h2>
+<p id="lbl-main-subheading">Immersive bilingual texts built for intermediate Spanish mastery.</p>
+</div>
 
-            <div class="theme-tabs-row">
-                <button class="tab-pill-btn active" id="pill-all" onclick="filterHomeTheme('all')">All Material</button>
-                <button class="tab-pill-btn" id="pill-arte" onclick="filterHomeTheme('Arte')">Fine Arts</button>
-                <button class="tab-pill-btn" id="pill-historia" onclick="filterHomeTheme('Historia')">Chronicles</button>
-            </div>
+<div class="theme-tabs-row">
+<button class="tab-pill-btn active" id="pill-all" onclick="filterHomeTheme('all')">All Material</button>
+<button class="tab-pill-btn" id="pill-arte" onclick="filterHomeTheme('Arte')">Fine Arts</button>
+<button class="tab-pill-btn" id="pill-historia" onclick="filterHomeTheme('Historia')">Chronicles</button>
+</div>
 
+            <div class="artist-grid" id="portfolio-grid-mount">
+                </div>
             <div class="artist-grid" id="portfolio-grid-mount"></div>
-        </section>
+</section>
 
-        <section id="reader-section" class="app-section">
-            <div class="reader-header">
-                <a class="back-link" onclick="exitReader()"><i class="fa-solid fa-arrow-left-long"></i> <span id="lbl-back-btn">Back to Library</span></a>
+<section id="reader-section" class="app-section">
+<div class="reader-header">
+<a class="back-link" onclick="exitReader()"><i class="fa-solid fa-arrow-left-long"></i> <span id="lbl-back-btn">Back to Library</span></a>
+                <div class="reader-title" id="reader-meta-title-region">
+                    </div>
                 <div class="reader-title" id="reader-meta-title-region"></div>
-            </div>
+</div>
+            <div class="interactive-essay" id="essay-paragraphs-container">
+                </div>
             <div class="interactive-essay" id="essay-paragraphs-container"></div>
-        </section>
+</section>
 
-        <section id="news-direct-section" class="app-section">
-            <div class="doc-intro">
-                <h2 id="lbl-news-heading">El Noticiero Diario</h2>
-                <p id="lbl-news-subheading">Real-time news coverage direct from Spanish wire services.</p>
-            </div>
+<section id="news-direct-section" class="app-section">
+<div class="doc-intro">
+<h2 id="lbl-news-heading">El Noticiero Diario</h2>
+<p id="lbl-news-subheading">Real-time news coverage direct from Spanish wire services.</p>
+</div>
+            <div class="interactive-essay" id="news-feed-paragraphs-container" style="padding: 24px 18px;">
+                </div>
             <div class="interactive-essay" id="news-feed-paragraphs-container" style="padding: 24px 18px;"></div>
-        </section>
+</section>
 
-        <section id="flashcards-section" class="app-section">
-            <div class="doc-intro">
-                <h2 id="lbl-cards-heading">Smart Flashcards</h2>
-                <p id="lbl-cards-subheading">Adaptive evaluation targeting content parsed from the essays.</p>
-            </div>
+<section id="flashcards-section" class="app-section">
+<div class="doc-intro">
+<h2 id="lbl-cards-heading">Smart Flashcards</h2>
+<p id="lbl-cards-subheading">Adaptive evaluation targeting content parsed from the essays.</p>
+</div>
 
-            <div class="fc-container">
-                <div class="fc-stats-bar">
-                    <span id="score-counter">Points: 0</span>
-                    <button class="mode-toggle-pill" id="mode-toggle-btn" onclick="toggleFlashcardMode()">
-                        <i class="fa-solid fa-shuffle"></i> <span id="lbl-quiz-mode-status">Mode: Multiple Choice</span>
-                    </button>
-                    <span class="score-badge" id="streak-counter">Streak: 0 🔥</span>
-                </div>
+<div class="fc-container">
+<div class="fc-stats-bar">
+<span id="score-counter">Points: 0</span>
+<button class="mode-toggle-pill" id="mode-toggle-btn" onclick="toggleFlashcardMode()">
+<i class="fa-solid fa-shuffle"></i> <span id="lbl-quiz-mode-status">Mode: Multiple Choice</span>
+</button>
+<span class="score-badge" id="streak-counter">Streak: 0 🔥</span>
+</div>
 
-                <div class="progress-track">
-                    <div class="progress-fill" id="fc-progress-indicator"></div>
-                </div>
+<div class="progress-track">
+<div class="progress-fill" id="fc-progress-indicator"></div>
+</div>
 
+                <div class="fc-card" id="active-flashcard-box">
+                    </div>
                 <div class="fc-card" id="active-flashcard-box"></div>
-            </div>
-        </section>
+</div>
+</section>
 
-        <section id="writing-production-section" class="app-section">
-            <div class="doc-intro">
-                <h2 id="lbl-wp-heading">Creative Composition</h2>
-                <p id="lbl-wp-subheading">Draft authentic text answers and get instant native AI formatting feedback.</p>
-            </div>
+<section id="writing-production-section" class="app-section">
+<div class="doc-intro">
+<h2 id="lbl-wp-heading">Creative Composition</h2>
+<p id="lbl-wp-subheading">Draft authentic text answers and get instant native AI formatting feedback.</p>
+</div>
 
-            <div class="writing-panel-box">
-                <div class="theme-tabs-row" style="margin-bottom: 4px; padding-bottom: 4px; border-bottom: none;">
-                    <button class="tab-pill-btn active" id="wp-tab-conversational" onclick="switchWritingCategory('conversational')">Conversational</button>
-                    <button class="tab-pill-btn" id="wp-tab-academic" onclick="switchWritingCategory('academic')">Academic</button>
-                </div>
+<div class="api-inline-setup">
+<label for="gemini-key-field" id="lbl-api-label">Gemini API Key Connection</label>
+<div class="api-input-group">
+<input type="password" id="gemini-key-field" placeholder="AIZAisy..." />
+<button id="lbl-save-key-btn" onclick="commitApiKeySecurely()">Save Token</button>
+</div>
+</div>
 
-                <div class="writing-prompt-card">
-                    <h4 id="lbl-wp-question-heading">Writing Prompt</h4>
-                    <p id="wp-prompt-display-node">Loading assigned composition prompt matrix...</p>
-                </div>
+<div class="writing-panel-box">
+<div class="theme-tabs-row" style="margin-bottom: 4px; padding-bottom: 4px; border-bottom: none;">
+<button class="tab-pill-btn active" id="wp-tab-conversational" onclick="switchWritingCategory('conversational')">Conversational</button>
+<button class="tab-pill-btn" id="wp-tab-academic" onclick="switchWritingCategory('academic')">Academic</button>
+</div>
 
-                <textarea class="writing-textarea" id="wp-student-input" placeholder="Escribe tu respuesta aquí en español... (Mínimo 15 palabras)"></textarea>
+<div class="writing-prompt-card">
+<h4 id="lbl-wp-question-heading">Writing Prompt</h4>
+<p id="wp-prompt-display-node">Loading assigned composition prompt matrix...</p>
+</div>
 
-                <div class="fc-actions" style="margin-top: 0;">
-                    <button class="secondary-outline-btn" id="lbl-skip-prompt-btn" onclick="cycleNextWritingPrompt()" style="margin-right: auto;">Skip Prompt</button>
-                    <button class="primary-btn" id="wp-submit-btn" onclick="transmitCompositionToGemini()">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-eval-btn">Evaluate Text</span>
-                    </button>
-                </div>
+<textarea class="writing-textarea" id="wp-student-input" placeholder="Escribe tu respuesta aquí en español... (Mínimo 15 palabras)"></textarea>
 
+<div class="fc-actions" style="margin-top: 0;">
+<button class="secondary-outline-btn" id="lbl-skip-prompt-btn" onclick="cycleNextWritingPrompt()" style="margin-right: auto;">Skip Prompt</button>
+<button class="primary-btn" id="wp-submit-btn" onclick="transmitCompositionToGemini()">
+<i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-eval-btn">Evaluate Text</span>
+</button>
+</div>
+
+                <div class="grading-feedback-panel" id="wp-feedback-container">
+                    </div>
                 <div class="grading-feedback-panel" id="wp-feedback-container"></div>
-            </div>
-        </section>
+</div>
+</section>
 
-        <nav class="bottom-nav">
-            <button class="nav-item active" id="tab-doc" onclick="switchSection('portfolio')">
-                <i class="fa-solid fa-compass"></i> <span id="lbl-nav-explore">Explore</span>
-            </button>
-            <button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
-                <i class="fa-solid fa-newspaper"></i> <span id="lbl-nav-news">News</span>
-            </button>
-            <button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
-                <i class="fa-solid fa-rectangle-list"></i> <span id="lbl-nav-cards">Cards</span>
-            </button>
-            <button class="nav-item" id="tab-write-nav" onclick="switchSection('writing-production')">
-                <i class="fa-solid fa-pen-nib"></i> <span id="lbl-nav-write">Write</span>
-            </button>
-        </nav>
-    </div>
+<nav class="bottom-nav">
+<button class="nav-item active" id="tab-doc" onclick="switchSection('portfolio')">
+<i class="fa-solid fa-compass"></i> <span id="lbl-nav-explore">Explore</span>
+</button>
+<button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
+<i class="fa-solid fa-newspaper"></i> <span id="lbl-nav-news">News</span>
+</button>
+<button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
+<i class="fa-solid fa-rectangle-list"></i> <span id="lbl-nav-cards">Cards</span>
+</button>
+<button class="nav-item" id="tab-write-nav" onclick="switchSection('writing-production')">
+<i class="fa-solid fa-pen-nib"></i> <span id="lbl-nav-write">Write</span>
+</button>
+</nav>
+</div>
 
-    <script>
-        const i18n = {
-            en: {
-                mainHeading: "Cultural Essays",
-                mainSubheading: "Immersive bilingual texts built for intermediate Spanish mastery.",
-                newsHeading: "El Noticiero Diario",
-                newsSubheading: "Real-time news coverage direct from Spanish wire services.",
-                cardsHeading: "Smart Flashcards",
-                cardsSubheading: "Adaptive evaluation targeting content parsed from the essays.",
-                wpHeading: "Creative Composition",
-                wpSubheading: "Draft authentic text answers and get instant native AI formatting feedback.",
-                backBtn: "Back to Library",
-                skipBtn: "Skip Prompt",
-                evalBtn: "Evaluate Text",
-                qHeading: "Writing Prompt",
-                textareaPlaceholder: "Write your answer here in Spanish... (Minimum 15 words)",
-                navExplore: "Explore",
-                navNews: "News",
-                navCards: "Cards",
-                navWrite: "Write",
-                streak: "Streak",
-                points: "Points",
-                apiAlert: "Workflow API Key Verification Failed. Ensure your GitHub Action contains the valid secret token configuration mappings.",
-                emptyAlert: "Your composition canvas is currently empty. Please type a short response first.",
-                analyzing: "Analyzing Framework...",
-                loadingRobot: "Reviewing metrics, alignment grammar, and stylistic syntax properties...",
-                errorFeedback: "Could not safely process assessment logs. Check connection profiles and api variables.",
-                explicitHeader: "Grammar Analysis & Target Edits",
-                correctNotice: "Perfect Submission! Your response showcases natural phrasing and precise morphological structures.",
-                trackConversational: "Conversational",
-                trackAcademic: "Academic"
-            },
-            es: {
-                mainHeading: "Ensayos Culturales",
-                mainSubheading: "Textos bilingües inmersivos diseñados para el dominio intermedio del español.",
-                newsHeading: "El Noticiero Diario",
-                newsSubheading: "Cobertura informativa en tiempo real directa desde agencias españolas.",
-                cardsHeading: "Tarjetas Inteligentes",
-                cardsSubheading: "Evaluación adaptativa basada en el contenido analizado de los ensayos.",
-                wpHeading: "Composición Creativa",
-                wpSubheading: "Redacta respuestas auténticas y obtén comentarios instantáneos de IA sobre sintaxis nativa.",
-                backBtn: "Volver a la Biblioteca",
-                skipBtn: "Saltar Propuesta",
-                evalBtn: "Evaluar Texto",
-                qHeading: "Propuesta de Escritura",
-                textareaPlaceholder: "Escribe tu respuesta aquí en español... (Mínimo 15 palabras)",
-                navExplore: "Explorar",
-                navNews: "Noticias",
-                navCards: "Tarjetas",
-                navWrite: "Escribir",
-                streak: "Racha",
-                points: "Puntos",
-                apiAlert: "Error de verificación de clave API del flujo de trabajo. Asegúrate de que tu Acción de GitHub contiene los mapeos de tokens secretos válidos.",
-                emptyAlert: "El lienzo de composición está vacío. Por favor, escribe una breve respuesta primero.",
-                analyzing: "Analizando Estructura...",
-                loadingRobot: "Revisando métricas de alineación estructural, gramática y propiedades sintácticas...",
-                errorFeedback: "No se pudieron procesar los registros de evaluación. Verifica la conexión y variables de la API.",
-                explicitHeader: "Análisis Gramatical y Correcciones Específicas",
-                correctNotice: "¡Entrega Perfecta! Tu respuesta exhibe un fraseo natural y estructuras morfológicas precisas.",
-                trackConversational: "Conversacional",
-                trackAcademic: "Académico"
-            }
-        };
+<script>
+const i18n = {
+en: {
+mainHeading: "Cultural Essays",
+mainSubheading: "Immersive bilingual texts built for intermediate Spanish mastery.",
+newsHeading: "El Noticiero Diario",
+newsSubheading: "Real-time news coverage direct from Spanish wire services.",
+cardsHeading: "Smart Flashcards",
+cardsSubheading: "Adaptive evaluation targeting content parsed from the essays.",
+wpHeading: "Creative Composition",
+wpSubheading: "Draft authentic text answers and get instant native AI formatting feedback.",
+backBtn: "Back to Library",
+apiLabel: "Gemini API Key Connection",
+saveKeyBtn: "Save Token",
+skipBtn: "Skip Prompt",
+evalBtn: "Evaluate Text",
+qHeading: "Writing Prompt",
+textareaPlaceholder: "Write your answer here in Spanish... (Minimum 15 words)",
+navExplore: "Explore",
+navNews: "News",
+navCards: "Cards",
+navWrite: "Write",
+streak: "Streak",
+points: "Points",
+apiAlert: "Please supply a valid Gemini API access token to execute live feedback processing.",
+emptyAlert: "Your composition canvas is currently empty. Please type a short response first.",
+analyzing: "Analyzing Framework...",
+loadingRobot: "Reviewing metrics, alignment grammar, and stylistic syntax properties...",
+errorFeedback: "Could not safely process assessment logs. Check connection profiles and api variables.",
+explicitHeader: "Grammar Analysis & Target Edits",
+correctNotice: "Perfect Submission! Your response showcases natural phrasing and precise morphological structures.",
+trackConversational: "Conversational",
+trackAcademic: "Academic"
+},
+es: {
+mainHeading: "Ensayos Culturales",
+mainSubheading: "Textos bilingües inmersivos diseñados para el dominio intermedio del español.",
+newsHeading: "El Noticiero Diario",
+newsSubheading: "Cobertura informativa en tiempo real directa desde agencias españolas.",
+cardsHeading: "Tarjetas Inteligentes",
+cardsSubheading: "Evaluación adaptativa basada en el contenido analizado de los ensayos.",
+wpHeading: "Composición Creativa",
+wpSubheading: "Redacta respuestas auténticas y obtén comentarios instantáneos de IA sobre sintaxis nativa.",
+backBtn: "Volver a la Biblioteca",
+apiLabel: "Conexión de Clave API Gemini",
+saveKeyBtn: "Guardar Token",
+skipBtn: "Saltar Propuesta",
+evalBtn: "Evaluar Texto",
+qHeading: "Propuesta de Escritura",
+textareaPlaceholder: "Escribe tu respuesta aquí en español... (Mínimo 15 palabras)",
+navExplore: "Explorar",
+navNews: "Noticias",
+navCards: "Tarjetas",
+navWrite: "Escribir",
+streak: "Racha",
+points: "Puntos",
+apiAlert: "Por favor, proporciona un token de acceso válido de la API de Gemini para ejecutar la evaluación en vivo.",
+emptyAlert: "El lienzo de composición está vacío. Por favor, escribe una breve respuesta primero.",
+analyzing: "Analizando Estructura...",
+loadingRobot: "Revisando métricas de alineación estructural, gramática y propiedades sintácticas...",
+errorFeedback: "No se pudieron procesar los registros de evaluación. Verifica la conexión y variables de la API.",
+explicitHeader: "Análisis Gramatical y Correcciones Específicas",
+correctNotice: "¡Entrega Perfecta! Tu respuesta exhibe un fraseo natural y estructuras morfológicas precisas.",
+trackConversational: "Conversacional",
+trackAcademic: "Académico"
+}
+};
 
-        const documentaries = [
-            { id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "La captura efímera de la luz y la revolución de la pintura al aire libre.", genre: "Impresionismo", theme: "Arte", file: "monet.json" },
-            { id: "seurat", title: "Georges Seurat y la Ciencia del Puntillismo", subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.", genre: "Puntillismo", theme: "Arte", file: "georgesseurat.json", vocabQuizSeed: [{ term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" }, { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }, { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" }, { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }] },
-            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de reality que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] }
-        ];
+const documentaries = [
+{ id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "La captura efímera de la luz y la revolución de la pintura al aire libre.", genre: "Impresionismo", theme: "Arte", file: "monet.json" },
+{ id: "seurat", title: "Georges Seurat y la Ciencia del Puntillismo", subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.", genre: "Puntillismo", theme: "Arte", file: "georgesseurat.json", vocabQuizSeed: [{ term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" }, { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }, { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" }, { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }] },
+{ id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de reality que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] }
+];
 
-        const writingPromptsDatabase = [
-            { id: 1, category: "academic", promptEn: "Describe how impressionist painters changed the world's relationship with ambient light, using concepts like plein air painting.", promptEs: "Describe cómo los pintores impresionistas cambiaron la relación del mundo con la luz ambiental, utilizando conceptos como la pintura al aire libre." },
-            { id: 2, category: "academic", promptEn: "Argue whether photography should be treated strictly as historical documentation or as an autonomous fine art form.", promptEs: "Argumenta si la fotografía debe ser tratada estrictamente como documentación histórica o como una forma autónoma de bellas artes." },
-            { id: 3, category: "academic", promptEn: "Analyze the technical overlap between Seurat's pointillism optical layout and modern digital display screen pixel densities.", promptEs: "Analiza la superposición técnica entre la disposición óptica del puntillismo de Seurat y las densidades de píxeles en las pantallas digitales modernas." },
-            { id: 4, category: "conversational", promptEn: "How would you describe your perfect weekend in Spain?", promptEs: "¿Cómo describirías tu fin de semana perfecto en España?" },
-            { id: 5, category: "conversational", promptEn: "What are the core differences between typical mid-day meals in your hometown and traditional Spanish tapas culture?", promptEs: "¿Cuáles son las diferencias principales entre las comidas típicas de tu ciudad natal y la cultura tradicional de las tapas españolas?" },
-            { id: 6, category: "conversational", promptEn: "Imagine you are lost in a historic neighborhood in Seville. Draft a script showing how you would ask a local for directions to the cathedral and a great nearby restaurant.", promptEs: "Imagina que estás perdido en un barrio histórico de Sevilla. Escribe un guion sobre cómo le pedirías indicaciones a un lugareño para llegar a la catedral y a un buen restaurante cercano." },
-            { id: 7, category: "conversational", promptEn: "Discuss your favorite seasonal celebrations or festivals, and compare their social dynamic with a Spanish tradition like La Tomatina or Las Fallas.", promptEs: "Habla sobre tus celebraciones o festivales estacionales favoritos y compara su dinámica social con una tradición española como La Tomatina o Las Fallas." },
-            { id: 8, category: "conversational", promptEn: "If you could live in a coastal Spanish village versus a dense capital like Madrid for a year to learn the language, which environment would you choose and why?", promptEs: "Si pudieras vivir en un pueblo costero español frente a una capital densa como Madrid durante un año para aprender el idioma, ¿qué entorno elegirías y por qué?" }
-        ];
+const writingPromptsDatabase = [
+{ id: 1, category: "academic", promptEn: "Describe how impressionist painters changed the world's relationship with ambient light, using concepts like plein air painting.", promptEs: "Describe cómo los pintores impresionistas cambiaron la relación del mundo con la luz ambiental, utilizando conceptos como la pintura al aire libre." },
+{ id: 2, category: "academic", promptEn: "Argue whether photography should be treated strictly as historical documentation or as an autonomous fine art form.", promptEs: "Argumenta si la fotografía debe ser tratada estrictamente como documentación histórica o como una forma autónoma de bellas artes." },
+{ id: 3, category: "academic", promptEn: "Analyze the technical overlap between Seurat's pointillism optical layout and modern digital display screen pixel densities.", promptEs: "Analiza la superposición técnica entre la disposición óptica del puntillismo de Seurat y las densidades de píxeles en las pantallas digitales modernas." },
+{ id: 4, category: "conversational", promptEn: "How would you describe your perfect weekend in Spain?", promptEs: "¿Cómo describirías tu fin de semana perfecto en España?" },
+{ id: 5, category: "conversational", promptEn: "What are the core differences between typical mid-day meals in your hometown and traditional Spanish tapas culture?", promptEs: "¿Cuáles son las diferencias principales entre las comidas típicas de tu ciudad natal y la cultura tradicional de las tapas españolas?" },
+{ id: 6, category: "conversational", promptEn: "Imagine you are lost in a historic neighborhood in Seville. Draft a script showing how you would ask a local for directions to the cathedral and a great nearby restaurant.", promptEs: "Imagina que estás perdido en un barrio histórico de Sevilla. Escribe un guion sobre cómo le pedirías indicaciones a un lugareño para llegar a la catedral y a un buen restaurante cercano." },
+{ id: 7, category: "conversational", promptEn: "Discuss your favorite seasonal celebrations or festivals, and compare their social dynamic with a Spanish tradition like La Tomatina or Las Fallas.", promptEs: "Habla sobre tus celebraciones o festivales estacionales favoritos y compara su dinámica social con una tradición española como La Tomatina o Las Fallas." },
+{ id: 8, category: "conversational", promptEn: "If you could live in a coastal Spanish village versus a dense capital like Madrid for a year to learn the language, which environment would you choose and why?", promptEs: "Si pudieras vivir en un pueblo costero español frente a una capital densa como Madrid durante un año para aprender el idioma, ¿qué entorno elegirías y por qué?" }
+];
 
-        let state = {
-            uiLanguage: "en",
-            activeTab: "portfolio",
-            currentFilter: "all",
-            allSentencePairs: [],
-            score: 0,
-            streak: 0,
-            quizMode: "multiple-choice", 
-            activeQuestion: null,
-            scrambledSelections: [],
-            writingCategory: "conversational",
-            writingPromptIndex: 0,
-            needsReview: []
-        };
+let state = {
+uiLanguage: "en",
+activeTab: "portfolio",
+currentFilter: "all",
+allSentencePairs: [],
+score: 0,
+streak: 0,
+quizMode: "multiple-choice", 
+activeQuestion: null,
+scrambledSelections: [],
+writingCategory: "conversational",
+writingPromptIndex: 0,
+needsReview: []
+};
 
-        function switchSection(tabId) {
-            state.activeTab = tabId;
-            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+function switchSection(tabId) {
+state.activeTab = tabId;
+document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-            if (tabId === 'portfolio') {
-                document.getElementById('portfolio-section').classList.add('active');
-                document.getElementById('tab-doc').classList.add('active');
-            } else if (tabId === 'news-direct') {
-                document.getElementById('news-direct-section').classList.add('active');
-                document.getElementById('tab-news-nav').classList.add('active');
-                loadLiveNewsFeedDirectly();
-            } else if (tabId === 'flashcards') {
-                document.getElementById('flashcards-section').classList.add('active');
-                document.getElementById('tab-flash').classList.add('active');
-                serveNextAdaptiveFlashcard();
-            } else if (tabId === 'writing-production') {
-                document.getElementById('writing-production-section').classList.add('active');
-                document.getElementById('tab-write-nav').classList.add('active');
-            }
-        }
+if (tabId === 'portfolio') {
+document.getElementById('portfolio-section').classList.add('active');
+document.getElementById('tab-doc').classList.add('active');
+} else if (tabId === 'news-direct') {
+document.getElementById('news-direct-section').classList.add('active');
+document.getElementById('tab-news-nav').classList.add('active');
+loadLiveNewsFeedDirectly();
+} else if (tabId === 'flashcards') {
+document.getElementById('flashcards-section').classList.add('active');
+document.getElementById('tab-flash').classList.add('active');
+serveNextAdaptiveFlashcard();
+} else if (tabId === 'writing-production') {
+document.getElementById('writing-production-section').classList.add('active');
+document.getElementById('tab-write-nav').classList.add('active');
+}
+}
 
-        function getFilteredWritingPrompts() {
-            return writingPromptsDatabase.filter(p => p.category === state.writingCategory);
-        }
+function getFilteredWritingPrompts() {
+return writingPromptsDatabase.filter(p => p.category === state.writingCategory);
+}
 
-        function switchWritingCategory(targetCategory) {
-            if (state.writingCategory === targetCategory) return;
-            state.writingCategory = targetCategory;
-            state.writingPromptIndex = 0;
+function switchWritingCategory(targetCategory) {
+if (state.writingCategory === targetCategory) return;
+state.writingCategory = targetCategory;
+state.writingPromptIndex = 0;
 
-            document.getElementById('wp-tab-conversational').classList.toggle('active', targetCategory === 'conversational');
-            document.getElementById('wp-tab-academic').classList.toggle('active', targetCategory === 'academic');
+document.getElementById('wp-tab-conversational').classList.toggle('active', targetCategory === 'conversational');
+document.getElementById('wp-tab-academic').classList.toggle('active', targetCategory === 'academic');
 
-            renderCurrentWritingPrompt();
-            document.getElementById('wp-student-input').value = '';
-            document.getElementById('wp-feedback-container').style.display = "none";
-        }
+renderCurrentWritingPrompt();
+document.getElementById('wp-student-input').value = '';
+document.getElementById('wp-feedback-container').style.display = "none";
+}
 
-        function updateUiLanguageDOM() {
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('lang-toggle').innerText = state.uiLanguage.toUpperCase();
-            document.getElementById('lbl-main-heading').innerText = currentDict.mainHeading;
-            document.getElementById('lbl-main-subheading').innerText = currentDict.mainSubheading;
-            document.getElementById('lbl-news-heading').innerText = currentDict.newsHeading;
-            document.getElementById('lbl-news-subheading').innerText = currentDict.newsSubheading;
-            document.getElementById('lbl-cards-heading').innerText = currentDict.cardsHeading;
-            document.getElementById('lbl-cards-subheading').innerText = currentDict.cardsSubheading;
-            document.getElementById('lbl-wp-heading').innerText = currentDict.wpHeading;
-            document.getElementById('lbl-wp-subheading').innerText = currentDict.wpSubheading;
-            document.getElementById('lbl-back-btn').innerText = currentDict.backBtn;
-            document.getElementById('lbl-skip-prompt-btn').innerText = currentDict.skipBtn;
-            document.getElementById('lbl-eval-btn').innerText = currentDict.evalBtn;
-            document.getElementById('lbl-wp-question-heading').innerText = currentDict.qHeading;
-            document.getElementById('wp-student-input').placeholder = currentDict.textareaPlaceholder;
-            document.getElementById('lbl-nav-explore').innerText = currentDict.navExplore;
-            document.getElementById('lbl-nav-news').innerText = currentDict.navNews;
-            document.getElementById('lbl-nav-cards').innerText = currentDict.navCards;
-            document.getElementById('lbl-nav-write').innerText = currentDict.navWrite;
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            document.getElementById('wp-tab-conversational').innerText = currentDict.trackConversational;
-            document.getElementById('wp-tab-academic').innerText = currentDict.trackAcademic;
-            renderCurrentWritingPrompt();
-        }
+function updateUiLanguageDOM() {
+const currentDict = i18n[state.uiLanguage];
+document.getElementById('lang-toggle').innerText = state.uiLanguage.toUpperCase();
+document.getElementById('lbl-main-heading').innerText = currentDict.mainHeading;
+document.getElementById('lbl-main-subheading').innerText = currentDict.mainSubheading;
+document.getElementById('lbl-news-heading').innerText = currentDict.newsHeading;
+document.getElementById('lbl-news-subheading').innerText = currentDict.newsSubheading;
+document.getElementById('lbl-cards-heading').innerText = currentDict.cardsHeading;
+document.getElementById('lbl-cards-subheading').innerText = currentDict.cardsSubheading;
+document.getElementById('lbl-wp-heading').innerText = currentDict.wpHeading;
+document.getElementById('lbl-wp-subheading').innerText = currentDict.wpSubheading;
+document.getElementById('lbl-back-btn').innerText = currentDict.backBtn;
+document.getElementById('lbl-api-label').innerText = currentDict.apiLabel;
+document.getElementById('lbl-save-key-btn').innerText = currentDict.saveKeyBtn;
+document.getElementById('lbl-skip-prompt-btn').innerText = currentDict.skipBtn;
+document.getElementById('lbl-eval-btn').innerText = currentDict.evalBtn;
+document.getElementById('lbl-wp-question-heading').innerText = currentDict.qHeading;
+document.getElementById('wp-student-input').placeholder = currentDict.textareaPlaceholder;
+document.getElementById('lbl-nav-explore').innerText = currentDict.navExplore;
+document.getElementById('lbl-nav-news').innerText = currentDict.navNews;
+document.getElementById('lbl-nav-cards').innerText = currentDict.navCards;
+document.getElementById('lbl-nav-write').innerText = currentDict.navWrite;
+document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
+document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
+document.getElementById('wp-tab-conversational').innerText = currentDict.trackConversational;
+document.getElementById('wp-tab-academic').innerText = currentDict.trackAcademic;
+renderCurrentWritingPrompt();
+}
 
-        function toggleLanguage() {
-            state.uiLanguage = state.uiLanguage === "en" ? "es" : "en";
-            updateUiLanguageDOM();
-        }
+function toggleLanguage() {
+state.uiLanguage = state.uiLanguage === "en" ? "es" : "en";
+updateUiLanguageDOM();
+}
 
-        async function buildGlobalFlashcardCache() {
-            let list = [];
-            for (let doc of documentaries) {
-                try {
-                    const response = await fetch(`./data/${doc.file}`);
-                    if (!response.ok) continue;
-                    const json = await response.json();
-                    const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
-                    
-                    paragraphs.forEach(para => {
-                        para.forEach(pair => {
-                            list.push({ es: pair.es, en: pair.en, genre: doc.genre, source: doc.title });
-                        });
-                    });
-                } catch (e) {
-                    console.warn(`File loading skipped for ${doc.file}: `, e);
-                }
-            }
-            state.allSentencePairs = list;
-        }
+async function buildGlobalFlashcardCache() {
+let list = [];
+for (let doc of documentaries) {
+try {
+const response = await fetch(`./data/${doc.file}`);
+if (!response.ok) continue;
+const json = await response.json();
+const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
 
-        function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            document.getElementById('theme-toggle').innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-        }
+paragraphs.forEach(para => {
+para.forEach(pair => {
+list.push({ es: pair.es, en: pair.en, genre: doc.genre, source: doc.title });
+});
+});
+} catch (e) {
+console.warn(`File loading skipped for ${doc.file}: `, e);
+}
+}
+state.allSentencePairs = list;
+}
 
-        function filterHomeTheme(themeName) {
-            state.currentFilter = themeName;
-            document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
-            if (themeName === 'all') document.getElementById('pill-all').classList.add('active');
-            if (themeName === 'Arte') document.getElementById('pill-arte').classList.add('active');
-            
-            const grid = document.getElementById('portfolio-grid-mount');
-            grid.innerHTML = '';
+function toggleTheme() {
+const body = document.body;
+const currentTheme = body.getAttribute('data-theme');
+const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+body.setAttribute('data-theme', newTheme);
+document.getElementById('theme-toggle').innerHTML = newTheme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+}
 
-            documentaries.forEach(doc => {
-                if (themeName !== 'all' && doc.theme !== themeName) return;
-                
-                const card = document.createElement('div');
-                card.className = 'artist-card';
-                card.onclick = () => openReader(doc);
-                card.innerHTML = `
-                    <span class="artist-badge">${doc.genre}</span>
-                    <h3>${doc.title}</h3>
-                    <p>${doc.subtitle}</p>
-                    <div class="meta-info">
-                        <span>${doc.theme} Framework</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+function filterHomeTheme(themeName) {
+state.currentFilter = themeName;
+document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
+if (themeName === 'all') document.getElementById('pill-all').classList.add('active');
+if (themeName === 'Arte') document.getElementById('pill-arte').classList.add('active');
 
-        async function openReader(doc) {
-            const container = document.getElementById('essay-paragraphs-container');
-            const titleRegion = document.getElementById('reader-meta-title-region');
-            container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading context segments...</p>';
-            
-            titleRegion.innerHTML = `
-                <h2>${doc.title}</h2>
-                <div class="reader-meta">${doc.genre} • Interactive Module</div>
-            `;
+const grid = document.getElementById('portfolio-grid-mount');
+grid.innerHTML = '';
 
-            try {
-                const response = await fetch(`./data/${doc.file}`);
-                if (!response.ok) throw new Error();
-                const json = await response.json();
-                container.innerHTML = '';
+documentaries.forEach(doc => {
+if (themeName !== 'all' && doc.theme !== themeName) return;
 
-                const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
+const card = document.createElement('div');
+card.className = 'artist-card';
+card.onclick = () => openReader(doc);
+card.innerHTML = `
+                   <span class="artist-badge">${doc.genre}</span>
+                   <h3>${doc.title}</h3>
+                   <p>${doc.subtitle}</p>
+                   <div class="meta-info">
+                       <span>${doc.theme} Framework</span>
+                       <i class="fa-solid fa-chevron-right"></i>
+                   </div>
+               `;
+grid.appendChild(card);
+});
+}
 
-                paragraphs.forEach(para => {
-                    const block = document.createElement('div');
-                    block.className = 'essay-paragraph';
-                    
-                    para.forEach(pair => {
-                        const node = document.createElement('span');
-                        node.className = 'sentence-node';
-                        node.onclick = (e) => {
-                            e.stopPropagation();
-                            document.querySelectorAll('.sentence-node').forEach(n => {
-                                if (n !== node) n.classList.remove('highlighted');
-                            });
-                            node.classList.toggle('highlighted');
-                        };
-                        node.innerHTML = `
-                            <span class="sp-text">${pair.es}</span>
-                            <span class="en-translation">${pair.en}</span>
-                        `;
-                        block.appendChild(node);
-                    });
-                    container.appendChild(block);
-                });
-            } catch (e) {
-                container.innerHTML = '<p style="color:#F44336; text-align:center; padding:30px;"><i class="fa-solid fa-circle-exclamation"></i> Could not load JSON archive data yet.</p>';
-            }
+async function openReader(doc) {
+const container = document.getElementById('essay-paragraphs-container');
+const titleRegion = document.getElementById('reader-meta-title-region');
+container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading context segments...</p>';
 
-            document.getElementById('portfolio-section').classList.remove('active');
-            document.getElementById('reader-section').classList.add('active');
-        }
+titleRegion.innerHTML = `
+               <h2>${doc.title}</h2>
+               <div class="reader-meta">${doc.genre} • Interactive Module</div>
+           `;
 
-        function exitReader() {
-            document.getElementById('reader-section').classList.remove('active');
-            document.getElementById('portfolio-section').classList.add('active');
-        }
+try {
+const response = await fetch(`./data/${doc.file}`);
+if (!response.ok) throw new Error();
+const json = await response.json();
+container.innerHTML = '';
 
-        function playSfx(type) {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                
-                if (type === 'correct') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.3);
-                } else {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(180, ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.2);
-                }
-            } catch (err) {}
-        }
+const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
 
-        async function loadLiveNewsFeedDirectly() {
-            const container = document.getElementById('news-feed-paragraphs-container');
-            container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-rotate fa-spin"></i> Polling cloud repository content nodes...</p>';
-            try {
-                const response = await fetch('./data/news_ia.json');
-                if (!response.ok) throw new Error();
-                const json = await response.json();
-                container.innerHTML = '';
+paragraphs.forEach(para => {
+const block = document.createElement('div');
+block.className = 'essay-paragraph';
 
-                const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
+para.forEach(pair => {
+const node = document.createElement('span');
+node.className = 'sentence-node';
+node.onclick = (e) => {
+e.stopPropagation();
+document.querySelectorAll('.sentence-node').forEach(n => {
+if (n !== node) n.classList.remove('highlighted');
+});
+node.classList.toggle('highlighted');
+};
+node.innerHTML = `
+                           <span class="sp-text">${pair.es}</span>
+                           <span class="en-translation">${pair.en}</span>
+                       `;
+block.appendChild(node);
+});
+container.appendChild(block);
+});
+} catch (e) {
+container.innerHTML = '<p style="color:#F44336; text-align:center; padding:30px;"><i class="fa-solid fa-circle-exclamation"></i> Could not load JSON archive data yet.</p>';
+}
 
-                paragraphs.forEach(feedSegment => {
-                    const block = document.createElement('div');
-                    block.className = 'essay-paragraph';
-                    block.style.marginBottom = "24px";
-                    block.style.borderBottom = "1px solid var(--border-color)";
-                    block.style.paddingBottom = "18px";
-                    
-                    feedSegment.forEach(pair => {
-                        const node = document.createElement('span');
-                        node.className = 'sentence-node';
-                        node.onclick = (e) => {
-                            e.stopPropagation();
-                            node.classList.toggle('highlighted');
-                        };
-                        node.innerHTML = `
-                            <span class="sp-text" style="font-size:15px;">${pair.es}</span>
-                            <span class="en-translation" style="font-size:13.5px;">${pair.en}</span>
-                        `;
-                        block.appendChild(node);
-                    });
-                    container.appendChild(block);
-                });
-            } catch (err) {
-                container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:24px; font-size:14px;"><i class="fa-solid fa-circle-nodes"></i> Real-time pipeline processing offline. Fallback active.</p>';
-            }
-        }
+document.getElementById('portfolio-section').classList.remove('active');
+document.getElementById('reader-section').classList.add('active');
+}
 
-        function generateAdaptiveQuestionNode() {
-            if (state.allSentencePairs.length === 0) return null;
-            
-            if (state.needsReview.length > 0 && Math.random() < 0.25) {
-                return state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
-            }
+function exitReader() {
+document.getElementById('reader-section').classList.remove('active');
+document.getElementById('portfolio-section').classList.add('active');
+}
 
-            if (state.quizMode === 'multiple-choice') {
-                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-                const questionText = `What is the correct English translation of this fragment?<br><br><em>"${targetPair.es}"</em>`;
-                const answer = targetPair.en;
-                let distractors = [];
-                state.allSentencePairs.forEach(p => { if (p.en !== answer) distractors.push(p.en); });
-                distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
-                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-                
-                return {
-                    id_key: `es_en_${targetPair.es.substring(0,15)}`,
-                    type: "Translate to English",
-                    question: questionText,
-                    options: options,
-                    answer: answer,
-                    explanation: `Correct translation configuration verified.`
-                };
-            } else {
-                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-                const questionText = `Translate to European Spanish:<br><br><em>"${targetPair.en}"</em>`;
-                const answer = targetPair.es;
-                let distractors = [];
-                state.allSentencePairs.forEach(p => { if (p.es !== answer) distractors.push(p.es); });
-                distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
-                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-                
-                return {
-                    id_key: `en_es_${targetPair.es.substring(0,15)}`,
-                    type: "Translate to Spanish",
-                    question: questionText,
-                    options: options,
-                    answer: answer,
-                    explanation: `Correct alignment structure in Castilian.`
-                };
-            }
-        }
+function playSfx(type) {
+try {
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const osc = ctx.createOscillator();
+const gain = ctx.createGain();
+osc.connect(gain);
+gain.connect(ctx.destination);
 
-        function toggleFlashcardMode() {
-            state.quizMode = state.quizMode === "multiple-choice" ? "scramble" : "multiple-choice";
-            document.getElementById('lbl-quiz-mode-status').innerText = state.quizMode === "multiple-choice" ? "Mode: Multiple Choice" : "Mode: Build Phrase";
-            serveNextAdaptiveFlashcard();
-        }
+if (type === 'correct') {
+osc.type = 'triangle';
+osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+gain.gain.setValueAtTime(0.1, ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+osc.start();
+osc.stop(ctx.currentTime + 0.3);
+} else {
+osc.type = 'sawtooth';
+osc.frequency.setValueAtTime(180, ctx.currentTime);
+osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.15);
+gain.gain.setValueAtTime(0.12, ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+osc.start();
+osc.stop(ctx.currentTime + 0.2);
+}
+} catch (err) {}
+}
 
-        function serveNextAdaptiveFlashcard() {
-            state.scrambledSelections = [];
-            const q = generateAdaptiveQuestionNode();
-            state.activeQuestion = q;
+async function loadLiveNewsFeedDirectly() {
+const container = document.getElementById('news-feed-paragraphs-container');
+container.innerHTML = '<p style="text-align:center; padding:40px; color:var(--text-secondary);"><i class="fa-solid fa-rotate fa-spin"></i> Polling cloud repository content nodes...</p>';
+try {
+const response = await fetch('./data/news_ia.json');
+if (!response.ok) throw new Error();
+const json = await response.json();
+container.innerHTML = '';
 
-            const box = document.getElementById('active-flashcard-box');
-            if (!q) {
-                box.innerHTML = `<p style='text-align:center; padding:20px;'>Parsing indices... Return to Explore section to load memory cache arrays.</p>`;
-                return;
-            }
+const paragraphs = Array.isArray(json) ? json : (json.paragraphs || []);
 
-            document.getElementById('fc-progress-indicator').style.width = `${Math.min(100, state.streak * 8)}%`;
+paragraphs.forEach(feedSegment => {
+const block = document.createElement('div');
+block.className = 'essay-paragraph';
+block.style.marginBottom = "24px";
+block.style.borderBottom = "1px solid var(--border-color)";
+block.style.paddingBottom = "18px";
 
-            if (state.quizMode === 'multiple-choice') {
-                let optionsHtml = '';
-                q.options.forEach((opt, idx) => {
-                    optionsHtml += `<button class="option-button" onclick="evaluateChoiceFlashcard(this, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
-                });
+feedSegment.forEach(pair => {
+const node = document.createElement('span');
+node.className = 'sentence-node';
+node.onclick = (e) => {
+e.stopPropagation();
+node.classList.toggle('highlighted');
+};
+node.innerHTML = `
+                           <span class="sp-text" style="font-size:15px;">${pair.es}</span>
+                           <span class="en-translation" style="font-size:13.5px;">${pair.en}</span>
+                       `;
+block.appendChild(node);
+});
+container.appendChild(block);
+});
+} catch (err) {
+container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:24px; font-size:14px;"><i class="fa-solid fa-circle-nodes"></i> Real-time pipeline processing offline. Fallback active.</p>';
+}
+}
 
-                box.innerHTML = `
-                    <div class="card-type-indicator">${q.type}</div>
-                    <div class="fc-question-text">${q.question}</div>
-                    <div class="options-list">${optionsHtml}</div>
-                    <div class="fc-explanation-box" id="fc-explanation-panel">${q.explanation}</div>
-                    <div class="fc-actions hidden" id="fc-action-row">
-                        <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
-                    </div>
-                `;
-            } else {
-                const wordsArray = q.answer.split(' ');
-                const randomizedChips = [...wordsArray].sort(() => 0.5 - Math.random());
-                
-                let chipsHtml = '';
-                randomizedChips.forEach((word, idx) => {
-                    chipsHtml += `<span class="word-chip-pill" id="chip-index-${idx}" onclick="appendWordChip(this, '${word.replace(/'/g, "\\'")}')">${word}</span>`;
-                });
+function generateAdaptiveQuestionNode() {
+if (state.allSentencePairs.length === 0) return null;
 
-                box.innerHTML = `
-                    <div class="card-type-indicator">Syntax Reconstruction Matrix</div>
-                    <div class="fc-question-text">Target Phrasing: <br><em>"${state.quizMode === 'multiple-choice' ? q.answer : q.question.split('</em>')[0].split('<em>')[1]}"</em></div>
-                    
-                    <div class="scrambled-board-zone">
-                        <div class="construct-build-preview" id="chip-preview-destination-box"></div>
-                        <div class="scrambled-pool-chips">${chipsHtml}</div>
-                    </div>
+if (state.needsReview.length > 0 && Math.random() < 0.25) {
+return state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
+}
 
-                    <div class="fc-explanation-box" id="scramble-correction-report" style="display:block; background:transparent; padding:0; font-size:13.5px; font-weight:500;"></div>
+if (state.quizMode === 'multiple-choice') {
+const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+const questionText = `What is the correct English translation of this fragment?<br><br><em>"${targetPair.es}"</em>`;
+const answer = targetPair.en;
+let distractors = [];
+state.allSentencePairs.forEach(p => { if (p.en !== answer) distractors.push(p.en); });
+distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+const options = [...distractors, answer].sort(() => 0.5 - Math.random());
 
-                    <div class="fc-actions" id="scramble-controls" style="margin-top:8px;">
-                        <button class="secondary-outline-btn" onclick="clearScrambledBuild()" style="margin-right:auto;">Clear Array</button>
-                        <button class="primary-btn" onclick="validateScrambledSequence()">Verify Synthesis</button>
-                    </div>
-                    <div class="fc-actions hidden" id="scramble-next-row">
-                        <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
-                    </div>
-                `;
-            }
-        }
+return {
+id_key: `es_en_${targetPair.es.substring(0,15)}`,
+type: "Translate to English",
+question: questionText,
+options: options,
+answer: answer,
+explanation: `Correct translation configuration verified.`
+};
+} else {
+const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+const questionText = `Translate to European Spanish:<br><br><em>"${targetPair.en}"</em>`;
+const answer = targetPair.es;
+let distractors = [];
+state.allSentencePairs.forEach(p => { if (p.es !== answer) distractors.push(p.es); });
+distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+const options = [...distractors, answer].sort(() => 0.5 - Math.random());
 
-        function evaluateChoiceFlashcard(btnElement, selectionString) {
-            const isCorrect = selectionString === state.activeQuestion.answer;
-            document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
-            
-            const explanationPanel = document.getElementById('fc-explanation-panel');
-            explanationPanel.style.display = "block";
+return {
+id_key: `en_es_${targetPair.es.substring(0,15)}`,
+type: "Translate to Spanish",
+question: questionText,
+options: options,
+answer: answer,
+explanation: `Correct alignment structure in Castilian.`
+};
+}
+}
 
-            if (isCorrect) {
-                btnElement.classList.add('correct');
-                state.score += 10;
-                state.streak += 1;
-                playSfx('correct');
-                state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-            } else {
-                btnElement.classList.add('wrong');
-                state.streak = 0;
-                playSfx('wrong');
-                if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
-                    state.needsReview.push(state.activeQuestion);
-                }
-                
-                document.querySelectorAll('.option-button').forEach(b => {
-                    if (b.innerText === state.activeQuestion.answer) b.classList.add('correct');
-                });
-            }
+function toggleFlashcardMode() {
+state.quizMode = state.quizMode === "multiple-choice" ? "scramble" : "multiple-choice";
+document.getElementById('lbl-quiz-mode-status').innerText = state.quizMode === "multiple-choice" ? "Mode: Multiple Choice" : "Mode: Build Phrase";
+serveNextAdaptiveFlashcard();
+}
 
-            document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
-            document.getElementById('fc-action-row').classList.remove('hidden');
-        }
+function serveNextAdaptiveFlashcard() {
+state.scrambledSelections = [];
+const q = generateAdaptiveQuestionNode();
+state.activeQuestion = q;
 
-        function appendWordChip(chipElement, wordString) {
-            chipElement.classList.add('used-up');
-            state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
-            
-            const previewZone = document.getElementById('chip-preview-destination-box');
-            const subBadge = document.createElement('span');
-            subBadge.className = 'word-chip-pill';
-            subBadge.style.borderColor = 'var(--accent-secondary)';
-            subBadge.innerText = wordString;
-            previewZone.appendChild(subBadge);
-        }
+const box = document.getElementById('active-flashcard-box');
+if (!q) {
+box.innerHTML = `<p style='text-align:center; padding:20px;'>Parsing indices... Return to Explore section to load memory cache arrays.</p>`;
+return;
+}
 
-        function clearScrambledBuild() {
-            state.scrambledSelections = [];
-            document.querySelectorAll('.word-chip-pill').forEach(c => c.classList.remove('used-up'));
-            document.getElementById('chip-preview-destination-box').innerHTML = '';
-        }
+document.getElementById('fc-progress-indicator').style.width = `${Math.min(100, state.streak * 8)}%`;
 
-        function validateScrambledSequence() {
-            const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
-            const targetRaw = state.activeQuestion.answer;
-            const correctString = targetRaw.toLowerCase();
+if (state.quizMode === 'multiple-choice') {
+let optionsHtml = '';
+q.options.forEach((opt, idx) => {
+optionsHtml += `<button class="option-button" onclick="evaluateChoiceFlashcard(this, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`;
+});
 
-            const previewZone = document.getElementById('chip-preview-destination-box');
-            document.getElementById('scramble-controls').classList.add('hidden');
-            document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
+box.innerHTML = `
+                   <div class="card-type-indicator">${q.type}</div>
+                   <div class="fc-question-text">${q.question}</div>
+                   <div class="options-list">${optionsHtml}</div>
+                   <div class="fc-explanation-box" id="fc-explanation-panel">${q.explanation}</div>
+                   <div class="fc-actions hidden" id="fc-action-row">
+                       <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
+                   </div>
+               `;
+} else {
+const wordsArray = q.answer.split(' ');
+const randomizedChips = [...wordsArray].sort(() => 0.5 - Math.random());
 
-            if (compiledString.trim() === correctString.trim()) {
-                previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
-                previewZone.style.borderColor = '#4CAF50';
-                state.score += 15;
-                state.streak += 1;
-                playSfx('correct');
-                state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-            } else {
-                previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
-                previewZone.style.borderColor = '#F44336';
-                state.streak = 0;
-                playSfx('wrong');
-                if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
-                    state.needsReview.push(state.activeQuestion);
-                }
-                document.getElementById('scramble-correction-report').innerHTML = `<span style="color:#F44336;"><i class="fa-solid fa-circle-info"></i> Expected layout:</span><br><b style="color:var(--text-primary);">${targetRaw}</b>`;
-            }
+let chipsHtml = '';
+randomizedChips.forEach((word, idx) => {
+chipsHtml += `<span class="word-chip-pill" id="chip-index-${idx}" onclick="appendWordChip(this, '${word.replace(/'/g, "\\'")}')">${word}</span>`;
+});
 
-            document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
-            document.getElementById('scramble-next-row').classList.remove('hidden');
-        }
+box.innerHTML = `
+                   <div class="card-type-indicator">Syntax Reconstruction Matrix</div>
+                   <div class="fc-question-text">Target Phrasing: <br><em>"${state.quizMode === 'multiple-choice' ? q.answer : q.question.split('</em>')[0].split('<em>')[1]}"</em></div>
+                   
+                   <div class="scrambled-board-zone">
+                       <div class="construct-build-preview" id="chip-preview-destination-box"></div>
+                       <div class="scrambled-pool-chips">${chipsHtml}</div>
+                   </div>
 
-        function renderCurrentWritingPrompt() {
-            const filteredPrompts = getFilteredWritingPrompts();
-            if (filteredPrompts.length === 0) return;
-            
-            if (state.writingPromptIndex >= filteredPrompts.length) {
-                state.writingPromptIndex = 0;
-            }
-            
-            const prompt = filteredPrompts[state.writingPromptIndex];
-            document.getElementById('wp-prompt-display-node').innerText = state.uiLanguage === 'en' ? prompt.promptEn : prompt.promptEs;
-        }
+                   <div class="fc-explanation-box" id="scramble-correction-report" style="display:block; background:transparent; padding:0; font-size:13.5px; font-weight:500;"></div>
 
-        function cycleNextWritingPrompt() {
-            const filteredPrompts = getFilteredWritingPrompts();
-            if (filteredPrompts.length > 0) {
-                state.writingPromptIndex = (state.writingPromptIndex + 1) % filteredPrompts.length;
-            } else {
-                state.writingPromptIndex = 0;
-            }
-            renderCurrentWritingPrompt();
-            document.getElementById('wp-student-input').value = '';
-            document.getElementById('wp-feedback-container').style.display = "none";
-        }
+                   <div class="fc-actions" id="scramble-controls" style="margin-top:8px;">
+                       <button class="secondary-outline-btn" onclick="clearScrambledBuild()" style="margin-right:auto;">Clear Array</button>
+                       <button class="primary-btn" onclick="validateScrambledSequence()">Verify Synthesis</button>
+                   </div>
+                   <div class="fc-actions hidden" id="scramble-next-row">
+                       <button class="primary-btn" onclick="serveNextAdaptiveFlashcard()">Next Element <i class="fa-solid fa-arrow-right"></i></button>
+                   </div>
+               `;
+}
+}
 
-        async function transmitCompositionToGemini() {
-            const currentDict = i18n[state.uiLanguage];
-            
-            // Secure route reading token injected directly from code attributes
-            const apiKey = document.body.getAttribute('data-secret-token');
-            if (!apiKey) {
-                alert(currentDict.apiAlert);
-                return;
-            }
+function evaluateChoiceFlashcard(btnElement, selectionString) {
+const isCorrect = selectionString === state.activeQuestion.answer;
+document.querySelectorAll('.option-button').forEach(b => b.classList.add('disabled'));
 
-            const filteredPrompts = getFilteredWritingPrompts();
-            if (filteredPrompts.length === 0) return;
-            const currentPrompt = filteredPrompts[state.writingPromptIndex];
-            const studentSubmission = document.getElementById('wp-student-input').value.trim();
-            
-            if (!studentSubmission) {
-                alert(currentDict.emptyAlert);
-                return;
-            }
+const explanationPanel = document.getElementById('fc-explanation-panel');
+explanationPanel.style.display = "block";
 
-            const actionBtn = document.getElementById('wp-submit-btn');
-            const feedbackPanel = document.getElementById('wp-feedback-container');
+if (isCorrect) {
+btnElement.classList.add('correct');
+state.score += 10;
+state.streak += 1;
+playSfx('correct');
+state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+} else {
+btnElement.classList.add('wrong');
+state.streak = 0;
+playSfx('wrong');
+if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
+state.needsReview.push(state.activeQuestion);
+}
 
-            actionBtn.disabled = true;
-            actionBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${currentDict.analyzing}`;
-            feedbackPanel.style.display = "flex";
-            feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> ${currentDict.loadingRobot}</p>`;
+document.querySelectorAll('.option-button').forEach(b => {
+if (b.innerText === state.activeQuestion.answer) b.classList.add('correct');
+});
+}
 
-            const endpointUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
+document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
+document.getElementById('fc-action-row').classList.remove('hidden');
+}
 
-            const parsingInstructionSystem = `
-                You are a Castilian Spanish linguist evaluating an intermediate learner's response.
-                Prompt Was: "${currentPrompt.promptEs}"
-                Evaluate the student submission and reply STRICTLY with a clean JSON object containing these keys:
-                {
+function appendWordChip(chipElement, wordString) {
+chipElement.classList.add('used-up');
+state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
+
+const previewZone = document.getElementById('chip-preview-destination-box');
+const subBadge = document.createElement('span');
+subBadge.className = 'word-chip-pill';
+subBadge.style.borderColor = 'var(--accent-secondary)';
+subBadge.innerText = wordString;
+previewZone.appendChild(subBadge);
+}
+
+function clearScrambledBuild() {
+state.scrambledSelections = [];
+document.querySelectorAll('.word-chip-pill').forEach(c => c.classList.remove('used-up'));
+document.getElementById('chip-preview-destination-box').innerHTML = '';
+}
+
+function validateScrambledSequence() {
+const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
+const targetRaw = state.activeQuestion.answer;
+const correctString = targetRaw.toLowerCase();
+
+const previewZone = document.getElementById('chip-preview-destination-box');
+document.getElementById('scramble-controls').classList.add('hidden');
+document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
+
+if (compiledString.trim() === correctString.trim()) {
+previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
+previewZone.style.borderColor = '#4CAF50';
+state.score += 15;
+state.streak += 1;
+playSfx('correct');
+state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+} else {
+previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
+previewZone.style.borderColor = '#F44336';
+state.streak = 0;
+playSfx('wrong');
+if (!state.needsReview.some(item => item.id_key === state.activeQuestion.id_key)) {
+state.needsReview.push(state.activeQuestion);
+}
+document.getElementById('scramble-correction-report').innerHTML = `<span style="color:#F44336;"><i class="fa-solid fa-circle-info"></i> Expected layout:</span><br><b style="color:var(--text-primary);">${targetRaw}</b>`;
+}
+
+document.getElementById('score-counter').innerText = `${i18n[state.uiLanguage].points}: ${state.score}`;
+document.getElementById('streak-counter').innerText = `${i18n[state.uiLanguage].streak}: ${state.streak} 🔥`;
+document.getElementById('scramble-next-row').classList.remove('hidden');
+}
+
+function commitApiKeySecurely() {
+const key = document.getElementById('gemini-key-field').value.trim();
+if (key) {
+localStorage.setItem('KULTURA_GEMINI_KEY', key);
+alert("Credentials committed successfully to local app sandbox storage variables.");
+}
+}
+
+function renderCurrentWritingPrompt() {
+const filteredPrompts = getFilteredWritingPrompts();
+if (filteredPrompts.length === 0) return;
+
+if (state.writingPromptIndex >= filteredPrompts.length) {
+state.writingPromptIndex = 0;
+}
+
+const prompt = filteredPrompts[state.writingPromptIndex];
+document.getElementById('wp-prompt-display-node').innerText = state.uiLanguage === 'en' ? prompt.promptEn : prompt.promptEs;
+}
+
+function cycleNextWritingPrompt() {
+const filteredPrompts = getFilteredWritingPrompts();
+if (filteredPrompts.length > 0) {
+state.writingPromptIndex = (state.writingPromptIndex + 1) % filteredPrompts.length;
+} else {
+state.writingPromptIndex = 0;
+}
+renderCurrentWritingPrompt();
+document.getElementById('wp-student-input').value = '';
+document.getElementById('wp-feedback-container').style.display = "none";
+}
+
+async function transmitCompositionToGemini() {
+const currentDict = i18n[state.uiLanguage];
+const apiKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+if (!apiKey) {
+alert(currentDict.apiAlert);
+return;
+}
+
+const filteredPrompts = getFilteredWritingPrompts();
+if (filteredPrompts.length === 0) return;
+const currentPrompt = filteredPrompts[state.writingPromptIndex];
+const studentSubmission = document.getElementById('wp-student-input').value.trim();
+
+if (!studentSubmission) {
+alert(currentDict.emptyAlert);
+return;
+}
+
+const actionBtn = document.getElementById('wp-submit-btn');
+const feedbackPanel = document.getElementById('wp-feedback-container');
+
+actionBtn.disabled = true;
+actionBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${currentDict.analyzing}`;
+feedbackPanel.style.display = "flex";
+feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> ${currentDict.loadingRobot}</p>`;
+
+const endpointUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+const parsingInstructionSystem = `
+               You are a Castilian Spanish linguist evaluating an intermediate learner's response.
+               Prompt Was: "${currentPrompt.promptEs}"
+               Evaluate the student submission and reply STRICTLY with a clean JSON object containing these keys:
+               {
+                   "is_perfect_score": true/false,
                    "score": 85,
-                   "summary_critique": "A brief overall feedback note written in english describing syntax quality.",
-                   "corrections": [
-                      {"original": "incorrect part", "fixed": "corrected part", "reason": "brief grammatical rule explanation"}
-                   ]
-                }
+                  "summary_critique": "A brief overall feedback note written in english describing syntax quality.",
+                  "corrections": [
+                     {"original": "incorrect part", "fixed": "corrected part", "reason": "brief grammatical rule explanation"}
+                  ]
+               }
+                Do not wrap the output in markdown fences or additional text strings.
                 The "score" value must be an integer from 0 to 100 representing linguistic accuracy. Do not wrap the output in markdown fences or additional text strings.
-            `;
+           `;
 
-            try {
-                const apiPayload = {
-                    contents: [{
-                        parts: [
-                            { text: parsingInstructionSystem },
-                            { text: `Student Submission: "${studentSubmission}"` }
-                        ]
-                    }],
-                    generationConfig: {
-                        responseMimeType: "application/json"
-                    }
-                };
+try {
+const apiPayload = {
+contents: [{
+parts: [
+{ text: parsingInstructionSystem },
+{ text: `Student Submission: "${studentSubmission}"` }
+]
+}],
+generationConfig: {
+responseMimeType: "application/json"
+}
+};
 
-                const response = await fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(apiPayload)
-                });
+const response = await fetch(endpointUrl, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(apiPayload)
+});
 
-                if (!response.ok) throw new Error();
-                const data = await response.json();
-                
-                const rawResponseText = data.candidates[0].content.parts[0].text;
-                const jsonCleanResponse = JSON.parse(rawResponseText);
+if (!response.ok) throw new Error();
+const data = await response.json();
 
-                let innerCorrectionsMarkup = '';
-                if (jsonCleanResponse.corrections && jsonCleanResponse.corrections.length > 0) {
-                    jsonCleanResponse.corrections.forEach(item => {
-                        innerCorrectionsMarkup += `
-                            <div class="correction-line-item">
-                                <span style="text-decoration: line-through; color: #F44336; font-weight:500;">${item.original}</span> 
-                                <i class="fa-solid fa-arrow-right" style="font-size:10px; margin: 0 4px; color:var(--text-secondary);"></i> 
-                                <span style="color: #4CAF50; font-weight:600;">${item.fixed}</span>
-                                <p style="font-size:12px; color: var(--text-secondary); margin-top:2px;">${item.reason}</p>
-                            </div>
-                        `;
-                    });
-                } else {
-                    innerCorrectionsMarkup = `<p style="color:#4CAF50; font-size:13.5px; font-weight:500;"><i class="fa-solid fa-circle-check"></i> ${currentDict.correctNotice}</p>`;
-                }
+const rawResponseText = data.candidates[0].content.parts[0].text;
+const jsonCleanResponse = JSON.parse(rawResponseText);
 
-                feedbackPanel.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
-                        <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--accent-secondary);">Structural Diagnostics Report</h4>
+let innerCorrectionsMarkup = '';
+if (jsonCleanResponse.corrections && jsonCleanResponse.corrections.length > 0) {
+jsonCleanResponse.corrections.forEach(item => {
+innerCorrectionsMarkup += `
+                           <div class="correction-line-item">
+                               <span style="text-decoration: line-through; color: #F44336; font-weight:500;">${item.original}</span> 
+                               <i class="fa-solid fa-arrow-right" style="font-size:10px; margin: 0 4px; color:var(--text-secondary);"></i> 
+                               <span style="color: #4CAF50; font-weight:600;">${item.fixed}</span>
+                               <p style="font-size:12px; color: var(--text-secondary); margin-top:2px;">${item.reason}</p>
+                           </div>
+                       `;
+});
+} else {
+innerCorrectionsMarkup = `<p style="color:#4CAF50; font-size:13.5px; font-weight:500;"><i class="fa-solid fa-circle-check"></i> ${currentDict.correctNotice}</p>`;
+}
+
+feedbackPanel.innerHTML = `
+                   <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
+                       <h4 style="font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:var(--accent-secondary);">Structural Diagnostics Report</h4>
+                        <span style="font-size:11px; font-weight:700; color: ${jsonCleanResponse.is_perfect_score ? '#4CAF50':'#FF9800'}">${jsonCleanResponse.is_perfect_score ? 'NATURAL':'EDITS SUGGESTED'}</span>
                         <span style="font-size:11px; font-weight:700; color: ${jsonCleanResponse.score >= 80 ? '#4CAF50':'#FF9800'}">SCORE: ${jsonCleanResponse.score}/100</span>
-                    </div>
-                    <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
-                        "${jsonCleanResponse.summary_critique}"
-                    </p>
-                    <div style="margin-top: 4px;">
-                        <h5 style="font-size:11px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; letter-spacing:0.5px;">${currentDict.explicitHeader}</h5>
-                        ${innerCorrectionsMarkup}
-                    </div>
-                `;
+                   </div>
+                   <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
+                       "${jsonCleanResponse.summary_critique}"
+                   </p>
+                   <div style="margin-top: 4px;">
+                       <h5 style="font-size:11px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; letter-spacing:0.5px;">${currentDict.explicitHeader}</h5>
+                       ${innerCorrectionsMarkup}
+                   </div>
+               `;
 
-            } catch (err) {
-                console.error("Pipeline breakdown tracking error:", err);
-                feedbackPanel.innerHTML = `<p style="color: #F44336; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> ${currentDict.errorFeedback}</p>`;
-            } finally {
-                actionBtn.disabled = false;
-                actionBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> ${currentDict.evalBtn}`;
-            }
-        }
+} catch (err) {
+console.error("Pipeline breakdown tracking error:", err);
+feedbackPanel.innerHTML = `<p style="color: #F44336; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> ${currentDict.errorFeedback}</p>`;
+} finally {
+actionBtn.disabled = false;
+actionBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> ${currentDict.evalBtn}`;
+}
+}
 
-        window.onload = async () => {
-            updateUiLanguageDOM();
-            filterHomeTheme('all');
-            await buildGlobalFlashcardCache();
-        };
-    </script>
+window.onload = async () => {
+updateUiLanguageDOM();
+filterHomeTheme('all');
+await buildGlobalFlashcardCache();
+
+const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+if (savedKey) {
+document.getElementById('gemini-key-field').value = savedKey;
+}
+};
+</script>
 </body>
 </html>
