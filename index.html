@@ -1186,11 +1186,55 @@ line-height: 1.5;
         }
 
         const documentaries = [
-            { id: "monet", title: "Claude Monet y el Impresionismo", subtitle: "El pintor que descompuso la luz sobre el agua.", genre: "Impresionismo", theme: "Arte", file: "monet.json", vocabQuizSeed: [{ term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" }, { term: "lienzo", translation: "canvas", hint: "La tela sobre la que se pinta al óleo" }, { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" }, { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }] },
-            { id: "seurat", title: "Georges Seurat y la Ciencia del Puntillismo", subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.", genre: "Puntillismo", theme: "Arte", file: "georgesseurat.json", vocabQuizSeed: [{ term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" }, { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }, { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" }, { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }] },
-            { id: "bresson", title: "Henri Cartier-Bresson: El Ojo de la Calle", subtitle: "La geometría instantánea y la revolución de la fotografía documental.", genre: "Fotografía", theme: "Arte", file: "henricartierbresson.json", vocabQuizSeed: [{ term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" }, { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" }, { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" }, { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }] },
-            { id: "diario-actualidad", title: "Diario de Actualidad: Noticias de España", subtitle: "Últimas novedades, sociedad y cultura analizadas en castellano nativo.", genre: "Noticias", theme: "Noticias", file: "news_ia.json", vocabQuizSeed: [{ term: "redacción", translation: "newsroom", hint: "Lugar o equipo de periodistas encargados de redactar" }, { term: "titular", translation: "headline", hint: "El título llamativo y principal de una noticia" }, { term: "corresponsal", translation: "correspondent", hint: "Periodista enviado a otra ciudad o país" }, { term: "rueda de prensa", translation: "press conference", hint: "Reunión convocada por una organización para responder preguntas" }] }
-];
+            {
+                id: "monet",
+                title: "Claude Monet y el Impresionismo",
+                subtitle: "El pintor que descompuso la luz sobre el agua.",
+                genre: "Impresionismo",
+                theme: "Arte",
+                vocabQuizSeed: [
+                    { term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" },
+                    { term: "lienzo", translation: "canvas", hint: "La tela sobre la que se pinta al óleo" },
+                    { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" },
+                    { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }
+                ],
+                para: [
+                    {
+                        es: "Claude Monet fue un pintor francés, uno de los creadores del impresionismo.",
+                        en: "Claude Monet was a French painter, one of the creators of impressionism."
+                    },
+                    {
+                        es: "Su obra 'Impresión, sol naciente' dio nombre al movimiento artístico.",
+                        en: "His work 'Impression, Sunrise' gave its name to the artistic movement."
+                    },
+                    {
+                        es: "Pasó sus últimos años pintando los famosos nenúfares en su jardín de Giverny.",
+                        en: "He spent his final years painting the famous water lilies in his Giverny garden."
+                    }
+                ]
+            },
+            {
+                id: "seurat",
+                title: "Georges Seurat y la Ciencia del Puntillismo",
+                subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.",
+                genre: "Puntillismo",
+                theme: "Arte",
+                vocabQuizSeed: [
+                    { term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" },
+                    { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }
+                ],
+                para: [
+                    {
+                        es: "Georges Seurat alteró el curso del arte moderno con el puntillismo.",
+                        en: "Georges Seurat altered the course of modern art with pointillism."
+                    },
+                    {
+                        es: "Su obra maestra plasma una tarde de domingo en la isla de la Grande Jatte.",
+                        en: "His masterpiece depicts a Sunday afternoon on the Island of La Grande Jatte."
+                    }
+                ]
+            }
+        ];
 
 const state = {
 theme: "light",
