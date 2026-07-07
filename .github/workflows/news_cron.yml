@@ -32,12 +32,12 @@ jobs:
       env:
         SECURE_GEMINI_TOKEN: ${{ secrets.GEMINI_API_KEY }}
       run: |
-        # Replaces placeholder token attribute in index.html with real secret values securely on compilation
+        # Safely finds the structural body tag and injects the token variable
         if [ -n "$SECURE_GEMINI_TOKEN" ]; then
-          sed -i "s/data-secret-token=\"\"/data-secret-token=\"$SECURE_GEMINI_TOKEN\"/g" index.html
+          sed -i 's/<body data-theme="light">/<body data-theme="light" data-secret-token="'"$SECURE_GEMINI_TOKEN"'">/g' index.html
           echo "Gemini authorization routing configuration applied successfully."
         else
-          echo "Warning: GEMINI_API_KEY secret not found. Retaining standard prompt layout."
+          echo "Warning: GEMINI_API_KEY secret not found in repository secrets."
         fi
 
     - name: Commit Updated Content to GitHub Pages
