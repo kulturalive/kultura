@@ -1,942 +1,926 @@
-<!DOCTYPE html>
-<html lang="en">
+PE html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kultura — Learn European Spanish</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,500;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-:root {
---bg-base: #FBFBFA;
---bg-card: #FFFFFF;
---bg-tertiary: #F4F4F1;
---border-color: #E6E6E2;
---text-primary: #1C1C1A;
---text-secondary: #5C5C57;
---text-spanish: #000000;
---text-english: #6C6C67;
---accent-primary: #E05A47;
---accent-secondary: #1F4C81;
---accent-glow: rgba(226, 90, 71, 0.08);
---card-radius: 16px;
---transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
---font-sans: 'Plus Jakarta Sans', sans-serif;
---font-serif: 'Playfair Display', serif;
-}
-
-[data-theme="dark"] {
---bg-base: #111111;
---bg-card: #181818;
---bg-tertiary: #222222;
---border-color: #2D2D2D;
---text-primary: #ECECEC;
---text-secondary: #A0A0A0;
---text-spanish: #FFFFFF;
---text-english: #B5B5B5;
---accent-primary: #FF9800;
---accent-secondary: #4A90E2;
---accent-glow: rgba(255, 152, 0, 0.08);
-}
-
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
--webkit-tap-highlight-color: transparent;
-}
-
-body {
-background-color: var(--bg-base);
-color: var(--text-primary);
-font-family: var(--font-sans);
-transition: var(--transition-smooth);
-display: flex;
-justify-content: center;
-min-height: 100vh;
-overflow-x: hidden;
-}
-
-.app-shell {
-width: 100%;
-max-width: 600px;
-padding: 24px 20px 120px 20px;
-display: flex;
-flex-direction: column;
-position: relative;
-}
-
-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding-bottom: 20px;
-border-bottom: 1px solid var(--border-color);
-margin-bottom: 28px;
-}
-
-.brand-logo {
-font-family: var(--font-serif);
-font-size: 24px;
-font-weight: 600;
-letter-spacing: -0.5px;
-color: var(--text-primary);
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.brand-logo i {
-font-size: 16px;
-color: var(--accent-primary);
-}
-
-.controls {
-display: flex;
-gap: 12px;
-}
-
-.icon-btn {
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-color: var(--text-primary);
-width: 44px;
-height: 44px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: var(--transition-smooth);
-box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-}
-
-.icon-btn:hover {
-transform: translateY(-2px);
-border-color: var(--accent-primary);
-}
-
-.bottom-nav {
-position: fixed;
-bottom: 24px;
-left: 50%;
-transform: translateX(-50%);
-width: calc(100% - 40px);
-max-width: 520px;
-background: rgba(28, 28, 26, 0.85);
-backdrop-filter: blur(20px);
--webkit-backdrop-filter: blur(20px);
-border-radius: 30px;
-padding: 8px;
-display: flex;
-justify-content: space-between;
-box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-z-index: 1000;
-border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .bottom-nav {
-background: rgba(18, 18, 18, 0.9);
-border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-item {
-flex: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 4px;
-background: transparent;
-border: none;
-color: rgba(255, 255, 255, 0.6);
-cursor: pointer;
-padding: 10px 0;
-border-radius: 22px;
-font-family: var(--font-sans);
-font-size: 11px;
-font-weight: 500;
-transition: var(--transition-smooth);
-}
-
-.nav-item i {
-font-size: 18px;
-}
-
-.nav-item.active {
-color: #FFFFFF;
-background: var(--accent-primary);
-}
-
-.app-section {
-display: none;
-opacity: 0;
-transform: translateY(12px);
-transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.app-section.active {
-display: block;
-opacity: 1;
-transform: translateY(0);
-}
-
-.hidden {
-display: none !important;
-}
-
-.doc-intro {
-margin-bottom: 24px;
-}
-
-.doc-intro h2 {
-font-family: var(--font-serif);
-font-size: 32px;
-font-weight: 500;
-margin-bottom: 8px;
-letter-spacing: -0.5px;
-}
-
-.doc-intro p {
-color: var(--text-secondary);
-font-size: 15px;
-line-height: 1.5;
-}
-
-.theme-tabs-row {
-display: flex;
-gap: 8px;
-margin-bottom: 24px;
-border-bottom: 1px solid var(--border-color);
-padding-bottom: 12px;
-}
-
-.tab-pill-btn {
-background: transparent;
-border: 1px solid transparent;
-color: var(--text-secondary);
-font-family: var(--font-sans);
-font-size: 13px;
-font-weight: 600;
-padding: 8px 16px;
-border-radius: 100px;
-cursor: pointer;
-transition: var(--transition-smooth);
-}
-
-.tab-pill-btn.active {
-border-color: var(--accent-primary);
-color: var(--accent-primary);
-background: var(--accent-glow);
-}
-
-.artist-grid {
-display: flex;
-flex-direction: column;
-gap: 16px;
-}
-
-.artist-card {
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-border-radius: var(--card-radius);
-padding: 24px;
-cursor: pointer;
-position: relative;
-overflow: hidden;
-transition: var(--transition-smooth);
-box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-
-.artist-card:hover {
-transform: translateY(-4px);
-border-color: var(--accent-primary);
-}
-
-.artist-badge {
-align-self: flex-start;
-background: var(--bg-tertiary);
-color: var(--text-secondary);
-font-size: 10px;
-font-weight: 600;
-text-transform: uppercase;
-letter-spacing: 1px;
-padding: 6px 12px;
-border-radius: 100px;
-border: 1px solid var(--border-color);
-}
-
-.artist-card h3 {
-font-family: var(--font-serif);
-font-size: 24px;
-font-weight: 500;
-color: var(--text-primary);
-}
-
-.artist-card p {
-font-size: 14px;
-color: var(--text-secondary);
-line-height: 1.5;
-}
-
-.artist-card .meta-info {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-top: 8px;
-font-size: 13px;
-color: var(--accent-primary);
-font-weight: 500;
-}
-
-.reader-header {
-margin-bottom: 24px;
-}
-
-.back-link {
-display: flex;
-align-items: center;
-gap: 8px;
-color: var(--text-secondary);
-font-size: 14px;
-cursor: pointer;
-text-decoration: none;
-font-weight: 500;
-margin-bottom: 16px;
-transition: var(--transition-smooth);
-}
-
-.back-link:hover {
-color: var(--accent-primary);
-}
-
-.reader-title h2 {
-font-family: var(--font-serif);
-font-size: 36px;
-font-weight: 500;
-line-height: 1.2;
-margin-bottom: 8px;
-}
-
-.reader-meta {
-font-size: 12px;
-color: var(--text-secondary);
-text-transform: uppercase;
-letter-spacing: 1px;
-font-weight: 600;
-}
-
-.interactive-essay {
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-border-radius: var(--card-radius);
-padding: 32px 24px;
-box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-}
-
-.essay-paragraph {
-margin-bottom: 36px;
-line-height: 1.9;
-}
-
-.sentence-node {
-display: block;
-margin-bottom: 14px;
-cursor: pointer;
-border-left: 3px solid transparent;
-padding: 4px 12px;
-transition: var(--transition-smooth);
-border-radius: 0 var(--card-radius) var(--card-radius) 0;
-word-wrap: break-word;
-overflow-wrap: break-word;
-}
-
-.sentence-node:hover {
-border-left-color: var(--border-color);
-background: var(--bg-tertiary);
-}
-
-.sentence-node.highlighted {
-border-left-color: var(--accent-primary);
-background: var(--accent-glow);
-}
-
-.sp-text {
-font-family: var(--font-sans);
-font-size: 16.5px;
-color: var(--text-spanish);
-font-weight: 400;
-display: block;
-white-space: normal;
-}
-
-.en-translation {
-max-height: 0;
-overflow: hidden;
-opacity: 0;
-font-family: var(--font-sans);
-font-size: 14.5px;
-color: var(--accent-secondary);
-font-style: italic;
-transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.25s ease;
-margin-top: 0;
-display: block;
-font-weight: 500;
-white-space: normal;
-word-wrap: break-word;
-overflow-wrap: break-word;
-}
-
-.sentence-node.highlighted .en-translation {
-max-height: 500px;
-opacity: 1;
-margin-top: 8px;
-}
-
-.fc-container {
-display: flex;
-flex-direction: column;
-gap: 24px;
-align-items: center;
-width: 100%;
-}
-
-.fc-stats-bar {
-width: 100%;
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-size: 13px;
-color: var(--text-secondary);
-font-weight: 600;
-}
-
-.score-badge {
-color: var(--accent-primary);
-background: var(--accent-glow);
-padding: 4px 12px;
-border-radius: 100px;
-}
-
-.mode-toggle-pill {
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-color: var(--text-secondary);
-font-family: var(--font-sans);
-font-size: 11px;
-font-weight: 600;
-padding: 6px 14px;
-border-radius: 100px;
-cursor: pointer;
-display: flex;
-align-items: center;
-gap: 6px;
-transition: var(--transition-smooth);
-}
-
-.mode-toggle-pill:hover {
-border-color: var(--accent-primary);
-color: var(--text-primary);
-}
-
-.progress-track {
-width: 100%;
-height: 6px;
-background: var(--border-color);
-border-radius: 100px;
-overflow: hidden;
-}
-
-.progress-fill {
-height: 100%;
-width: 0%;
-background: var(--accent-primary);
-transition: width 0.3s ease;
-}
-
-.fc-card {
-width: 100%;
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-border-radius: var(--card-radius);
-padding: 32px 24px;
-box-shadow: 0 8px 32px rgba(0,0,0,0.02);
-position: relative;
-display: flex;
-flex-direction: column;
-gap: 24px;
-transition: var(--transition-smooth);
-word-wrap: break-word;
-overflow-wrap: break-word;
-}
-
-.card-type-indicator {
-font-size: 11px;
-text-transform: uppercase;
-letter-spacing: 1.5px;
-font-weight: 700;
-color: var(--accent-primary);
-}
-
-.fc-question-text {
-font-size: 19px;
-font-weight: 500;
-line-height: 1.4;
-color: var(--text-primary);
-white-space: normal;
-}
-
-.options-list {
-display: flex;
-flex-direction: column;
-gap: 12px;
-width: 100%;
-}
-
-.option-button {
-width: 100%;
-text-align: left;
-padding: 16px 20px;
-background: var(--bg-base);
-border: 1px solid var(--border-color);
-border-radius: 12px;
-font-family: var(--font-sans);
-font-size: 15px;
-color: var(--text-primary);
-cursor: pointer;
-transition: var(--transition-smooth);
-font-weight: 400;
-line-height: 1.4;
-white-space: normal;
-word-wrap: break-word;
-overflow-wrap: break-word;
-}
-
-.option-button:hover {
-border-color: var(--accent-primary);
-transform: translateX(4px);
-}
-
-.option-button.correct {
-background: #4CAF50 !important;
-border-color: #4CAF50 !important;
-color: white !important;
-font-weight: 600;
-opacity: 1 !important;
-}
-
-.option-button.wrong {
-background: #F44336 !important;
-border-color: #F44336 !important;
-color: white !important;
-font-weight: 600;
-opacity: 1 !important;
-}
-
-.option-button.disabled:not(.correct):not(.wrong) {
-opacity: 0.35;
-cursor: not-allowed;
-pointer-events: none;
-}
-
-.fc-explanation-box {
-background: var(--bg-tertiary);
-border-radius: 12px;
-padding: 16px;
-font-size: 14px;
-line-height: 1.5;
-color: var(--text-secondary);
-display: none;
-word-wrap: break-word;
-overflow-wrap: break-word;
-}
-
-.fc-actions {
-display: flex;
-justify-content: flex-end;
-margin-top: 12px;
-width: 100%;
-}
-
-.primary-btn {
-background: var(--text-primary);
-color: var(--bg-base);
-border: none;
-padding: 14px 28px;
-border-radius: 30px;
-font-family: var(--font-sans);
-font-weight: 600;
-font-size: 14px;
-cursor: pointer;
-transition: var(--transition-smooth);
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.primary-btn:hover {
-transform: translateY(-2px);
-opacity: 0.9;
-}
-
-.srs-queue-badge {
-font-size: 11px;
-color: var(--accent-primary);
-font-weight: 700;
-margin-left: 6px;
-}
-
-.scrambled-board-zone {
-display: flex;
-flex-direction: column;
-gap: 16px;
-width: 100%;
-margin-top: 8px;
-}
-
-.construct-build-preview {
-min-height: 76px;
-width: 100%;
-background: var(--bg-tertiary);
-border: 1px dashed var(--border-color);
-border-radius: 12px;
-padding: 14px;
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-align-content: flex-start;
-}
-
-.scrambled-pool-chips {
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
-justify-content: center;
-background: var(--bg-card);
-padding: 12px 4px;
-border-top: 1px solid var(--border-color);
-}
-
-.word-chip-pill {
-background: var(--bg-base);
-border: 1px solid var(--border-color);
-color: var(--text-primary);
-font-family: var(--font-sans);
-font-size: 15px;
-padding: 10px 16px;
-border-radius: 100px;
-cursor: pointer;
-transition: var(--transition-smooth);
-user-select: none;
-font-weight: 500;
-box-shadow: 0 2px 4px rgba(0,0,0,0.01);
-}
-
-.word-chip-pill:hover {
-border-color: var(--accent-primary);
-background: var(--bg-card);
-}
-
-.word-chip-pill.used-up {
-opacity: 0.2;
-pointer-events: none;
-background: var(--bg-tertiary);
-border-color: transparent;
-}
-
-.scramble-check-footer {
-display: flex;
-justify-content: space-between;
-align-items: center;
-width: 100%;
-margin-top: 8px;
-}
-
-.secondary-outline-btn {
-background: transparent;
-border: 1px solid var(--border-color);
-color: var(--text-secondary);
-padding: 12px 20px;
-border-radius: 30px;
-font-family: var(--font-sans);
-font-size: 13px;
-font-weight: 500;
-cursor: pointer;
-transition: var(--transition-smooth);
-}
-
-.secondary-outline-btn:hover {
-color: var(--text-primary);
-border-color: var(--text-secondary);
-}
-
-.api-inline-setup {
-background: var(--bg-tertiary);
-border: 1px solid var(--border-color);
-padding: 16px;
-border-radius: var(--card-radius);
-margin-bottom: 24px;
-display: flex;
-flex-direction: column;
-gap: 10px;
-}
-
-.api-inline-setup label {
-font-size: 12px;
-font-weight: 700;
-text-transform: uppercase;
-color: var(--text-secondary);
-letter-spacing: 0.5px;
-}
-
-.api-input-group {
-display: flex;
-gap: 8px;
-}
-
-.api-input-group input {
-flex: 1;
-padding: 10px 14px;
-border-radius: 8px;
-border: 1px solid var(--border-color);
-background: var(--bg-card);
-color: var(--text-primary);
-font-family: var(--font-sans);
-font-size: 14px;
-}
-
-.api-input-group button {
-background: var(--accent-secondary);
-color: white;
-border: none;
-padding: 0 16px;
-border-radius: 8px;
-cursor: pointer;
-font-family: var(--font-sans);
-font-weight: 600;
-font-size: 13px;
-transition: var(--transition-smooth);
-}
-
-.api-input-group button:hover {
-opacity: 0.9;
-}
-
-.prompt-badge-row {
-display: flex;
-gap: 6px;
-margin-bottom: 4px;
-}
-
-.mini-pill {
-font-size: 10px;
-text-transform: uppercase;
-font-weight: 700;
-padding: 4px 10px;
-border-radius: 100px;
-background: var(--bg-tertiary);
-color: var(--text-secondary);
-}
-
-.mini-pill.level-tag {
-background: var(--accent-primary);
-color: white;
-}
-
-.prompt-main-question {
-font-family: var(--font-serif);
-font-size: 22px;
-line-height: 1.4;
-color: var(--text-primary);
-margin: 8px 0;
-}
-
-.prompt-context-hint {
-font-size: 13px;
-color: var(--text-secondary);
-background: var(--bg-base);
-padding: 12px;
-border-radius: 8px;
-border-left: 3px solid var(--accent-secondary);
-line-height: 1.5;
-}
-
-.writing-textarea {
-width: 100%;
-height: 130px;
-padding: 16px;
-border-radius: 12px;
-border: 1px solid var(--border-color);
-background: var(--bg-card);
-color: var(--text-primary);
-font-family: var(--font-sans);
-font-size: 15px;
-line-height: 1.6;
-resize: vertical;
-transition: var(--transition-smooth);
-}
-
-.writing-textarea:focus {
-outline: none;
-border-color: var(--accent-primary);
-box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
-.grading-feedback-panel {
-background: var(--bg-tertiary);
-border-radius: 12px;
-padding: 20px;
-display: none;
-flex-direction: column;
-gap: 16px;
-margin-top: 12px;
-}
-
-.correction-line-item {
-border-left: 3px solid var(--accent-primary);
-padding-left: 12px;
-margin-bottom: 8px;
-font-size: 14px;
-line-height: 1.5;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kultura — Aprende Español de España</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-base: #FBFBFA;
+            --bg-card: #FFFFFF;
+            --bg-tertiary: #F4F4F1;
+            --border-color: #E6E6E2;
+            --text-primary: #1C1C1A;
+            --text-secondary: #5C5C57;
+            --text-spanish: #000000;
+            --text-english: #6C6C67;
+            --accent-primary: #E05A47;
+            --accent-secondary: #1F4C81;
+            --accent-glow: rgba(226, 90, 71, 0.08);
+            --card-radius: 16px;
+            --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-base: #111111;
+            --bg-card: #181818;
+            --bg-tertiary: #222222;
+            --border-color: #2D2D2D;
+            --text-primary: #ECECEC;
+            --text-secondary: #A0A0A0;
+            --text-spanish: #FFFFFF;
+            --text-english: #B5B5B5;
+            --accent-primary: #FF9800;
+            --accent-secondary: #4A90E2;
+            --accent-glow: rgba(255, 152, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 600px;
+            padding: 24px 20px 120px 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 28px;
+        }
+
+        .brand-logo {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo i {
+            font-size: 16px;
+            color: var(--accent-primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .icon-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 520px;
+            background: rgba(28, 28, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .bottom-nav {
+            background: rgba(18, 18, 18, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 10px 0;
+            border-radius: 22px;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            color: #FFFFFF;
+            background: var(--accent-primary);
+        }
+
+        .app-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .app-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .doc-intro {
+            margin-bottom: 24px;
+        }
+
+        .doc-intro h2 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .doc-intro p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .theme-tabs-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-pill-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-pill-btn.active {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: var(--accent-glow);
+        }
+
+        .artist-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .artist-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .artist-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+
+        .artist-badge {
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border-color);
+        }
+
+        .artist-card h3 {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .artist-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .artist-card .meta-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .reader-header {
+            margin-bottom: 24px;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        .back-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .reader-title h2 {
+            font-family: var(--font-serif);
+            font-size: 36px;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .reader-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .interactive-essay {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 32px 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+        }
+
+        .essay-paragraph {
+            margin-bottom: 36px;
+            line-height: 1.9;
+        }
+
+        .sentence-node {
+            display: block;
+            margin-bottom: 14px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            padding: 4px 12px;
+            transition: var(--transition-smooth);
+            border-radius: 0 var(--card-radius) var(--card-radius) 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .sentence-node:hover {
+            border-left-color: var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .sentence-node.highlighted {
+            border-left-color: var(--accent-primary);
+            background: var(--accent-glow);
+        }
+
+        .sp-text {
+            font-family: var(--font-sans);
+            font-size: 16.5px;
+            color: var(--text-spanish);
+            font-weight: 400;
+            display: block;
+            white-space: normal;
+        }
+
+        .en-translation {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            font-family: var(--font-sans);
+            font-size: 14.5px;
+            color: var(--accent-secondary);
+            font-style: italic;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.25s ease;
+            margin-top: 0;
+            display: block;
+            font-weight: 500;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .sentence-node.highlighted .en-translation {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        .fc-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .fc-stats-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .score-badge {
+            color: var(--accent-primary);
+            background: var(--accent-glow);
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        .mode-toggle-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 100px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition-smooth);
+        }
+
+        .mode-toggle-pill:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .fc-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.02);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            transition: var(--transition-smooth);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .card-type-indicator {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .fc-question-text {
+            font-size: 19px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--text-primary);
+            white-space: normal;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .option-button {
+            width: 100%;
+            text-align: left;
+            padding: 16px 20px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 400;
+            line-height: 1.4;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .option-button:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(4px);
+        }
+
+        .option-button.correct {
+            background: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+            color: white !important;
+            font-weight: 600;
+            opacity: 1 !important;
+        }
+
+        .option-button.wrong {
+            background: #F44336 !important;
+            border-color: #F44336 !important;
+            color: white !important;
+            font-weight: 600;
+            opacity: 1 !important;
+        }
+
+        .option-button.disabled:not(.correct):not(.wrong) {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .fc-explanation-box {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            display: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .fc-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .primary-btn {
+            background: var(--text-primary);
+            color: var(--bg-base);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .srs-queue-badge {
+            font-size: 11px;
+            color: var(--accent-primary);
+            font-weight: 700;
+            margin-left: 6px;
+        }
+
+        .scrambled-board-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .construct-build-preview {
+            min-height: 76px;
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+        }
+
+        .scrambled-pool-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            background: var(--bg-card);
+            padding: 12px 4px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .word-chip-pill {
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            padding: 10px 16px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .word-chip-pill:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-card);
+        }
+
+        .word-chip-pill.used-up {
+            opacity: 0.2;
+            pointer-events: none;
+            background: var(--bg-tertiary);
+            border-color: transparent;
+        }
+
+        .scramble-check-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .secondary-outline-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .secondary-outline-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        /* --- WRITING FEATURE EXTRA STYLES --- */
+        .api-inline-setup {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: var(--card-radius);
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .api-inline-setup label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .api-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .api-input-group input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 14px;
+        }
+
+        .api-input-group button {
+            background: var(--accent-secondary);
+            color: white;
+            border: none;
+            padding: 0 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 13px;
+            transition: var(--transition-smooth);
+        }
+
+        .api-input-group button:hover {
+            opacity: 0.9;
+        }
+
+        .prompt-badge-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .mini-pill {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 100px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .mini-pill.level-tag {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .prompt-main-question {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin: 8px 0;
+        }
+
+        .prompt-context-hint {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--bg-base);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-secondary);
+            line-height: 1.5;
+        }
+
+        .writing-textarea {
+            width: 100%;
+            height: 130px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+            transition: var(--transition-smooth);
+        }
+
+        .writing-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .grading-feedback-panel {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .correction-line-item {
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body data-theme="light">
 
-<div class="app-shell">
-<header>
-<div class="brand-logo">
-<i class="fa-solid fa-feather-pointed"></i> Kultura
-</div>
-<div class="controls">
-                <button class="icon-btn" id="lang-toggle" onclick="toggleLanguage()" title="Switch UI/Feedback Language" style="font-weight: 700; font-size: 12px;">
-                    EN
+    <div class="app-shell">
+        <header>
+            <div class="brand-logo">
+                <i class="fa-solid fa-feather-pointed"></i> Kultura
+            </div>
+            <div class="controls">
+                <button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Night Mode">
+                    <i class="fa-regular fa-moon"></i>
                 </button>
-<button class="icon-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Night Mode">
-<i class="fa-regular fa-moon"></i>
-</button>
-</div>
-</header>
+            </div>
+        </header>
 
-<section id="portfolio-section" class="app-section active">
-<div class="doc-intro">
-                <h2>Explore Content</h2>
+        <section id="portfolio-section" class="app-section active">
+            <div class="doc-intro">
+                <h2>Explorar Contenido</h2>
                 <p>Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.</p>
-                <h2 id="lbl-explore-title">Explore Content</h2>
-                <p id="lbl-explore-desc">Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.</p>
-</div>
+            </div>
 
-<div class="theme-tabs-row">
-<button id="tab-btn-all" class="tab-pill-btn" onclick="filterHomeTheme('all')">All</button>
-<button id="tab-btn-art" class="tab-pill-btn" onclick="filterHomeTheme('Arte')">Art</button>
-<button id="tab-btn-news" class="tab-pill-btn" onclick="filterHomeTheme('Noticias')">News</button>
-</div>
+            <div class="theme-tabs-row">
+                <button id="tab-btn-all" class="tab-pill-btn" onclick="filterHomeTheme('all')">Todos</button>
+                <button id="tab-btn-art" class="tab-pill-btn" onclick="filterHomeTheme('Arte')">Arte</button>
+                <button id="tab-btn-news" class="tab-pill-btn" onclick="filterHomeTheme('Noticias')">Noticias</button>
+            </div>
 
-<div class="artist-grid" id="artist-grid-container"></div>
-</section>
+            <div class="artist-grid" id="artist-grid-container"></div>
+        </section>
 
-<section id="reader-section" class="app-section">
-<div class="reader-header">
-<a class="back-link" onclick="exitReader()">
-                    <i class="fa-solid fa-arrow-left"></i> Back to gallery
-                    <i class="fa-solid fa-arrow-left"></i> <span id="lbl-back-link">Back to gallery</span>
-</a>
-<div class="reader-title">
-<h2 id="current-reader-title"></h2>
-<div class="reader-meta" id="current-reader-genre"></div>
-</div>
-</div>
-<div class="interactive-essay" id="essay-display-container"></div>
-</section>
+        <section id="reader-section" class="app-section">
+            <div class="reader-header">
+                <a class="back-link" onclick="exitReader()">
+                    <i class="fa-solid fa-arrow-left"></i> Volver a la galería
+                </a>
+                <div class="reader-title">
+                    <h2 id="current-reader-title"></h2>
+                    <div class="reader-meta" id="current-reader-genre"></div>
+                </div>
+            </div>
+            <div class="interactive-essay" id="essay-display-container"></div>
+        </section>
 
-<section id="flashcards-section" class="app-section">
-<div class="fc-container">
-<div class="fc-stats-bar">
-<span id="streak-counter">Streak: 0 🔥</span>
-<button id="mode-toggle-btn" class="mode-toggle-pill" onclick="toggleFlashcardMode()">
-<i class="fa-solid fa-toggle-off"></i> Mixed Mode
-</button>
-<span id="score-counter" class="score-badge">Points: 0</span>
-</div>
-<div class="progress-track">
-<div id="fc-progress" class="progress-fill"></div>
-</div>
-<div class="fc-card" id="active-card-frame"></div>
-</div>
-</section>
+        <section id="flashcards-section" class="app-section">
+            <div class="fc-container">
+                <div class="fc-stats-bar">
+                    <span id="streak-counter">Racha: 0 🔥</span>
+                    <button id="mode-toggle-btn" class="mode-toggle-pill" onclick="toggleFlashcardMode()">
+                        <i class="fa-solid fa-toggle-off"></i> Modo Mixto
+                    </button>
+                    <span id="score-counter" class="score-badge">Puntos: 0</span>
+                </div>
+                <div class="progress-track">
+                    <div id="fc-progress" class="progress-fill"></div>
+                </div>
+                <div class="fc-card" id="active-card-frame"></div>
+            </div>
+        </section>
 
-<section id="writing-section" class="app-section">
-<div class="doc-intro">
-                <h2>Writing Practice</h2>
+        <section id="writing-section" class="app-section">
+            <div class="doc-intro">
+                <h2>Práctica de Escritura</h2>
                 <p>Respond to advanced cultural questions. Google Gemini 2.5 Flash Lite will assess your grammar, spelling, regional vocabulary, and tone directly.</p>
-                <h2 id="lbl-writing-title">Writing Practice</h2>
-                <p id="lbl-writing-desc">Respond to advanced cultural questions. Google Gemini 2.5 Flash Lite will assess your grammar, spelling, regional vocabulary, and tone directly.</p>
-</div>
+            </div>
 
-<div class="api-inline-setup">
-                <label for="gemini-key-field"><i class="fa-solid fa-key"></i> Gemini API Key Configuration</label>
-                <label for="gemini-key-field" id="lbl-api-setup"><i class="fa-solid fa-key"></i> Gemini API Key Configuration</label>
-<div class="api-input-group">
-<input type="password" id="gemini-key-field" placeholder="Enter your Gemini API Key...">
-                    <button onclick="saveWritingApiKey()">Save</button>
-                    <button onclick="saveWritingApiKey()" id="lbl-save-btn">Save</button>
-</div>
-</div>
+            <div class="api-inline-setup">
+                <label for="gemini-key-field"><i class="fa-solid fa-key"></i> Configuración de API Key (Gemini)</label>
+                <div class="api-input-group">
+                    <input type="password" id="gemini-key-field" placeholder="Introduce tu Gemini API Key...">
+                    <button onclick="saveWritingApiKey()">Guardar</button>
+                </div>
+            </div>
 
-<div class="fc-card">
-<div class="prompt-badge-row">
-<span class="mini-pill level-tag" id="wp-level">B2</span>
-<span class="mini-pill" id="wp-topic">Cultura</span>
-<span class="mini-pill" id="wp-tracker">Question 1 of 50</span>
-</div>
-                <h4 style="font-size:11px; text-transform:uppercase; color:var(--accent-secondary); margin-bottom: -4px; letter-spacing:0.5px;" id="lbl-wp-question-heading">Question Prompt:</h4>
-<h3 class="prompt-main-question" id="wp-question-text">Loading question...</h3>
-<p class="prompt-context-hint" id="wp-hint-text">Loading grammatical hint...</p>
+            <div class="fc-card">
+                <div class="prompt-badge-row">
+                    <span class="mini-pill level-tag" id="wp-level">B2</span>
+                    <span class="mini-pill" id="wp-topic">Cultura</span>
+                    <span class="mini-pill" id="wp-tracker">Pregunta 1 de 50</span>
+                </div>
+                <h3 class="prompt-main-question" id="wp-question-text">Cargando pregunta...</h3>
+                <p class="prompt-context-hint" id="wp-hint-text">Cargando sugerencia lingüística...</p>
 
-<textarea class="writing-textarea" id="wp-student-input" placeholder="Type your response here in European Spanish..."></textarea>
+                <textarea class="writing-textarea" id="wp-student-input" placeholder="Escribe tu respuesta aquí en español europeo..."></textarea>
 
-<div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:8px;">
-                    <button class="secondary-outline-btn" style="border-radius:30px;" onclick="skipToNextWritingPrompt()">Skip</button>
-                    <button class="primary-btn" id="wp-submit-btn" onclick="evaluateStudentWriting()"><i class="fa-solid fa-wand-magic-sparkles"></i> Evaluate with IA</button>
-                    <button class="secondary-outline-btn" style="border-radius:30px;" onclick="skipToNextWritingPrompt()" id="lbl-skip-btn">Skip</button>
-                    <button class="primary-btn" id="wp-submit-btn" onclick="evaluateStudentWriting()"><i class="fa-solid fa-wand-magic-sparkles"></i> <span id="lbl-eval-btn">Evaluate with IA</span></button>
-</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:8px;">
+                    <button class="secondary-outline-btn" style="border-radius:30px;" onclick="skipToNextWritingPrompt()">Saltar</button>
+                    <button class="primary-btn" id="wp-submit-btn" onclick="evaluateStudentWriting()"><i class="fa-solid fa-wand-magic-sparkles"></i> Evaluar con IA</button>
+                </div>
 
-<div class="grading-feedback-panel" id="wp-feedback-container"></div>
-</div>
-</section>
+                <div class="grading-feedback-panel" id="wp-feedback-container"></div>
+            </div>
+        </section>
 
-<nav class="bottom-nav">
-<button class="nav-item active" id="tab-doc" onclick="switchSection('portfolio')">
-<i class="fa-solid fa-compass"></i>
-                <span>Explore</span>
-                <span id="lbl-nav-explore">Explore</span>
-</button>
-<button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
-<i class="fa-solid fa-newspaper"></i>
-                <span>News</span>
-                <span id="lbl-nav-news">News</span>
-</button>
-<button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
-<i class="fa-solid fa-rectangle-list"></i>
-                <span>Cards</span>
-                <span id="lbl-nav-cards">Cards</span>
-</button>
-<button class="nav-item" id="tab-write-nav" onclick="switchSection('writing-production')">
-<i class="fa-solid fa-pen-nib"></i>
-                <span>Write</span>
-                <span id="lbl-nav-write">Write</span>
-</button>
-</nav>
-</div>
+        <nav class="bottom-nav">
+            <button class="nav-item active" id="tab-doc" onclick="switchSection('portfolio')">
+                <i class="fa-solid fa-compass"></i>
+                <span>Explorar</span>
+            </button>
+            <button class="nav-item" id="tab-news-nav" onclick="switchSection('news-direct')">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Noticias</span>
+            </button>
+            <button class="nav-item" id="tab-flash" onclick="switchSection('flashcards')">
+                <i class="fa-solid fa-rectangle-list"></i>
+                <span>Tarjetas</span>
+            </button>
+            <button class="nav-item" id="tab-write-nav" onclick="switchSection('writing-production')">
+                <i class="fa-solid fa-pen-nib"></i>
+                <span>Escribir</span>
+            </button>
+        </nav>
+    </div>
 
-<script>
+    <script>
         // Content Registry Definition Grid Arrays
         const documentaries = [
             {
@@ -952,29 +936,7 @@ line-height: 1.5;
                     { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" },
                     { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }
                 ]
-        // Dictionary lookup structure to handle interface transitions seamlessly
-        const i18n = {
-            en: {
-                exploreTitle: "Explore Content",
-                exploreDesc: "Learn advanced European Spanish. Choose a curated channel theme below to analyze structures line by line or build your daily vocabulary queue.",
-                tabAll: "All", tabArt: "Art", tabNews: "News",
-                backLink: "Back to gallery",
-                writingTitle: "Writing Practice",
-                writingDesc: "Respond to advanced cultural questions. Google Gemini 2.5 Flash Lite will assess your grammar, spelling, regional vocabulary, and tone directly.",
-                apiSetup: "Gemini API Key Configuration",
-                saveBtn: "Save", skipBtn: "Skip", evalBtn: "Evaluate with IA",
-                navExplore: "Explore", navNews: "News", navCards: "Cards", navWrite: "Write",
-                streak: "Streak", points: "Points", qHeading: "Question Prompt:",
-                textareaPlaceholder: "Type your response here in European Spanish...",
-                qTracker: "Question", of: "of", analyzing: "Analyzing text...",
-                loadingRobot: "Generating detailed corrections via Gemini 2.5 Flash Lite...",
-                emptyAlert: "The text area is empty. Write something before requesting an AI evaluation.",
-                apiAlert: "Please enter and save your Gemini API Key in the setup panel above before continuing.",
-                successNoErrors: "Excellent! No explicit errors were spotted.",
-                explicitHeader: "Explicit Corrections:",
-                resultsHeader: "Analysis Results",
-                errorFeedback: "Failed to communicate with Gemini. Verify API Key validation settings, rate quotas, or network connection."
-},
+            },
             {
                 id: "seurat",
                 title: "Georges Seurat y la Ciencia del Puntillismo",
@@ -988,36 +950,7 @@ line-height: 1.5;
                     { term: "retina", translation: "retina", hint: "Membrana del ojo que recibe las imágenes" },
                     { term: "yuxtaposición", translation: "juxtaposition", hint: "Colocar cosas juntas una al lado de la otra" }
                 ]
-            es: {
-                exploreTitle: "Explorar Contenido",
-                exploreDesc: "Aprende español europeo avanzado. Elige un canal temático a continuación para analizar estructuras línea por línea o construir tu lista de vocabulario.",
-                tabAll: "Todo", tabArt: "Arte", tabNews: "Noticias",
-                backLink: "Volver a la galería",
-                writingTitle: "Práctica de Escritura",
-                writingDesc: "Responde a preguntas culturales complejas. Gemini 2.5 Flash Lite evaluará tu gramática, ortografía, vocabulario regional y tono de inmediato.",
-                apiSetup: "Configuración de Clave API de Gemini",
-                saveBtn: "Guardar", skipBtn: "Saltar", evalBtn: "Evaluar con IA",
-                navExplore: "Explorar", navNews: "Noticias", navCards: "Tarjetas", navWrite: "Escribir",
-                streak: "Racha", points: "Puntos", qHeading: "Enunciado de la Pregunta:",
-                textareaPlaceholder: "Escribe tu respuesta aquí en español de España...",
-                qTracker: "Pregunta", of: "de", analyzing: "Analizando texto...",
-                loadingRobot: "Generando correcciones detalladas a través de Gemini 2.5 Flash Lite...",
-                emptyAlert: "El campo de respuesta está vacío. Escribe algo antes de solicitar evaluación.",
-                apiAlert: "Por favor, introduce y guarda tu Gemini API Key en el panel superior antes de continuar.",
-                successNoErrors: "¡Excelente! No se encontraron errores explícitos.",
-                explicitHeader: "Correcciones Explícitas:",
-                resultsHeader: "Resultado del Análisis",
-                errorFeedback: "Error al conectar con la API de Gemini. Verifica tu clave de API, cuotas o conexión de red."
-            }
-        };
-
-        // 50 Open Production Questions - Now includes native bilingual lookup support (ES / EN toggle)
-        const writingPromptsDatabase = [
-            { 
-                id: "wp1", level: "B1", topic: "Rutinas", 
-                question: { es: "¿Cómo suele ser tu rutina ideal durante un fin de semana en una ciudad española?", en: "What does your ideal weekend routine look like in a Spanish city?" },
-                hint: { es: "Usa verbos reflexivos y la perífrasis temporal 'soler + infinitivo' (ej: suelo dar un paseo).", en: "Use reflexive verbs and the temporal frequency marker 'soler + infinitive' (e.g., 'suelo dar un paseo')." }
-},
+            },
             {
                 id: "bresson",
                 title: "Henri Cartier-Bresson: El Ojo de la Calle",
@@ -1027,15 +960,11 @@ line-height: 1.5;
                 file: "henricartierbresson.json",
                 vocabQuizSeed: [
                     { term: "enfoque", translation: "focus", hint: "La nitidez de la imagen en la lente" },
-                    { term: "encuadre", translation: "framing", hint: "La porción de realidad que se elige fotografiar" },
+                    { term: "encuadre", translation: "framing", hint: "La porción de reality que se elige fotografiar" },
                     { term: "disparador", translation: "shutter button", hint: "El botón que se pulsa para tomar la foto" },
                     { term: "cuarto oscuro", translation: "darkroom", hint: "Lugar donde se revelaba el carrete de película" }
                 ]
-            { 
-                id: "wp2", level: "B1", topic: "Gastronomía", 
-                question: { es: "Describe cómo prepararías una tortilla de patatas perfecta. ¿Le pones cebolla o no? Justifica tu decisión.", en: "Describe how you would prepare a perfect Spanish potato omelet. Do you include onions or not? Justify your stance." },
-                hint: { es: "Emplea la estructura impersonal 'se + verbo' (ej: se cortan las patatas en láminas finas).", en: "Employ the impersonal voice using the 'se + verb' framework (e.g., 'se cortan las patatas')." }
-},
+            },
             {
                 id: "diario-actualidad",
                 title: "Diario de Actualidad: Noticias de España",
@@ -1049,118 +978,54 @@ line-height: 1.5;
                     { term: "corresponsal", translation: "correspondent", hint: "Periodista enviado a otra ciudad o país" },
                     { term: "rueda de prensa", translation: "press conference", hint: "Reunión convocada por una organización para responder preguntas" }
                 ]
-            { 
-                id: "wp3", level: "B1", topic: "Viajes", 
-                question: { es: "Si pudieras viajar mañana mismo a una comunidad autónoma de España, ¿a dónde irías y por qué?", en: "If you could travel tomorrow to any Autonomous Community in Spain, where would you go and why?" },
-                hint: { es: "Practica el condicional simple ('Iría a Asturias porque me gustaría disfrutar de sus paisajes...').", en: "Practice using the conditional simple tense ('Iría a Asturias porque me gustaría...')." }
-            },
-            { 
-                id: "wp4", level: "B1", topic: "Vivienda", 
-                question: { es: "¿Cómo es la casa de tus sueños? Describe su ubicación, decoración y estancias.", en: "What is your dream house like? Describe its ideal location, decor style, and layout." },
-                hint: { es: "Utiliza adjetivos descriptivos variados y el presente indicativo con corrección léxica.", en: "Utilize diverse descriptive adjectives and the present indicative tense with lexical precision." }
-            },
-            { 
-                id: "wp5", level: "B1", topic: "Pasados", 
-                question: { es: "Cuenta qué hiciste el último día festivo o fin de semana largo que disfrutaste.", en: "Narrate what you did on your last national public holiday or long holiday weekend." },
-                hint: { es: "Alterna correctamente entre el pretérito indefinido (acciones puntuales) y el imperfecto (descripciones).", en: "Alternated accurately between the preterite (completed historical actions) and imperfect (background details)." }
-            },
-            { 
-                id: "wp6", level: "B2", topic: "Cultura", 
-                question: { es: "Imagina que estás visitando el Museo del Prado por primera vez. ¿Qué sientes al contemplar 'Las Meninas' de Velázquez?", en: "Imagine visiting the Prado Museum for the first time. What do you feel when gazing at Velázquez's masterpiece 'Las Meninas'?" },
-                hint: { es: "Utiliza verbos de cambio emocional o estructuras de sentimiento ('Me conmueve', 'Me impresiona el uso de la luz').", en: "Incorporate emotional transition verbs or structures ('Me conmueve', 'Me impresiona el uso de...')." }
-            },
-            { 
-                id: "wp7", level: "B2", topic: "Sociedad", 
-                question: { es: "¿Cuáles crees que son los mayores beneficios y desventajas del teletrabajo en la sociedad moderna?", en: "What do you consider to be the primary pros and cons of remote work in modern society?" },
-                hint: { es: "Usa conectores discursivos organizadores como 'por un lado', 'por el contrario', o 'en resumen'.", en: "Organize using contrast discourse markers like 'por un lado', 'por el contrario', or 'en resumen'." }
-            },
-            { 
-                id: "wp8", level: "B2", topic: "Medio Ambiente", 
-                question: { es: "¿Qué medidas urgentes debería tomar tu ciudad para combatir la contaminación y el cambio climático?", en: "What urgent measures should your city execute to fight urban pollution and global warming climate shifts?" },
-                hint: { es: "Introduce estructuras de valoración: 'Es urgente que + subjuntivo'.", en: "Introduce assessment formulations requiring the subjunctive mood: 'Es urgente que + subjunctive'." }
-            },
-            { 
-                id: "wp9", level: "B2", topic: "Tradiciones", 
-                question: { es: "¿Qué opinión te merecen las fiestas populares tradicionales? ¿Crees que deben adaptarse a los nuevos tiempos?", en: "What is your stance on traditional town festivals? Do you believe they ought to adapt to modern norms?" },
-                hint: { es: "Utiliza expresiones de opinión avanzadas como 'A mi modo de ver', 'Desde mi punto de vista' o 'Sostengo que'.", en: "Incorporate advanced stance locutions like 'A mi modo de ver', 'Desde mi punto de vista', or 'Sostengo que'." }
-            },
-            { 
-                id: "wp10", level: "B2", topic: "Tecnología", 
-                question: { es: "¿Hasta qué punto consideras que los teléfonos móviles inteligentes han cambiado las relaciones familiares?", en: "To what extent do you believe smartphones have fundamentally modified modern family relationships?" },
-                hint: { es: "Emplea marcadores de grado o cuantificación ('en gran medida', 'parcialmente', 'de forma determinante').", en: "Employ adverbial qualifiers of degree ('en gran medida', 'parcialmente', 'de forma determinante')." }
-            },
-            { 
-                id: "wp11", level: "C1", topic: "Economía Urbana", 
-                question: { es: "Analiza el impacto socioeconómico de la turistificación y los alquileres vacacionales en los cascos históricos de las ciudades.", en: "Analyze the socioeconomic impact of rapid touristification and short-term holiday rentals on historical city centers." },
-                hint: { es: "Demuestra precisión léxica utilizando términos específicos como 'gentrificación', 'oferta habitacional' o 'éxodo vecinal'.", en: "Demonstrate precision by adopting targeted terms like 'gentrificación', 'oferta habitacional', or 'éxodo vecinal'." }
-            },
-            { 
-                id: "wp12", level: "C1", topic: "Filosofía laboral", 
-                question: { es: "Diserta sobre la siguiente premisa: 'Trabajar para vivir o vivir para trabajar'. ¿Dónde sitúas el equilibrio?", en: "Deliver an essay on this premise: 'Working to live versus living to work.' Where do you find the ideal balance?" },
-                hint: { es: "Estructura un texto formal empleando subjuntivos concesivos complejos (ej: 'Por mucho que pretendamos eludir...').", en: "Structure formal prose applying advanced concessive subjunctive clauses (e.g., 'Por mucho que pretendamos...')." }
-            },
-            { 
-                id: "wp13", level: "C1", topic: "Medios", 
-                question: { es: "¿Consideras que la prensa digital ha mermado la calidad del periodismo de investigación clásico?", en: "Do you consider that digital press formats have eroded the baseline quality of legacy investigative journalism?" },
-                hint: { es: "Haz uso de la subordinación concesiva refinada: 'A pesar de que', 'Aun cuando las cabeceras tradicionales atraviesen...'", en: "Implement elegant concessive subordinations: 'A pesar de que', 'Aun cuando las cabeceras tradicionales...'" }
-            },
-            { 
-                id: "wp14", level: "C1", topic: "Arte Moderno", 
-                question: { es: "Defiende o rebate la validez artística de las instalaciones de arte conceptual contemporáneo frente al arte figurativo tradicional.", en: "Defend or challenge the artistic validity of contemporary conceptual art installations versus traditional figurative art." },
-                hint: { es: "Despliega fórmulas argumentativas cultas ('Es indiscutible que', 'Se tiende a soslayar el hecho de que...').", en: "Deploy literate argumentative patterns ('Es indiscutible que', 'Se tiende a soslayar el hecho de que...')." }
-            },
-            { 
-                id: "wp15", level: "C1", topic: "Demografía", 
-                question: { es: "El envejecimiento de la población rural en el interior de la península ibérica (la España vaciada): causas y propuestas.", en: "The graying demographic shift in inland rural Spain ('la España vaciada'): examine its causes and remediation proposals." },
-                hint: { es: "Usa léxico demográfico y de ordenación territorial ('despoblación paulatina', 'infraestructuras obsoletas').", en: "Incorporate targeted demographic vocabulary ('despoblación paulatina', 'infraestructuras obsoletas')." }
-}
-];
+            }
+        ];
 
         // 50 Open Production Questions - calibrated for Peninsular / European Spanish standards
         const writingPromptsDatabase = [
             { id: "wp1", level: "B1", topic: "Rutinas", question: "¿Cómo suele ser tu rutina ideal durante un fin de semana en una ciudad española?", hint: "Usa verbos reflexivos y la perífrasis temporales 'soler + infinitivo' (ej: suelo dar un paseo)." },
             { id: "wp2", level: "B1", topic: "Gastronomía", question: "Describe cómo prepararías una tortilla de patatas perfecta. ¿Le pones cebolla o no? Justifica tu decisión.", hint: "Emplea la estructura impersonal 'se + verbo' (ej: se cortan las patatas en láminas finas)." },
             { id: "wp3", level: "B1", topic: "Viajes", question: "Si pudieras viajar mañana mismo a una comunidad autónoma de España, ¿a dónde irías y por qué?", hint: "Practica el condicional simple ('Iría a Asturias porque me gustaría disfrutar de sus paisajes...')." },
-            { id: "wp4", level: "B1", topic: "Vivienda", question: "¿Cómo es la casa de tus sueños? Describe su ubicación, decoración and estancias.", hint: "Utiliza adjetivos descriptivos variados y el presente indicativo con corrección léxica." },
+            { id: "wp4", level: "B1", topic: "Vivienda", question: "¿Cómo es la casa de tus sueños? Describe su ubicación, decoración y estancias.", hint: "Utiliza adjetivos descriptivos variados y el presente indicativo con corrección léxica." },
             { id: "wp5", level: "B1", topic: "Pasados", question: "Cuenta qué hiciste el último día festivo o fin de semana largo que disfrutaste.", hint: "Alterna correctamente entre el pretérito indefinido (acciones puntuales) y el imperfecto (descripciones)." },
             { id: "wp6", level: "B2", topic: "Cultura", question: "Imagina que estás visitando el Museo del Prado por primera vez. ¿Qué sientes al contemplar 'Las Meninas' de Velázquez?", hint: "Utiliza verbos de cambio emocional o estructuras de sentimiento ('Me conmueve', 'Me impresiona el uso de la luz')." },
-            { id: "wp7", level: "B2", topic: "Sociedad", question: "¿Cuáles crees que son los mayores beneficios y desventajas del teletrabajo en la sociedad moderna?", hint: "Usa conectores discursivos organizadores como 'por un lado', 'por el contrario', o 'en resumen'." },
-            { id: "wp8", level: "B2", topic: "Medio Ambiente", question: "¿Qué medidas urgentes debería tomar tu ciudad para combatir la contaminación y el cambio climático?", hint: "Introduce estructuras de valoración: 'Es urgente que + subjuntivo'." },
+            { id: "wp7", level: "B2", topic: "Sociedad", question: "¿Cuáles crees que son los mayores beneficios y desventajas del teletrabajo en la sociedad moderna?", hint: "Usa conectores discursivos organizadores como 'por un lado', 'sin embargo', 'en contraposición'." },
+            { id: "wp8", level: "B2", topic: "Medioambiente", question: "Qué medidas individuales consideras más urgentes para reducir la contaminación en nuestras ciudades?", hint: "Es una excelente oportunidad para emplear estructuras de valoración: 'Es urgente que + subjuntivo'." },
             { id: "wp9", level: "B2", topic: "Tradiciones", question: "¿Qué opinión te merecen las fiestas populares tradicionales? ¿Crees que deben adaptarse a los nuevos tiempos?", hint: "Utiliza expresiones de opinión avanzadas como 'A mi modo de ver', 'Desde mi punto de vista' o 'Sostengo que'." },
             { id: "wp10", level: "B2", topic: "Tecnología", question: "¿Hasta qué punto consideras que los teléfonos móviles inteligentes han cambiado las relaciones familiares?", hint: "Emplea marcadores de grado o cuantificación ('en gran medida', 'parcialmente', 'de forma determinante')." },
             { id: "wp11", level: "C1", topic: "Economía Urbana", question: "Analiza el impacto socioeconómico de la turistificación y los alquileres vacacionales en los cascos históricos de las ciudades.", hint: "Demuestra precisión léxica utilizando términos específicos como 'gentrificación', 'oferta habitacional' o 'éxodo vecinal'." },
             { id: "wp12", level: "C1", topic: "Filosofía laboral", question: "Diserta sobre la siguiente premisa: 'Trabajar para vivir o vivir para trabajar'. ¿Dónde sitúas el equilibrio?", hint: "Estructura un texto formal empleando subjuntivos concesivos complejos (ej: 'Por mucho que pretendamos eludir...')." },
             { id: "wp13", level: "C1", topic: "Medios", question: "¿Consideras que la prensa digital ha mermado la calidad del periodismo de investigación clásico?", hint: "Haz uso de la subordinación concesiva refinada: 'A pesar de que', 'Aun cuando las cabeceras tradicionales atraviesen...'" },
-            { id: "wp14", level: "C1", topic: "Arte Moderno", question: "Defiende o rebate la validez artística de las instalaciones de arte conceptual contemporáneo frente al arte figurativo tradicional.", hint: "Despliega fórmulas argumentativas cultas ('Es indiscutible que', 'Se tiende a soslayar el hecho de que...')." },
-            { id: "wp15", level: "C1", topic: "Demografía", question: "El envejecimiento de la población rural en el interior de la península ibérica (la España vaciada): causas y propuestas.", hint: "Usa léxico demográfico y de ordenación territorial ('despoblación paulatinas', 'infraestructuras obsoletas')." },
-            { id: "wp16", level: "B1", topic: "Juventud", question: "¿Qué importancia tienen los amigos en tu vida actual? Describe una anécdota significativa vivida con ellos.", hint: "Practica el uso fluido de pronombres de objeto directo e indirecto ('nos lo pasamos genial', 'les conté mi secreto')." },
-            { id: "wp17", level: "B1", topic: "Relaciones", question: "Describe las cualidades indispensables que buscas en una pareja ideal o en un mejor amigo.", hint: "Utiliza oraciones relativas con subjuntivo: 'Busco a alguien que sepa escuchar y que tenga empatía'." },
+            { id: "wp14", level: "C1", topic: "Arte Moderno", question: "Defiende o rebate la validez artística de las instalaciones de arte conceptual contemporáneo frente al arte figurativo.", hint: "Integra léxico especializado de crítica artística e incisos explicativos elegantes intercalados por comas." },
+            { id: "wp15", level: "C1", topic: "Educación", question: "¿Debería el sistema educativo priorizar las competencias tecnológicas frente a las humanidades clásicas? Argumenta de forma extensa.", hint: "Utiliza estructuras condicionales mixtas y conectores discursivos solemnes ('no obstante', 'por consiguiente')." },
+            { id: "wp16", level: "B1", topic: "Clima", question: "¿Cuál es tu estación del año favorita y qué actividades sueles realizar durante esos meses en tu zona?", hint: "Conecta frases coordinadas usando marcadores estables como 'ya que', 'puesto que' o 'dado que'." },
+            { id: "wp17", level: "B1", topic: "Amistad", question: "Describe las cualidades principales que buscas en un buen amigo. ¿Qué valoras más?", hint: "Aplica oraciones relativas con subjuntivo: 'Busco a alguien que sepa escuchar y que tenga empatía'." },
             { id: "wp18", level: "B1", topic: "Cine y Libros", question: "Resume brevemente el argumento de tu película o libro favorito sin desvelar el final.", hint: "Mantén el discurso cohesionado en presente histórico o cronológico e introduce personajes de forma fluida." },
             { id: "wp19", level: "B1", topic: "Deportes", question: "¿Practicas algún deporte o sigues alguna competición con regularidad? Describe qué te aporta esta afición.", hint: "Usa expresiones de frecuencia (a menudo, de vez en cuando) y verbos de beneficio ('me ayuda a desconectar')." },
             { id: "wp20", level: "B1", topic: "Música", question: "¿Cómo influye la música en tu estado de ánimo diario? ¿Qué géneros escuchas según el momento?", hint: "Utiliza estructuras de causa y efecto directas ('Cuando escucho flamenco, me invade una sensación de...')." },
             { id: "wp21", level: "B2", topic: "Gastronomía", question: "El auge de la comida rápida frente a la dieta mediterránea tradicional. ¿Qué consecuencias ves para las próximas generaciones?", hint: "Usa construcciones de futuro simple e hipótesis probables bien estructuradas." },
             { id: "wp22", level: "B2", topic: "Historia", question: "Si tuvieras la oportunidad de entrevistar a un personaje histórico relevante de España, ¿a quién elegirías y qué le preguntarías?", hint: "Aplica correctamente las estructuras condicionales hipotéticas: 'Si pudiera..., elegiría a... y le preguntaría si...'" },
-            { id: "wp23", level: "B2", topic: "Idiomas", question: "¿Qué dificultades específicas has encontrado al aprender español de España en comparación con otros idiomas?", hint: "Refiere problemas fonéticos, pragmáticos o gramaticales usando expresiones de contraste ('mientras que', 'por el contrario')." },
-            { id: "wp24", level: "B2", topic: "Nuevas Tecnologías", question: "El impacto de las redes sociales en la autoestima de los jóvenes. ¿Deberían regularse legalmente?", hint: "Emplea el condicional para manifestar propuestas ('Se deberían implementar restricciones', 'Estaría bien limitar...')." },
-            { id: "wp25", level: "B2", topic: "Turismo", question: "¿Crees que el modelo actual de turismo masivo de sol y playa es sostenible económicamente a largo plazo?", hint: "Estructura tus argumentos empleando locuciones conjuntivas condicionales avanzadas ('a menos que', 'siempre y cuando')." },
-            { id: "wp26", level: "C1", topic: "Demografía Global", question: "Expón los desafíos éticos y económicos que plantea la crisis de natalidad en Europa occidental y las posibles soluciones estructurales.", hint: "Demuestra manejo de terminología abstracta ('tasa de natalidad', 'relevo generacional', 'sostenibilidad del sistema')." },
+            { id: "wp23", level: "B2", topic: "Idiomas", question: "¿Qué dificultades específicas has encontrado al aprender español de España en comparación con otros idiomas?", hint: "Refiere problemas de contraste de fonética o usos del subjuntivo empleando gerundios expresivos coordinados." },
+            { id: "wp24", level: "B2", topic: "Urbanismo", question: "¿Cómo imaginas que serán las principales ciudades del mundo dentro de cincuenta años en términos de transporte?", hint: "Emplea el futuro simple con valor de predicción científica o conjetura social a largo plazo." },
+            { id: "wp25", level: "B2", topic: "Consumo", question: "¿Crees que la publicidad televisiva y en redes sociales manipula nuestras decisiones de compra reales?", hint: "Expresa matices de duda o certeza empleando el indicativo ('Es obvio que manipulan') o subjuntivo ('Dudo que logren...')." },
+            { id: "wp26", level: "C1", topic: "Demografía", question: "Analiza el fenómeno del envejecimiento demográfico en Europa occidental y las posibles soluciones estructurales.", hint: "Demuestra manejo de terminología abstracta ('tasa de natalidad', 'relevo generacional', 'sostenibilidad del sistema')." },
             { id: "wp27", level: "C1", topic: "Inteligencia Artificial", question: "¿Llegará la automatización algorítmica a sustituir la capacidad creativa e intuitiva genuina del ser humano?", hint: "Usa fórmulas refinadas de concesión y conectores restrictivos ('si bien es cierto que...', 'no por ello debemos deducir...')." },
             { id: "wp28", level: "C1", topic: "Globalización", question: "Discuta el riesgo de homogeneización cultural global frente a la preservación de las identidades y lenguas minoritarias locales.", hint: "Demuestra madurez sintáctica mediante el uso de pasivas reflejas e inversiones discursivas calculadas." },
             { id: "wp29", level: "C1", topic: "Psicología", question: "Examine el impacto psicológico que el aislamiento digital y las interacciones mediadas por pantallas ejercen sobre los adolescentes.", hint: "Sustente sus argumentos usando verbos de influencia y causación seguidos obligatoriamente de subjuntivo." },
             { id: "wp30", level: "C1", topic: "Moda Rápida", question: "¿Es éticamente justificable el ritmo de consumo de la fast fashion frente a la crisis climática actual? Exponga un ensayo crítico.", hint: "Despliega recursos retóricos avanzados, ironía fina o subordinadas condicionales complejas combinadas." },
             { id: "wp31", level: "B1", topic: "Naturaleza", question: "¿Prefieres pasar tus vacaciones de verano en la playa o en la montaña? Explica los motivos de tu elección.", hint: "Contrasta ventajas recurriendo a adjetivos espaciales y locuciones de lugar estables." },
-            { id: "wp32", level: "B1", topic: "Compras", question: "¿Cuál es tu postura ante las compras online frente a las tiendas tradicionales de barrio?", hint: "Utiliza conectores adversativos sencillos como 'pero', 'sin embargo' o 'en cambio'." },
-            { id: "wp33", level: "B1", topic: "Educación", question: "¿Qué asignaturas consideras fundamentales en el colegio y cuáles eliminarías del plan de estudios?", hint: "Usa expresiones para dar consejos u opiniones subjetivas en modo indicativo y condicional." },
-            { id: "wp34", level: "B1", topic: "Clima", question: "Describe cómo cambia el paisaje y tu estado de ánimo con la llegada del otoño.", hint: "Utiliza léxico sensorial y verbos de cambio comunes (ej: ponerse, volverse)." },
+            { id: "wp32", level: "B1", topic: "Moda", question: "¿Qué importancia le das a la moda y a la ropa que usas a diario? ¿Define esto tu identidad?", hint: "Prueba el uso de construcciones enfáticas relativas como 'Lo que más me importa a la hora de vestir es...'" },
+            { id: "wp33", level: "B1", topic: "Tecnología", question: "¿Recuerdas cómo era tu vida antes de tener tu primer ordenador o smartphone? Describe brevemente la diferencia.", hint: "Usa con soltura el pretérito imperfecto para describir estados habituales o continuados del pasado." },
+            { id: "wp34", level: "B1", topic: "Felicidad", question: "Para ti, ¿cuáles son los tres ingredientes indispensables para llevar una vida feliz y plena?", hint: "Enumera con fluidez empleando oraciones sustantivas con infinitivo ('para mí lo crucial es mantener...')." },
             { id: "wp35", level: "Trabajo", topic: "Trabajo", question: "¿Cuáles son las ventajas e inconvenientes de trabajar por cuenta propia frente a ser empleado en una gran empresa?", hint: "Utiliza un registro formal básico con nexos distributivos ('por un lado... por otro...')." },
             { id: "wp36", level: "B2", topic: "Arquitectura", question: "La arquitectura de una ciudad influye directamente en el carácter y bienestar de sus ciudadanos. ¿Estás de acuerdo?", hint: "Introduce valoraciones abstractas usando 'El hecho de que + subjuntivo + implique o condicione...'" },
             { id: "wp37", level: "B2", topic: "Redes Sociales", question: "¿Consideras que los denominados 'influencers' ejercen una responsabilidad educativa real sobre su audiencia juvenil?", hint: "Sopesa posturas utilizando locuciones conjuntivas concesivas intermedias como 'a pesar de que' o 'aun cuando'." },
             { id: "wp38", level: "B2", topic: "Espectáculos", question: "¿Qué ventajas experienciales ofrece asistir a una representación teatral en vivo en comparación con ver una película en casa?", hint: "Emplea léxico específico de espectáculos escénicos (escenografía, puesta en escena, butaca)." },
             { id: "wp39", level: "B2", topic: "Mascotas", question: "El debate sobre las leyes de bienestar animal y los derechos de las mascotas en los entornos urbanos modernos.", hint: "Usa construcciones impersonales y verbos jurídicos o sociales de nivel intermedio-alto (regular, proteger)." },
             { id: "wp40", level: "B2", topic: "Salud Mental", question: "¿Por qué crees que en los últimos años se ha normalizado y visibilizado la conversación sobre la salud mental?", hint: "Construye causas lógicas bien hiladas mediante marcadores como 'a consecuencia de', 'debido al auge de'." },
-            { id: "wp41", level: "C1", topic: "Filosofía del Consumo", question: "Evalúe la siguiente declaración: 'El consumo responsable es un oxímoron dentro del sistema económico contemporáneo'.", hint: "Formule oraciones complejas que utilicen preposiciones combinadas y nexos subordinados de finalidad o consecuencia." },
-            { id: "wp42", level: "C1", topic: "Urbanismo", question: "Diserte sobre los retos del diseño de ciudades del futuro bajo el modelo de la 'ciudad de los 15 minutos'.", hint: "Incorpore locuciones de carácter formal avanzado ('con vistas a', 'en lo que atañe a', 'so pretexto de')." },
-            { id: "wp43", level: "C1", topic: "Literatura", question: "¿Qué vigencia mantiene el formato de novela tradicional frente a las nuevas narrativas digitales y el contenido hiperfragmentado?", hint: "Expresa hipótesis estilísticas complejas mediante futuros hipotéticos y conectores de alternancia discursiva." },
+            { id: "wp41", level: "C1", topic: "Justicia Social", question: "Evalúe la efectividad de las políticas de discriminación positiva en el ámbito laboral para corregir desigualdades históricas.", hint: "Maneje con solvencia el vocabulario sociolaboral abstracto y subordinaciones condicionales de carácter restrictivo." },
+            { id: "wp42", level: "C1", topic: "Espacio", question: "¿Está legitimado destinar ingentes presupuestos estatales a la exploración cósmica habiendo carencias desatendidas en la Tierra?", hint: "Utiliza el gerundio compuesto ('habiendo analizado') o concesivas extremas para dotar de carga retórica a tus premisas." },
+            { id: "wp43", level: "C1", topic: "Literatura", question: "¿Sobrevivirá el formato de novela larga de corte decimonónico a los nuevos patrones de consumo de microcontenido hiperfragmentado?", hint: "Expresa hipótesis estilísticas complejas mediante futuros hipotéticos y conectores de alternancia discursiva." },
             { id: "wp44", level: "C1", topic: "Patrimonio", question: "Discuta la repatriación de bienes arqueológicos e históricos expuestos en museos occidentales a sus países de origen geográfico.", hint: "Demuestre rigor argumental haciendo uso de oraciones subordinadas sustantivas con verbos de exigencia o reclamación." },
             { id: "wp45", level: "C1", topic: "Bioética", question: "¿Cuáles deberían ser los límites bioéticos infranqueables en la edición genética aplicada a la salud humana?", hint: "Emplee con elegancia estructuras condicionales restrictivas extremas ('a condición de que', 'siempre y cuando')." },
             { id: "wp46", level: "B1", topic: "Animales", question: "¿Qué papel juegan los parques zoológicos hoy en día? ¿Crees que cumplen una labor educativa?", hint: "Alinea pros y contras empleando nexos explicativos estables como 'es decir', 'o sea' o 'en otras palabras'." },
@@ -1168,708 +1033,659 @@ line-height: 1.5;
             { id: "wp48", level: "B2", topic: "Comercio", question: "El pequeño comercio de barrio versus las grandes superficies y plataformas online. ¿Qué modelo de ciudad defiendes?", hint: "Utiliza adjetivos de valor y construcciones de relativo complejas ('aquello que define la idiosincrasia de los barrios...')." },
             { id: "wp49", level: "C1", topic: "Filosofía", question: "¿Puede la búsqueda incesante del éxito material alienar al individuo contemporáneo de sus necesidades espirituales?", hint: "Despliegue un abanico de sustantivos abstractos y conjunciones copulativas o disyuntivas de gran sonoridad retórica." },
             { id: "wp50", level: "C1", topic: "Historia", question: "Analice cómo la Transición Española influyó en el modelo geopolítico actual del sur de Europa.", hint: "Utilice marcadores de ordenación discursiva formal de nivel avanzado (en primer término, a mayor abundamiento)." }
-        // 35 boilerplate slots appended implicitly to backfill database sizing requirements safely
-        for(let i=16; i<=50; i++){
-            writingPromptsDatabase.push({
-                id: `wp${i}`,
-                level: i % 3 === 0 ? "C1" : (i % 2 === 0 ? "B2" : "B1"),
-                topic: "Cultura General",
-                question: {
-                    es: `[Tema Cultural ${i}] Expresa tu opinión fundamentada sobre las prioridades de conservación patrimonial en el siglo XXI.`,
-                    en: `[Cultural Topic ${i}] Express your structured perspective regarding heritage preservation priorities in the 21st century.`
-                },
-                hint: {
-                    es: "Utiliza un registro formal y conectores lógicos de causa y efecto.",
-                    en: "Utilize a formal register alongside logical cause-and-effect connectives."
+        ];
+
+        const state = {
+            theme: "light",
+            currentTab: "portfolio",
+            currentHomeTab: "all",
+            quizMode: "mixed", 
+            score: 0,
+            streak: 0,
+            allSentencePairs: [],
+            needsReview: [],
+            activeQuestion: null,
+            scrambledSelections: [],
+            writingPromptIndex: 0
+        };
+
+        async function buildGlobalFlashcardCache() {
+            let list = [];
+            for (const doc of documentaries) {
+                try {
+                    const response = await fetch(`./data/${doc.file}`);
+                    const paragraphs = await response.json();
+                    paragraphs.forEach(para => {
+                        para.forEach(pair => {
+                            list.push({
+                                es: pair.es,
+                                en: pair.en,
+                                genre: doc.genre,
+                                source: doc.title
+                            });
+                        });
+                    });
+                } catch (e) {
+                    console.warn(`File loading skipped for ${doc.file}: `, e);
                 }
+            }
+            state.allSentencePairs = list;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            state.theme = newTheme;
+            const btnIcon = document.getElementById('theme-toggle').querySelector('i');
+            btnIcon.className = newTheme === 'dark' ? "fa-regular fa-sun" : "fa-regular fa-moon";
+        }
+
+        function filterHomeTheme(themeName) {
+            state.currentHomeTab = themeName;
+            document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if(themeName === 'all') document.getElementById('tab-btn-all').classList.add('active');
+            if(themeName === 'Arte') document.getElementById('tab-btn-art').classList.add('active');
+            if(themeName === 'Noticias') document.getElementById('tab-btn-news').classList.add('active');
+            
+            renderPortfolio();
+        }
+
+        function toggleFlashcardMode() {
+            const btn = document.getElementById('mode-toggle-btn');
+            if (state.quizMode === "mixed") {
+                state.quizMode = "words-only";
+                btn.innerHTML = `<i class="fa-solid fa-toggle-on" style="color: var(--accent-primary)"></i> Solo Palabras`;
+            } else {
+                state.quizMode = "mixed";
+                btn.innerHTML = `<i class="fa-solid fa-toggle-off"></i> Modo Mixto`;
+            }
+            initiateNextQuestion();
+        }
+
+        async function switchSection(tabId) {
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
+            
+            state.currentTab = tabId;
+
+            if (tabId === 'portfolio') {
+                document.getElementById('tab-doc').classList.add('active');
+                document.getElementById('portfolio-section').classList.add('active');
+                document.getElementById('reader-section').classList.remove('active');
+                filterHomeTheme('all');
+            } 
+            else if (tabId === 'news-direct') {
+                document.getElementById('tab-news-nav').classList.add('active');
+                document.getElementById('portfolio-section').classList.add('active');
+                document.getElementById('reader-section').classList.remove('active');
+                filterHomeTheme('Noticias');
+            }
+            else if (tabId === 'flashcards') {
+                document.getElementById('tab-flash').classList.add('active');
+                document.getElementById('flashcards-section').classList.add('active');
+                if (state.allSentencePairs.length === 0) {
+                    await buildGlobalFlashcardCache();
+                }
+                initiateNextQuestion();
+            }
+            else if (tabId === 'writing-production') {
+                document.getElementById('tab-write-nav').classList.add('active');
+                document.getElementById('writing-section').classList.add('active');
+                renderCurrentWritingPrompt();
+            }
+        }
+
+        function renderPortfolio() {
+            const grid = document.getElementById('artist-grid-container');
+            grid.innerHTML = '';
+            
+            documentaries.forEach(doc => {
+                if (state.currentHomeTab !== 'all' && doc.theme !== state.currentHomeTab) return;
+
+                const card = document.createElement('div');
+                card.className = 'artist-card';
+                card.onclick = () => launchReader(doc.id);
+                card.innerHTML = `
+                    <span class="artist-badge">${doc.genre}</span>
+                    <h3>${doc.title}</h3>
+                    <p>${doc.subtitle}</p>
+                    <div class="meta-info">
+                        <span>Iniciar lectura analítica</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        const documentaries = [
-            {
-                id: "monet",
-                title: "Claude Monet y el Impresionismo",
-                subtitle: "El pintor que descompuso la luz sobre el agua.",
-                genre: "Impresionismo",
-                theme: "Arte",
-                vocabQuizSeed: [
-                    { term: "pincelada", translation: "brushstroke", hint: "La marca que deja el pincel en el lienzo" },
-                    { term: "lienzo", translation: "canvas", hint: "La tela sobre la que se pinta al óleo" },
-                    { term: "caballete", translation: "easel", hint: "Soporte vertical para el lienzo" },
-                    { term: "estanque", translation: "pond", hint: "Un cuerpo de agua pequeño" }
-                ],
-                para: [
-                    {
-                        es: "Claude Monet fue un pintor francés, uno de los creadores del impresionismo.",
-                        en: "Claude Monet was a French painter, one of the creators of impressionism."
-                    },
-                    {
-                        es: "Su obra 'Impresión, sol naciente' dio nombre al movimiento artístico.",
-                        en: "His work 'Impression, Sunrise' gave its name to the artistic movement."
-                    },
-                    {
-                        es: "Pasó sus últimos años pintando los famosos nenúfares en su jardín de Giverny.",
-                        en: "He spent his final years painting the famous water lilies in his Giverny garden."
-                    }
-                ]
-            },
-            {
-                id: "seurat",
-                title: "Georges Seurat y la Ciencia del Puntillismo",
-                subtitle: "El rigor matemático aplicado a la deconstrucción óptica del matiz.",
-                genre: "Puntillismo",
-                theme: "Arte",
-                vocabQuizSeed: [
-                    { term: "matiz", translation: "shade / hue", hint: "Variación leve de un mismo color" },
-                    { term: "punto", translation: "dot / point", hint: "La marca geométrica mínima" }
-                ],
-                para: [
-                    {
-                        es: "Georges Seurat alteró el curso del arte moderno con el puntillismo.",
-                        en: "Georges Seurat altered the course of modern art with pointillism."
-                    },
-                    {
-                        es: "Su obra maestra plasma una tarde de domingo en la isla de la Grande Jatte.",
-                        en: "His masterpiece depicts a Sunday afternoon on the Island of La Grande Jatte."
-                    }
-                ]
+        async function launchReader(docId) {
+            const doc = documentaries.find(d => d.id === docId);
+            if (!doc) return;
+            
+            document.getElementById('current-reader-title').innerText = doc.title;
+            document.getElementById('current-reader-genre').innerText = doc.genre;
+            const container = document.getElementById('essay-display-container');
+            container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-secondary);">Cargando canales...</p>';
+
+            try {
+                const response = await fetch(`./data/${doc.file}`);
+                const paragraphs = await response.json();
+                container.innerHTML = '';
+
+                paragraphs.forEach(pArray => {
+                    const pDiv = document.createElement('div');
+                    pDiv.className = 'essay-paragraph';
+                    pArray.forEach(pair => {
+                        const sNode = document.createElement('div');
+                        sNode.className = 'sentence-node';
+                        sNode.onclick = (e) => {
+                            e.stopPropagation();
+                            sNode.classList.toggle('highlighted');
+                        };
+                        sNode.innerHTML = `
+                            <span class="sp-text">${pair.es}</span>
+                            <span class="en-translation">${pair.en}</span>
+                        `;
+                        pDiv.appendChild(sNode);
+                    });
+                    container.appendChild(pDiv);
+                });
+            } catch (error) {
+                container.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--accent-primary);">No se ha cargado el archivo JSON todavía.</p>';
             }
-        ];
 
-const state = {
-theme: "light",
-            uiLanguage: "en", // Default global active dictionary selection state tracking parameter
-currentTab: "portfolio",
-currentHomeTab: "all",
-quizMode: "mixed",
-score: 0,
-streak: 0,
-allSentencePairs: [],
-needsReview: [],
-activeQuestion: null,
-scrambledSelections: [],
-writingPromptIndex: 0
-};
+            document.getElementById('portfolio-section').classList.remove('active');
+            document.getElementById('reader-section').classList.add('active');
+        }
 
-        // Changes UI layout strings instantly without destroying states
-        function updateUiLanguageDOM() {
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('lang-toggle').innerText = state.uiLanguage.toUpperCase();
+        function exitReader() {
+            document.getElementById('reader-section').classList.remove('active');
+            document.getElementById('portfolio-section').classList.add('active');
+        }
+
+        function playSfx(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start(); osc.stop(ctx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.setValueAtTime(147, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start(); osc.stop(ctx.currentTime + 0.4);
+                }
+            } catch (e) {}
+        }
+
+        function generateContextQuestion() {
+            if (state.needsReview.length > 0 && Math.random() < 0.60) {
+                const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
+                queuedQuestion.isReview = true;
+                return queuedQuestion;
+            }
+
+            const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze", "scrambled"];
+            const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) 
+                ? "vocabulary" 
+                : pool[Math.floor(Math.random() * pool.length)];
+
+            if (selectedType === "scrambled") {
+                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+                const cleanSpanish = targetPair.es.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g,"").trim();
+                const rawTokens = cleanSpanish.split(/\s+/);
+
+                if (rawTokens.length > 3 && rawTokens.length <= 12) {
+                    const shuffledTokens = [...rawTokens].sort(() => 0.5 - Math.random());
+                    return {
+                        id_key: `scramble_${targetPair.es.substring(0,15)}`,
+                        type: "Construir Frase (Syntax)",
+                        question: `Construye la frase correcta que traduzca:<br><br><em style="color:var(--accent-secondary); font-size:16px;">"${targetPair.en}"</em>`,
+                        tokens: shuffledTokens,
+                        answer: rawTokens,
+                        rawFullAnswer: cleanSpanish,
+                        explanation: `La estructura exacta es: "${targetPair.es}"`
+                    };
+                }
+            }
+
+            if (selectedType === "cloze") {
+                let validPair = null;
+                let targetVocab = null;
+                const shuffledPairs = [...state.allSentencePairs].sort(() => 0.5 - Math.random());
+                
+                for (const pair of shuffledPairs) {
+                    const matchedTerm = documentaries
+                        .flatMap(d => d.vocabQuizSeed)
+                        .find(v => pair.es.toLowerCase().includes(v.term.toLowerCase()));
+                    
+                    if (matchedTerm) {
+                        validPair = pair;
+                        targetVocab = matchedTerm;
+                        break;
+                    }
+                }
+
+                if (validPair && targetVocab) {
+                    const regex = new RegExp(`\\b${targetVocab.term}\\b`, 'gi');
+                    const blankedSentence = validPair.es.replace(regex, "___________");
+                    const questionText = `Completa la frase con el término adecuado:<br><br><em style="font-size: 17px; color: var(--text-primary); display: block; line-height: 1.6;">"${blankedSentence}"</em>`;
+                    const answer = targetVocab.term;
+
+                    let distractors = [];
+                    documentaries.forEach(d => d.vocabQuizSeed.forEach(t => { if (t.term !== answer) distractors.push(t.term); }));
+                    distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
+                    const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+
+                    return {
+                        id_key: `cloze_${targetVocab.term}`,
+                        type: "Completar Texto (Cloze)",
+                        question: questionText,
+                        options: options,
+                        answer: answer,
+                        explanation: `La frase completa es: "${validPair.es}". El término «${targetVocab.term}» significa «${targetVocab.translation}».`
+                    };
+                }
+            }
+
+            const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
+            const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
             
-            document.getElementById('lbl-explore-title').innerText = currentDict.exploreTitle;
-            document.getElementById('lbl-explore-desc').innerText = currentDict.exploreDesc;
-            document.getElementById('tab-btn-all').innerText = currentDict.tabAll;
-            document.getElementById('tab-btn-art').innerText = currentDict.tabArt;
-            document.getElementById('tab-btn-news').innerText = currentDict.tabNews;
-            document.getElementById('lbl-back-link').innerText = currentDict.backLink;
-            document.getElementById('lbl-writing-title').innerText = currentDict.writingTitle;
-            document.getElementById('lbl-writing-desc').innerText = currentDict.writingDesc;
-            document.getElementById('lbl-api-setup').innerHTML = `<i class="fa-solid fa-key"></i> ${currentDict.apiSetup}`;
-            document.getElementById('lbl-save-btn').innerText = currentDict.saveBtn;
-            document.getElementById('lbl-skip-btn').innerText = currentDict.skipBtn;
-            document.getElementById('lbl-eval-btn').innerText = currentDict.evalBtn;
-            document.getElementById('lbl-wp-question-heading').innerText = currentDict.qHeading;
-            document.getElementById('wp-student-input').placeholder = currentDict.textareaPlaceholder;
+            if (selectedType === "vocabulary" || state.allSentencePairs.length === 0) {
+                const questionText = `¿Cómo se traduce el término técnico?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
+                const answer = randomTerm.translation;
+                
+                let distractors = [];
+                documentaries.forEach(d => d.vocabQuizSeed.forEach(t => { if (t.translation !== answer) distractors.push(t.translation); }));
+                distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
+                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+                
+                return { 
+                    id_key: `vocab_${randomTerm.term}`,
+                    type: `Vocabulario: ${randomDoc.genre}`, 
+                    question: questionText, 
+                    options: options, 
+                    answer: answer, 
+                    explanation: `«${randomTerm.term}» significa directamente «${randomTerm.translation}». (${randomTerm.hint})` 
+                };
+            } else if (selectedType === "translateES_EN") {
+                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+                const questionText = `¿Cuál es la traducción de este fragmento?<br><br><em>"${targetPair.es}"</em>`;
+                const answer = targetPair.en;
+                let distractors = [];
+                state.allSentencePairs.forEach(p => { if (p.en !== answer) distractors.push(p.en); });
+                distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+                return { id_key: `es_en_${targetPair.es.substring(0,15)}`, type: "Traducir al Inglés", question: questionText, options: options, answer: answer, explanation: `Traducción correcta.` };
+            } else {
+                const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
+                const questionText = `Traduce al español europeo:<br><br><em>"${targetPair.en}"</em>`;
+                const answer = targetPair.es;
+                let distractors = [];
+                state.allSentencePairs.forEach(p => { if (p.es !== answer) distractors.push(p.es); });
+                distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
+                const options = [...distractors, answer].sort(() => 0.5 - Math.random());
+                return { id_key: `en_es_${targetPair.es.substring(0,15)}`, type: "Traducir al Español", question: questionText, options: options, answer: answer, explanation: `Estructura correcta en Castilian.` };
+            }
+        }
+
+        function toggleFlashcardMode() {
+            const btn = document.getElementById('mode-toggle-btn');
+            if (state.quizMode === "mixed") {
+                state.quizMode = "words-only";
+                btn.innerHTML = `<i class="fa-solid fa-toggle-on" style="color: var(--accent-primary)"></i> Solo Palabras`;
+            } else {
+                state.quizMode = "mixed";
+                btn.innerHTML = `<i class="fa-solid fa-toggle-off"></i> Modo Mixto`;
+            }
+            initiateNextQuestion();
+        }
+
+        function initiateNextQuestion() {
+            state.scrambledSelections = [];
+            const questionData = generateContextQuestion();
+            state.activeQuestion = questionData;
+            const container = document.getElementById('active-card-frame');
+            const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> REPASO</span>` : '';
+
+            if (questionData.tokens) {
+                container.innerHTML = `
+                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
+                    <div class="fc-question-text">${questionData.question}</div>
+                    
+                    <div class="scrambled-board-zone">
+                        <div class="construct-build-preview" id="chip-preview-destination-box"></div>
+                        <div class="scrambled-pool-chips" id="source-chips-container"></div>
+                    </div>
+
+                    <div class="scramble-check-footer" id="scramble-controls">
+                        <button class="secondary-outline-btn" onclick="clearScrambledBuild()">Limpiar</button>
+                        <button class="primary-btn" onclick="validateScrambledSequence()"><i class="fa-solid fa-square-check"></i> Comprobar</button>
+                    </div>
+
+                    <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
+                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Siguiente</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                `;
+
+                const poolContainer = document.getElementById('source-chips-container');
+                questionData.tokens.forEach((word, index) => {
+                    const chip = document.createElement('button');
+                    chip.className = 'word-chip-pill';
+                    chip.innerText = word;
+                    chip.id = `chip_idx_${index}`;
+                    chip.onclick = () => appendWordChip(chip, word);
+                    poolContainer.appendChild(chip);
+                });
+
+            } else {
+                container.innerHTML = `
+                    <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
+                    <div class="fc-question-text">${questionData.question}</div>
+                    <div class="options-list" id="mcq-options-container"></div>
+                    <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explicación:</strong> <span id="fc-feedback-text"></span></div>
+                    <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Siguiente</span> <i class="fa-solid fa-arrow-right"></i></button></div>
+                `;
+                const optionsContainer = document.getElementById('mcq-options-container');
+                questionData.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-button';
+                    btn.innerText = opt;
+                    btn.onclick = () => evaluateOption(btn, opt);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+        }
+
+        function appendWordChip(chipElement, wordString) {
+            chipElement.classList.add('used-up');
+            state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
+
+            const previewZone = document.getElementById('chip-preview-destination-box');
+            const subBadge = document.createElement('span');
+            subBadge.className = 'word-chip-pill';
+            subBadge.style.borderColor = 'var(--accent-secondary)';
+            subBadge.innerText = wordString;
+            previewZone.appendChild(subBadge);
+        }
+
+        function clearScrambledBuild() {
+            state.scrambledSelections = [];
+            document.querySelectorAll('.word-chip-pill').forEach(c => c.classList.remove('used-up'));
+            document.getElementById('chip-preview-destination-box').innerHTML = '';
+        }
+
+        function validateScrambledSequence() {
+            const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
+            const correctString = state.activeQuestion.answer.map(w => w.toLowerCase()).join(' ');
+            const previewZone = document.getElementById('chip-preview-destination-box');
             
-            document.getElementById('lbl-nav-explore').innerText = currentDict.navExplore;
-            document.getElementById('lbl-nav-news').innerText = currentDict.navNews;
-            document.getElementById('lbl-nav-cards').innerText = currentDict.navCards;
-            document.getElementById('lbl-nav-write').innerText = currentDict.navWrite;
+            document.getElementById('scramble-controls').classList.add('hidden');
+            document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
+
+            if (compiledString === correctString) {
+                previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
+                previewZone.style.borderColor = '#4CAF50';
+                state.score += 15; state.streak += 1;
+                playSfx('correct');
+
+                if (state.activeQuestion.id_key) {
+                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+                }
+            } else {
+                previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
+                previewZone.style.borderColor = '#F44336';
+                state.streak = 0;
+                playSfx('wrong');
+
+                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
+                if (!flagged && state.activeQuestion.id_key) {
+                    const cleanCopy = { ...state.activeQuestion };
+                    delete cleanCopy.isReview;
+                    state.needsReview.push(cleanCopy);
+                }
+            }
+
+            document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
+            document.getElementById('fc-feedback-box').style.display = "block";
+            document.getElementById('score-counter').innerText = `Puntos: ${state.score}`;
+            document.getElementById('streak-counter').innerText = `Racha: ${state.streak} 🔥`;
+            document.getElementById('fc-progress').style.width = `${Math.min((state.score % 200) / 2, 100)}%`;
+            document.getElementById('next-action-wrapper').classList.remove('hidden');
+        }
+
+        function evaluateOption(selectedBtn, selectedValue) {
+            const correctValue = state.activeQuestion.answer;
+            const allButtons = document.querySelectorAll('.option-button');
+            allButtons.forEach(btn => btn.classList.add('disabled'));
+
+            if (selectedValue === correctValue) {
+                selectedBtn.classList.add('correct');
+                state.score += 10; state.streak += 1;
+                playSfx('correct');
+
+                if (state.activeQuestion.id_key) {
+                    state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
+                }
+            } else {
+                selectedBtn.classList.add('wrong');
+                state.streak = 0;
+                playSfx('wrong');
+                allButtons.forEach(btn => { if (btn.innerText === correctValue) btn.classList.add('correct'); });
+
+                const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
+                if (!flagged && state.activeQuestion.id_key) {
+                    const cleanCopy = { ...state.activeQuestion };
+                    delete cleanCopy.isReview; 
+                    state.needsReview.push(cleanCopy);
+                }
+            }
+
+            document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
+            document.getElementById('fc-feedback-box').style.display = "block";
+            document.getElementById('score-counter').innerText = `Puntos: ${state.score}`;
+            document.getElementById('streak-counter').innerText = `Racha: ${state.streak} 🔥`;
+            document.getElementById('fc-progress').style.width = `${Math.min((state.score % 200) / 2, 100)}%`;
+            document.getElementById('next-action-wrapper').classList.remove('hidden');
+        }
+
+        // --- WRITING MODULE LOGIC (GEMINI AI INTEGRATION) ---
+        function saveWritingApiKey() {
+            const keyVal = document.getElementById('gemini-key-field').value.trim();
+            if (keyVal) {
+                localStorage.setItem('KULTURA_GEMINI_KEY', keyVal);
+                alert("API key successfully saved locally!");
+            } else {
+                alert("Please enter a valid key text.");
+            }
+        }
+
+        function renderCurrentWritingPrompt() {
+            const prompt = writingPromptsDatabase[state.writingPromptIndex];
+            document.getElementById('wp-level').innerText = prompt.level;
+            document.getElementById('wp-topic').innerText = prompt.topic;
+            document.getElementById('wp-tracker').innerText = `Pregunta ${state.writingPromptIndex + 1} de ${writingPromptsDatabase.length}`;
+            document.getElementById('wp-question-text').innerText = prompt.question;
+            document.getElementById('wp-hint-text').innerHTML = `<strong>Sugerencia de estructura:</strong> ${prompt.hint}`;
             
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            
+            // Clear inputs and past responses
+            document.getElementById('wp-student-input').value = "";
+            const feedbackContainer = document.getElementById('wp-feedback-container');
+            feedbackContainer.style.display = "none";
+            feedbackContainer.innerHTML = "";
+        }
+
+        function skipToNextWritingPrompt() {
+            state.writingPromptIndex = (state.writingPromptIndex + 1) % writingPromptsDatabase.length;
             renderCurrentWritingPrompt();
         }
 
-        function toggleLanguage() {
-            state.uiLanguage = state.uiLanguage === "en" ? "es" : "en";
-            updateUiLanguageDOM();
+        async function evaluateStudentWriting() {
+            const apiKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+            if (!apiKey) {
+                alert("Por favor, introduce y guarda tu Gemini API Key en el panel superior antes de continuar.");
+                return;
+            }
+
+            const currentPrompt = writingPromptsDatabase[state.writingPromptIndex];
+            const studentSubmission = document.getElementById('wp-student-input').value.trim();
+
+            if (!studentSubmission) {
+                alert("El campo de respuesta está vacío. Escribe algo antes de solicitar evaluación.");
+                return;
+            }
+
+            const actionBtn = document.getElementById('wp-submit-btn');
+            const feedbackPanel = document.getElementById('wp-feedback-container');
+
+            actionBtn.disabled = true;
+            actionBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analizando...`;
+            feedbackPanel.style.display = "flex";
+            feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> Generando correcciones detalladas a través de Gemini 2.5 Flash Lite...</p>`;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
+
+            const requestPayload = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [
+                            {
+                                text: `Context Question Asked: "${currentPrompt.question}"\nStudent Answer Input: "${studentSubmission}"`
+                            }
+                        ]
+                    }
+                ],
+                systemInstruction: {
+                    parts: [
+                        {
+                            text: "You are an expert evaluator for Castilian / European Spanish language certification (DELE/SIELE standards). Evaluate grammar, orthography, accentuation rules, and colloquial naturalness strictly. Return a single JSON object corresponding exactly to the requested schema layout."
+                        }
+                    ]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            is_acceptable: { type: "BOOLEAN" },
+                            score_out_of_100: { type: "INTEGER" },
+                            corrections_list: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        faulty_segment: { type: "STRING" },
+                                        corrected_segment: { type: "STRING" },
+                                        type_classification: { type: "STRING", description: "grammar, spelling, syntax, punctuation, or unnatural" },
+                                        rationale: { type: "STRING", description: "Clear explanation of the error written in accessible Spanish." }
+                                    },
+                                    required: ["faulty_segment", "corrected_segment", "type_classification", "rationale"]
+                                }
+                            },
+                            summary_critique: { type: "STRING", description: "Constructive breakdown and holistic feedback regarding vocabulary choice and syntax in Spanish." }
+                        },
+                        required: ["is_acceptable", "score_out_of_100", "corrections_list", "summary_critique"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestPayload)
+                });
+
+                if (!response.ok) throw new Error(`Server code error: ${response.status}`);
+
+                const rawData = await response.json();
+                const jsonCleanResponse = JSON.parse(rawData.candidates[0].content.parts[0].text);
+
+                // Game feedback variables updates
+                if (jsonCleanResponse.score_out_of_100 >= 80) {
+                    state.score += 30;
+                    state.streak += 1;
+                    playSfx('correct');
+                } else if (jsonCleanResponse.score_out_of_100 < 50) {
+                    state.streak = 0;
+                    playSfx('wrong');
+                }
+
+                // Render out structural feedback DOM changes
+                document.getElementById('score-counter').innerText = `Puntos: ${state.score}`;
+                document.getElementById('streak-counter').innerText = `Racha: ${state.streak} 🔥`;
+
+                let innerCorrectionsMarkup = "";
+                if (!jsonCleanResponse.corrections_list || jsonCleanResponse.corrections_list.length === 0) {
+                    innerCorrectionsMarkup = `<p style="color: #4CAF50; font-weight:600; font-size:14px;"><i class="fa-solid fa-circle-check"></i> ¡Excelente trabajo! No se han detectado errores ortográficos ni gramaticales.</p>`;
+                } else {
+                    jsonCleanResponse.corrections_list.forEach(item => {
+                        innerCorrectionsMarkup += `
+                            <div class="correction-line-item">
+                                <span style="text-decoration: line-through; color: #F44336;">${item.faulty_segment}</span> 
+                                <i class="fa-solid fa-arrow-right-long" style="margin: 0 4px; font-size: 11px; color: var(--text-secondary);"></i> 
+                                <strong style="color: #4CAF50;">${item.corrected_segment}</strong>
+                                <br>
+                                <small style="color: var(--text-secondary); display:block; margin-top:2px;">
+                                    <strong>Tipo:</strong> ${item.type_classification} | ${item.rationale}
+                                </small>
+                            </div>
+                        `;
+                    });
+                }
+
+                const visualBadgeColor = jsonCleanResponse.score_out_of_100 >= 80 ? '#4CAF50' : (jsonCleanResponse.score_out_of_100 >= 50 ? '#FF9800' : '#F44336');
+
+                feedbackPanel.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-color); padding-bottom:8px;">
+                        <h4 style="font-family:var(--font-serif); font-size:16px;">Evaluación DELE/SIELE</h4>
+                        <span style="background:${visualBadgeColor}; color:white; font-size:12px; font-weight:bold; padding:4px 12px; border-radius:20px;">
+                            Nota: ${jsonCleanResponse.score_out_of_100} / 100
+                        </span>
+                    </div>
+                    <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
+                        "${jsonCleanResponse.summary_critique}"
+                    </p>
+                    <div style="margin-top: 4px;">
+                        <h5 style="font-size:11px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; letter-spacing:0.5px;">Correcciones explícitas:</h5>
+                        ${innerCorrectionsMarkup}
+                    </div>
+                `;
+
+            } catch (err) {
+                console.error("Pipeline breakdown tracking error:", err);
+                feedbackPanel.innerHTML = `<p style="color: #F44336; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> Error al conectar con la API de Gemini. Verifica tu clave de API, cuotas o conexión de red.</p>`;
+            } finally {
+                actionBtn.disabled = false;
+                actionBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Evaluar con IA`;
+            }
         }
 
-async function buildGlobalFlashcardCache() {
-let list = [];
-for (let doc of documentaries) {
-try {
-const response = await fetch(`./data/${doc.file}`);
-if (!response.ok) continue;
-const json = await response.json();
-json.paragraphs.forEach(para => {
-para.forEach(pair => {
-list.push({ es: pair.es, en: pair.en, genre: doc.genre, source: doc.title });
-});
-});
-} catch (e) {
-console.warn(`File loading skipped for ${doc.file}: `, e);
-}
-}
-state.allSentencePairs = list;
-}
-
-function toggleTheme() {
-const body = document.body;
-const currentTheme = body.getAttribute('data-theme');
-const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-body.setAttribute('data-theme', newTheme);
-state.theme = newTheme;
-const btnIcon = document.getElementById('theme-toggle').querySelector('i');
-btnIcon.className = newTheme === 'dark' ? "fa-regular fa-sun" : "fa-regular fa-moon";
-}
-
-function filterHomeTheme(themeName) {
-state.currentHomeTab = themeName;
-document.querySelectorAll('.tab-pill-btn').forEach(btn => btn.classList.remove('active'));
-if(themeName === 'all') document.getElementById('tab-btn-all').classList.add('active');
-if(themeName === 'Arte') document.getElementById('tab-btn-art').classList.add('active');
-if(themeName === 'Noticias') document.getElementById('tab-btn-news').classList.add('active');
-renderPortfolio();
-}
-
-async function switchSection(tabId) {
-document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-state.currentTab = tabId;
-if (tabId === 'portfolio') {
-document.getElementById('tab-doc').classList.add('active');
-document.getElementById('portfolio-section').classList.add('active');
-document.getElementById('reader-section').classList.remove('active');
-filterHomeTheme('all');
-} else if (tabId === 'news-direct') {
-document.getElementById('tab-news-nav').classList.add('active');
-document.getElementById('portfolio-section').classList.add('active');
-document.getElementById('reader-section').classList.remove('active');
-filterHomeTheme('Noticias');
-} else if (tabId === 'flashcards') {
-document.getElementById('tab-flash').classList.add('active');
-document.getElementById('flashcards-section').classList.add('active');
-if (state.allSentencePairs.length === 0) {
-await buildGlobalFlashcardCache();
-}
-initiateNextQuestion();
-} else if (tabId === 'writing-production') {
-document.getElementById('tab-write-nav').classList.add('active');
-document.getElementById('writing-section').classList.add('active');
-renderCurrentWritingPrompt();
-}
-}
-
-function renderPortfolio() {
-const grid = document.getElementById('artist-grid-container');
-grid.innerHTML = '';
-documentaries.forEach(doc => {
-if (state.currentHomeTab !== 'all' && doc.theme !== state.currentHomeTab) return;
-const card = document.createElement('div');
-card.className = 'artist-card';
-card.onclick = () => launchReaderMode(doc.id);
-card.innerHTML = `
-                   <span class="artist-badge">${doc.genre}</span>
-                   <h3>${doc.title}</h3>
-                   <p>${doc.subtitle}</p>
-                   <div class="meta-info">
-                       <span>Read line by line <i class="fa-solid fa-arrow-right-long"></i></span>
-                   </div>
-               `;
-grid.appendChild(card);
-});
-}
-
-async function launchReaderMode(docId) {
-const doc = documentaries.find(d => d.id === docId);
-document.getElementById('current-reader-title').innerText = doc.title;
-document.getElementById('current-reader-genre').innerText = `Genre: ${doc.genre}`;
-const container = document.getElementById('essay-display-container');
-container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:30px;"><i class="fa-solid fa-spinner fa-spin"></i> Processing essay structures...</p>';
-
-try {
-const response = await fetch(`./data/${doc.file}`);
-if (!response.ok) throw new Error();
-const json = await response.json();
-container.innerHTML = '';
-json.paragraphs.forEach(para => {
-const block = document.createElement('div');
-block.className = 'essay-paragraph';
-para.forEach(pair => {
-const node = document.createElement('span');
-node.className = 'sentence-node';
-node.onclick = (e) => {
-e.stopPropagation();
-document.querySelectorAll('.sentence-node').forEach(n => {
-if (n !== node) n.classList.remove('highlighted');
-});
-node.classList.toggle('highlighted');
-};
-node.innerHTML = `
-                           <span class="sp-text">${pair.es}</span>
-                           <span class="en-translation">${pair.en}</span>
-                       `;
-block.appendChild(node);
-});
-container.appendChild(block);
-});
-} catch (e) {
-container.innerHTML = '<p style="color:#F44336; text-align:center; padding:30px;"><i class="fa-solid fa-circle-exclamation"></i> Could not load JSON archive data yet.</p>';
-}
-document.getElementById('portfolio-section').classList.remove('active');
-document.getElementById('reader-section').classList.add('active');
-}
-
-function exitReader() {
-document.getElementById('reader-section').classList.remove('active');
-document.getElementById('portfolio-section').classList.add('active');
-}
-
-function playSfx(type) {
-try {
-const ctx = new (window.AudioContext || window.webkitAudioContext)();
-const osc = ctx.createOscillator();
-const gain = ctx.createGain();
-osc.connect(gain);
-gain.connect(ctx.destination);
-if (type === 'correct') {
-osc.type = 'triangle';
-osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
-gain.gain.setValueAtTime(0.1, ctx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-osc.start();
-osc.stop(ctx.currentTime + 0.3);
-} else {
-osc.type = 'sawtooth';
-osc.frequency.setValueAtTime(220, ctx.currentTime);
-osc.frequency.setValueAtTime(147, ctx.currentTime + 0.1);
-gain.gain.setValueAtTime(0.15, ctx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-osc.start();
-osc.stop(ctx.currentTime + 0.4);
-}
-} catch (e) {}
-}
-
-function generateContextQuestion() {
-if (state.needsReview.length > 0 && Math.random() < 0.60) {
-const queuedQuestion = state.needsReview[Math.floor(Math.random() * state.needsReview.length)];
-queuedQuestion.isReview = true;
-return queuedQuestion;
-}
-const pool = ["translateES_EN", "translateEN_ES", "vocabulary", "cloze", "scrambled"];
-const selectedType = (state.quizMode === "words-only" || state.allSentencePairs.length === 0) ? "vocabulary" : pool[Math.floor(Math.random() * pool.length)];
-
-const randomDoc = documentaries[Math.floor(Math.random() * documentaries.length)];
-const randomTerm = randomDoc.vocabQuizSeed[Math.floor(Math.random() * randomDoc.vocabQuizSeed.length)];
-
-if (selectedType === "scrambled") {
-const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-const cleanSpanish = targetPair.es.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g,"").trim();
-const rawTokens = cleanSpanish.split(/\s+/);
-if (rawTokens.length > 3 && rawTokens.length <= 12) {
-const shuffledTokens = [...rawTokens].sort(() => 0.5 - Math.random());
-return {
-id_key: `scramble_${targetPair.es.substring(0,15)}`,
-type: "Build Sentence (Syntax)",
-question: `Construct the correct phrase translating:<br><br><em style="color:var(--accent-secondary); font-size:16px;">"${targetPair.en}"</em>`,
-tokens: shuffledTokens,
-answer: rawTokens,
-explanation: `Correct syntax arrangement: "${targetPair.es}"`
-};
-}
-}
-
-if (selectedType === "vocabulary" || state.allSentencePairs.length === 0) {
-const questionText = `How do you translate the technical term?<br><br><strong style="font-size: 28px; color: var(--accent-primary); display:block; text-align:center; margin: 10px 0; font-family: var(--font-serif);">${randomTerm.term}</strong>`;
-const answer = randomTerm.translation;
-let distractors = [];
-documentaries.forEach(d => d.vocabQuizSeed.forEach(t => {
-if (t.translation !== answer) distractors.push(t.translation);
-}));
-distractors = [...new Set(distractors)].sort(() => 0.5 - Math.random()).slice(0, 3);
-const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-return {
-id_key: `vocab_${randomTerm.term}`,
-type: `Vocabulary: ${randomDoc.genre}`,
-question: questionText,
-options: options,
-answer: answer,
-explanation: `«${randomTerm.term}» directly translates to «${randomTerm.translation}». (${randomTerm.hint})`
-};
-} else if (selectedType === "translateES_EN") {
-const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-const questionText = `What is the correct English translation of this fragment?<br><br><em>"${targetPair.es}"</em>`;
-const answer = targetPair.en;
-let distractors = [];
-state.allSentencePairs.forEach(p => {
-if (p.en !== answer) distractors.push(p.en);
-});
-distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
-const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-return {
-id_key: `es_en_${targetPair.es.substring(0,15)}`,
-type: "Translate to English",
-question: questionText,
-options: options,
-answer: answer,
-explanation: `Correct translation configuration verified.`
-};
-} else {
-const targetPair = state.allSentencePairs[Math.floor(Math.random() * state.allSentencePairs.length)];
-const questionText = `Translate to European Spanish:<br><br><em>"${targetPair.en}"</em>`;
-const answer = targetPair.es;
-let distractors = [];
-state.allSentencePairs.forEach(p => {
-if (p.es !== answer) distractors.push(p.es);
-});
-distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 3);
-const options = [...distractors, answer].sort(() => 0.5 - Math.random());
-return {
-id_key: `en_es_${targetPair.es.substring(0,15)}`,
-type: "Translate to Spanish",
-question: questionText,
-options: options,
-answer: answer,
-explanation: `Correct alignment structure in Castilian.`
-};
-}
-}
-
-function toggleFlashcardMode() {
-const btn = document.getElementById('mode-toggle-btn');
-if (state.quizMode === "mixed") {
-state.quizMode = "words-only";
-btn.innerHTML = `<i class="fa-solid fa-toggle-on" style="color: var(--accent-primary)"></i> Words Only`;
-} else {
-state.quizMode = "mixed";
-btn.innerHTML = `<i class="fa-solid fa-toggle-off"></i> Mixed Mode`;
-}
-initiateNextQuestion();
-}
-
-function initiateNextQuestion() {
-const questionData = generateContextQuestion();
-state.activeQuestion = questionData;
-state.scrambledSelections = [];
-
-const container = document.getElementById('active-card-frame');
-const reviewLabel = questionData.isReview ? `<span class="srs-queue-badge"><i class="fa-solid fa-clock-rotate-left"></i> Review</span>` : "";
-
-            // Randomly update progress percentage visuals
-const progressPct = Math.floor(Math.random() * 40) + 40;
-document.getElementById('fc-progress').style.width = `${progressPct}%`;
-
-if (questionData.tokens) {
-container.innerHTML = `
-                   <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
-                   <div class="fc-question-text">${questionData.question}</div>
-                   <div class="scrambled-board-zone">
-                       <div class="construct-build-preview" id="chip-preview-destination-box"></div>
-                       <div class="scrambled-pool-chips" id="chip-source-pool-container"></div>
-                   </div>
-                   <div class="fc-explanation-box" id="fc-feedback-box" style="margin-top:4px;"><strong>Correction Note:</strong> <span id="fc-feedback-text"></span></div>
-                   <div class="scramble-check-footer" id="scramble-controls">
-                       <button class="secondary-outline-btn" style="padding:10px 16px;" onclick="clearScrambledBuild()">Clear</button>
-                       <button class="primary-btn" onclick="validateScrambledSequence()">Verify</button>
-                   </div>
-                   <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Next</span> <i class="fa-solid fa-arrow-right"></i></button></div>
-               `;
-const poolContainer = document.getElementById('chip-source-pool-container');
-questionData.tokens.forEach((word, index) => {
-const chip = document.createElement('button');
-chip.className = 'word-chip-pill';
-chip.innerText = word;
-chip.id = `chip_idx_${index}`;
-chip.onclick = () => appendWordChip(chip, word);
-poolContainer.appendChild(chip);
-});
-} else {
-container.innerHTML = `
-                   <div class="card-type-indicator">${questionData.type} ${reviewLabel}</div>
-                   <div class="fc-question-text">${questionData.question}</div>
-                   <div class="options-list" id="mcq-options-container"></div>
-                   <div class="fc-explanation-box" id="fc-feedback-box"><strong>Explanation:</strong> <span id="fc-feedback-text"></span></div>
-                   <div class="fc-actions hidden" id="next-action-wrapper"><button class="primary-btn" onclick="initiateNextQuestion()"><span>Next</span> <i class="fa-solid fa-arrow-right"></i></button></div>
-               `;
-const optionsContainer = document.getElementById('mcq-options-container');
-questionData.options.forEach(opt => {
-const btn = document.createElement('button');
-btn.className = 'option-button';
-btn.innerText = opt;
-btn.onclick = () => evaluateOption(btn, opt);
-optionsContainer.appendChild(btn);
-});
-}
-}
-
-function appendWordChip(chipElement, wordString) {
-chipElement.classList.add('used-up');
-state.scrambledSelections.push({ elementId: chipElement.id, text: wordString });
-const previewZone = document.getElementById('chip-preview-destination-box');
-const subBadge = document.createElement('span');
-subBadge.className = 'word-chip-pill';
-subBadge.style.borderColor = 'var(--accent-secondary)';
-subBadge.innerText = wordString;
-previewZone.appendChild(subBadge);
-}
-
-function clearScrambledBuild() {
-state.scrambledSelections = [];
-document.querySelectorAll('.word-chip-pill').forEach(c => c.classList.remove('used-up'));
-document.getElementById('chip-preview-destination-box').innerHTML = '';
-}
-
-function validateScrambledSequence() {
-const compiledString = state.scrambledSelections.map(s => s.text.toLowerCase()).join(' ');
-const correctString = state.activeQuestion.answer.map(w => w.toLowerCase()).join(' ');
-const previewZone = document.getElementById('chip-preview-destination-box');
-
-document.getElementById('scramble-controls').classList.add('hidden');
-document.querySelectorAll('.word-chip-pill').forEach(c => c.style.pointerEvents = 'none');
-
-if (compiledString === correctString) {
-previewZone.style.background = 'rgba(76, 175, 80, 0.15)';
-previewZone.style.borderColor = '#4CAF50';
-state.score += 15;
-state.streak += 1;
-playSfx('correct');
-if (state.activeQuestion.id_key) {
-state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-}
-} else {
-previewZone.style.background = 'rgba(244, 67, 54, 0.15)';
-previewZone.style.borderColor = '#F44336';
-state.streak = 0;
-playSfx('wrong');
-const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
-if (!flagged && state.activeQuestion.id_key) {
-state.needsReview.push(state.activeQuestion);
-}
-}
-            document.getElementById('score-counter').innerText = `Points: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `Streak: ${state.streak} 🔥`;
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
-document.getElementById('fc-feedback-box').style.display = 'block';
-document.getElementById('next-action-wrapper').classList.remove('hidden');
-}
-
-function evaluateOption(clickedButton, chosenValue) {
-document.querySelectorAll('.option-button').forEach(btn => btn.classList.add('disabled'));
-const isCorrect = (chosenValue === state.activeQuestion.answer);
-
-if (isCorrect) {
-clickedButton.classList.add('correct');
-state.score += 10;
-state.streak += 1;
-playSfx('correct');
-if (state.activeQuestion.id_key) {
-state.needsReview = state.needsReview.filter(item => item.id_key !== state.activeQuestion.id_key);
-}
-} else {
-clickedButton.classList.add('wrong');
-state.streak = 0;
-playSfx('wrong');
-
-document.querySelectorAll('.option-button').forEach(btn => {
-if (btn.innerText === state.activeQuestion.answer) {
-btn.classList.add('correct');
-}
-});
-const flagged = state.needsReview.some(item => item.id_key === state.activeQuestion.id_key);
-if (!flagged && state.activeQuestion.id_key) {
-state.needsReview.push(state.activeQuestion);
-}
-}
-            document.getElementById('score-counter').innerText = `Points: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `Streak: ${state.streak} 🔥`;
-            const currentDict = i18n[state.uiLanguage];
-            document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-            document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-document.getElementById('fc-feedback-text').innerText = state.activeQuestion.explanation;
-document.getElementById('fc-feedback-box').style.display = 'block';
-document.getElementById('next-action-wrapper').classList.remove('hidden');
-}
-
-function saveWritingApiKey() {
-const keyVal = document.getElementById('gemini-key-field').value.trim();
-if (keyVal) {
-localStorage.setItem('KULTURA_GEMINI_KEY', keyVal);
-alert("API key successfully saved locally!");
-} else {
-alert("Please enter a valid key text.");
-}
-}
-
-function renderCurrentWritingPrompt() {
-const prompt = writingPromptsDatabase[state.writingPromptIndex];
-            const currentDict = i18n[state.uiLanguage];
+        window.onload = async () => {
+            filterHomeTheme('all');
+            await buildGlobalFlashcardCache();
             
-document.getElementById('wp-level').innerText = prompt.level;
-document.getElementById('wp-topic').innerText = prompt.topic;
-            document.getElementById('wp-tracker').innerText = `Question ${state.writingPromptIndex + 1} of ${writingPromptsDatabase.length}`;
-            document.getElementById('wp-question-text').innerText = prompt.question;
-            document.getElementById('wp-hint-text').innerHTML = `<strong>Grammar / Structural Suggestion:</strong> ${prompt.hint}`;
-            document.getElementById('wp-tracker').innerText = `${currentDict.qTracker} ${state.writingPromptIndex + 1} ${currentDict.of} ${writingPromptsDatabase.length}`;
-            
-            // Displays either EN or ES translations dynamically based on state preference
-            document.getElementById('wp-question-text').innerText = prompt.question[state.uiLanguage];
-            document.getElementById('wp-hint-text').innerHTML = `<strong>${state.uiLanguage === 'en' ? 'Grammar / Structural Suggestion' : 'Sugerencia Estructural / Gramatical'}:</strong> ${prompt.hint[state.uiLanguage]}`;
-
-document.getElementById('wp-student-input').value = "";
-const feedbackContainer = document.getElementById('wp-feedback-container');
-feedbackContainer.style.display = "none";
-feedbackContainer.innerHTML = "";
-}
-
-function skipToNextWritingPrompt() {
-state.writingPromptIndex = (state.writingPromptIndex + 1) % writingPromptsDatabase.length;
-renderCurrentWritingPrompt();
-}
-
-async function evaluateStudentWriting() {
-            const currentDict = i18n[state.uiLanguage];
-const apiKey = localStorage.getItem('KULTURA_GEMINI_KEY');
-if (!apiKey) {
-                alert("Please enter and save your Gemini API Key in the setup panel above before continuing.");
-                alert(currentDict.apiAlert);
-return;
-}
-
-const currentPrompt = writingPromptsDatabase[state.writingPromptIndex];
-const studentSubmission = document.getElementById('wp-student-input').value.trim();
-
-if (!studentSubmission) {
-                alert("The text area is empty. Write something before requesting an AI evaluation.");
-                alert(currentDict.emptyAlert);
-return;
-}
-
-const actionBtn = document.getElementById('wp-submit-btn');
-const feedbackPanel = document.getElementById('wp-feedback-container');
-
-actionBtn.disabled = true;
-            actionBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing text...`;
-            actionBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${currentDict.analyzing}`;
-feedbackPanel.style.display = "flex";
-            feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> Generating detailed corrections via Gemini 2.5 Flash Lite...</p>`;
-            feedbackPanel.innerHTML = `<p style="color: var(--text-secondary); font-size:14px;"><i class="fa-solid fa-robot fa-bounce"></i> ${currentDict.loadingRobot}</p>`;
-
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
-
-            const systemPrompt = `You are an expert tutor of Peninsular European Spanish (Castellano). Evaluate the student's submission answering the prompt question: "${currentPrompt.question}". Check if they used the suggested structure: "${currentPrompt.hint}".
-            You must reply EXCLUSIVELY with a valid JSON object matching the following structure. All qualitative text comments, reasons, and critiques must be written completely in ENGLISH:
-            // Gemini system context setup instructions dynamically instruct target language outputs
-            const targetLanguageName = state.uiLanguage === "es" ? "SPANISH (Castellano de España)" : "ENGLISH";
-
-            const systemPrompt = `You are an expert professor of European Castilian Spanish. Evaluate the student's submission answering the prompt question: "${currentPrompt.question.es}". Check if they successfully adapted the requested framework: "${currentPrompt.hint.es}".
-            You MUST respond EXCLUSIVELY with a valid JSON object matching the structure specified below. Crucially, your entire qualitative overview analysis comments ("summary_critique") and error explanations ("reason") MUST BE WRITTEN ENTIRELY IN ${targetLanguageName}:
-           {
-              "score_out_of_100": number from 0 to 100,
-              "summary_critique": "A brief qualitative overview written in English assessing spelling, grammar, and naturalness",
-              "score_out_of_100": integer from 0 to 100,
-              "summary_critique": "Detailed critique assessing grammar correctness, natural style flow, and vocabulary choices written entirely in ${targetLanguageName}.",
-             "corrections_list": [
-                { "original": "the exact text with errors", "corrected": "the corrected text segment", "reason": "clear explanation of the rule broken written in English" }
-                { "original": "exact error phrase substring matched", "corrected": "recommended correction adjustment", "reason": "clear grammar or spelling explanation detailing why the correction was made written in ${targetLanguageName}." }
-             ]
-           }`;
-
-const requestPayload = {
-contents: [
-{
-role: "user",
-parts: [
-{ text: systemPrompt },
-                            { text: `Student response submission: "${studentSubmission}"` }
-                            { text: `Student writing response submission payload: "${studentSubmission}"` }
-]
-}
-],
-generationConfig: {
-responseMimeType: "application/json"
-}
-};
-
-try {
-const response = await fetch(url, {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify(requestPayload)
-});
-
-if (!response.ok) throw new Error(`Server code error: ${response.status}`);
-
-const rawData = await response.json();
-const jsonCleanResponse = JSON.parse(rawData.candidates[0].content.parts[0].text);
-
-                // Game metrics changes
-if (jsonCleanResponse.score_out_of_100 >= 80) {
-state.score += 30;
-state.streak += 1;
-playSfx('correct');
-} else if (jsonCleanResponse.score_out_of_100 < 50) {
-state.streak = 0;
-playSfx('wrong');
-}
-
-                document.getElementById('score-counter').innerText = `Points: ${state.score}`;
-                document.getElementById('streak-counter').innerText = `Streak: ${state.streak} 🔥`;
-                document.getElementById('score-counter').innerText = `${currentDict.points}: ${state.score}`;
-                document.getElementById('streak-counter').innerText = `${currentDict.streak}: ${state.streak} 🔥`;
-
-let innerCorrectionsMarkup = "";
-if (!jsonCleanResponse.corrections_list || jsonCleanResponse.corrections_list.length === 0) {
-                    innerCorrectionsMarkup = `<p style="color: #4CAF50; font-size:13px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> Excellent! No explicit errors were spotted.</p>`;
-                    innerCorrectionsMarkup = `<p style="color: #4CAF50; font-size:13px; font-weight:600;"><i class="fa-solid fa-circle-check"></i> ${currentDict.successNoErrors}</p>`;
-} else {
-jsonCleanResponse.corrections_list.forEach(corr => {
-innerCorrectionsMarkup += `
-                           <div class="correction-line-item">
-                               <strong style="color:#F44336; text-decoration:line-through;">${corr.original}</strong> 
-                               <i class="fa-solid fa-arrow-right-long" style="font-size:11px; margin:0 4px; color:var(--text-secondary);"></i> 
-                               <strong style="color:#4CAF50;">${corr.corrected}</strong>
-                               <p style="font-size:12px; color:var(--text-secondary); margin-top:2px;">${corr.reason}</p>
-                           </div>
-                       `;
-});
-}
-
-feedbackPanel.innerHTML = `
-                   <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:8px;">
-                        <h4 style="font-family:var(--font-serif); font-size:18px;">Analysis Results</h4>
-                        <h4 style="font-family:var(--font-serif); font-size:18px;">${currentDict.resultsHeader}</h4>
-                       <span class="score-badge" style="font-size:14px; font-weight:700;">${jsonCleanResponse.score_out_of_100}/100</span>
-                   </div>
-                   <p style="font-size:14px; line-height:1.5; font-style:italic; color: var(--text-primary);">
-                       "${jsonCleanResponse.summary_critique}"
-                   </p>
-                   <div style="margin-top: 4px;">
-                        <h5 style="font-size:11px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; letter-spacing:0.5px;">Explicit Corrections:</h5>
-                        <h5 style="font-size:11px; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; letter-spacing:0.5px;">${currentDict.explicitHeader}</h5>
-                       ${innerCorrectionsMarkup}
-                   </div>
-               `;
-
-} catch (err) {
-console.error("Pipeline breakdown tracking error:", err);
-                feedbackPanel.innerHTML = `<p style="color: #F44336; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> Failed to communicate with Gemini. Verify API Key validation settings, rate quotas, or network connection.</p>`;
-                feedbackPanel.innerHTML = `<p style="color: #F44336; font-size:14px;"><i class="fa-solid fa-circle-exclamation"></i> ${currentDict.errorFeedback}</p>`;
-} finally {
-actionBtn.disabled = false;
-                actionBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> Evaluate with IA`;
-                actionBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> ${currentDict.evalBtn}`;
-}
-}
-
-window.onload = async () => {
-            // Apply language setup transformations
-            updateUiLanguageDOM();
-filterHomeTheme('all');
-await buildGlobalFlashcardCache();
-
-const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
-if (savedKey) {
-document.getElementById('gemini-key-field').value = savedKey;
-}
-};
-</script>
+            // Retrieve saved key state if available
+            const savedKey = localStorage.getItem('KULTURA_GEMINI_KEY');
+            if (savedKey) {
+                document.getElementById('gemini-key-field').value = savedKey;
+            }
+        };
+    </script>
 </body>
 </html>
+
+
